@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&amp;family=Newsreader:ital,opsz,wght@1,6..72,500;1,6..72,600&amp;display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: #CAD4E6; border-radius: 6px; border: 2px solid #EEF2F8; }
+  ::placeholder { color: #9AA6BE; }
+</style>
+</helmet>
+
+<template id="__bundler_thumbnail" data-bg-color="#2F57E6">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#2F57E6"></rect>
+    <path d="M250 400h120l90-200 150 460 110-300 60 40h170" fill="none" stroke="#ffffff" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"></path>
+  </svg>
+</template>
+
+<div style="display:flex; height:100vh; min-width:1280px; overflow:hidden; background:#EEF2F8; font-family:'Public Sans',system-ui,sans-serif; color:#16203A;">
+
+  <!-- ===================== SETUP / ONBOARDING ===================== -->
+  <sc-if value="{{ isSetup }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed; inset:0; z-index:90; background:linear-gradient(135deg,#22408F 0%,#152C6E 100%); display:flex; align-items:center; justify-content:center; padding:40px; font-family:'Public Sans',system-ui,sans-serif;">
+    <div style="width:100%; max-width:1000px; display:grid; grid-template-columns:1fr 1fr; background:#fff; border-radius:26px; overflow:hidden; box-shadow:0 50px 110px rgba(8,18,46,0.5); min-height:560px;">
+
+      <!-- brand panel -->
+      <div style="background:linear-gradient(165deg,#2F57E6 0%,#243F9E 100%); padding:46px 44px; display:flex; flex-direction:column; color:#fff;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:44px; height:44px; border-radius:13px; background:rgba(255,255,255,0.16); display:flex; align-items:center; justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3 12h3l2.5-6 4 14 3-8 1.5 0H21" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+          <div><div style="font-size:22px; font-weight:800; line-height:1;">Cadence</div><div style="font-size:11.5px; font-weight:700; letter-spacing:1.2px; color:rgba(255,255,255,0.7); margin-top:3px;">FOR CLINICIANS</div></div>
+        </div>
+        <div style="margin-top:auto;">
+          <div style="font-size:29px; font-weight:800; letter-spacing:-0.5px; line-height:1.22;">Continuous motor data from your Parkinson's patients.</div>
+          <div style="font-size:15.5px; font-weight:500; color:rgba(255,255,255,0.84); margin-top:15px; line-height:1.5;">On-time percentage, freeze events, and dose response, measured at home, summarized for the visit. No paper diaries.</div>
+          <div style="display:flex; flex-direction:column; gap:13px; margin-top:26px;">
+            <sc-for list="{{ setupHighlights }}" as="h" hint-placeholder-count="3">
+              <div style="display:flex; align-items:center; gap:11px;">
+                <span style="width:24px; height:24px; flex:none; border-radius:7px; background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 12.5 10.5 17 18 7.5" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+                <span style="font-size:15px; font-weight:600; color:rgba(255,255,255,0.95);">{{ h }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <!-- form panel -->
+      <div style="padding:44px 46px 40px; display:flex; flex-direction:column;">
+        <!-- welcome -->
+        <sc-if value="{{ suIsWelcome }}" hint-placeholder-val="{{ true }}">
+        <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+          <div style="font-size:13px; font-weight:800; letter-spacing:1px; color:#2F57E6;">WELCOME</div>
+          <div style="font-size:30px; font-weight:800; letter-spacing:-0.5px; margin-top:10px; line-height:1.15;">Set up your clinician account</div>
+          <div style="font-size:16px; font-weight:500; color:#6B7794; margin-top:12px; line-height:1.5;">A couple of details and you're in. It takes about a minute.</div>
+          <button onClick="{{ startCreate }}" style="width:100%; height:60px; margin-top:30px; border:none; border-radius:14px; background:#2F57E6; cursor:pointer; font-family:inherit; font-size:17px; font-weight:800; color:#fff; box-shadow:0 12px 26px rgba(47,87,230,0.28);" style-hover="background:#274BCB">Create my account</button>
+          <button onClick="{{ signInDemo }}" style="width:100%; height:54px; margin-top:12px; border:1px solid #DCE4F0; border-radius:14px; background:#fff; cursor:pointer; font-family:inherit; font-size:16px; font-weight:700; color:#3A4A66;" style-hover="background:#F5F8FD">I already have an account · Sign in</button>
+          <div style="font-size:12.5px; font-weight:500; color:#9AA6BE; margin-top:22px; line-height:1.5;">Cadence is an observational tool. It supports, never replaces, your clinical judgment.</div>
+        </div>
+        </sc-if>
+
+        <!-- steps -->
+        <sc-if value="{{ suInForm }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:26px;">
+          <sc-if value="{{ suBackVisible }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ suBack }}" style="width:40px; height:40px; flex:none; border:1px solid #DCE4F0; border-radius:11px; background:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="background:#F5F8FD"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="#16203A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+          </sc-if>
+          <div style="flex:1; display:flex; gap:8px;">
+            <div style="flex:1; height:6px; border-radius:4px; background:{{ suProgress1Bg }};"></div>
+            <div style="flex:1; height:6px; border-radius:4px; background:{{ suProgress2Bg }};"></div>
+          </div>
+        </div>
+        <div style="font-size:13px; font-weight:800; letter-spacing:1px; color:#2F57E6;">{{ suEyebrow }}</div>
+        <div style="font-size:27px; font-weight:800; letter-spacing:-0.5px; margin-top:9px; line-height:1.18;">{{ suTitle }}</div>
+        <div style="font-size:15.5px; font-weight:500; color:#6B7794; margin-top:10px; line-height:1.5;">{{ suBody }}</div>
+
+        <div style="display:flex; flex-direction:column; gap:16px; margin-top:26px; flex:1;">
+          <sc-if value="{{ suIsName }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <div style="font-size:13px; font-weight:700; color:#536084; margin-bottom:7px;">Full name</div>
+              <input value="{{ suName }}" onInput="{{ setSuName }}" placeholder="Dr. Naomi Okafor" style="width:100%; height:54px; border:1px solid #DCE4F0; border-radius:13px; padding:0 16px; font-family:inherit; font-size:16px; font-weight:600; color:#16203A; background:#F8FAFD; outline:none;">
+            </div>
+            <div>
+              <div style="font-size:13px; font-weight:700; color:#536084; margin-bottom:7px;">Credentials &amp; specialty</div>
+              <input value="{{ suCred }}" onInput="{{ setSuCred }}" placeholder="MD, Movement Disorders" style="width:100%; height:54px; border:1px solid #DCE4F0; border-radius:13px; padding:0 16px; font-family:inherit; font-size:16px; font-weight:600; color:#16203A; background:#F8FAFD; outline:none;">
+            </div>
+          </sc-if>
+          <sc-if value="{{ suIsPractice }}" hint-placeholder-val="{{ false }}">
+            <div>
+              <div style="font-size:13px; font-weight:700; color:#536084; margin-bottom:7px;">Institution / practice</div>
+              <input value="{{ suInstitution }}" onInput="{{ setSuInstitution }}" placeholder="Bayfront Neurology" style="width:100%; height:54px; border:1px solid #DCE4F0; border-radius:13px; padding:0 16px; font-family:inherit; font-size:16px; font-weight:600; color:#16203A; background:#F8FAFD; outline:none;">
+            </div>
+            <div style="display:flex; gap:14px;">
+              <div style="flex:1;">
+                <div style="font-size:13px; font-weight:700; color:#536084; margin-bottom:7px;">Work email</div>
+                <input value="{{ suEmail }}" onInput="{{ setSuEmail }}" placeholder="you@clinic.org" style="width:100%; height:54px; border:1px solid #DCE4F0; border-radius:13px; padding:0 16px; font-family:inherit; font-size:16px; font-weight:600; color:#16203A; background:#F8FAFD; outline:none;">
+              </div>
+              <div style="width:150px; flex:none;">
+                <div style="font-size:13px; font-weight:700; color:#536084; margin-bottom:7px;">NPI</div>
+                <input value="{{ suNpi }}" onInput="{{ setSuNpi }}" placeholder="0000000000" style="width:100%; height:54px; border:1px solid #DCE4F0; border-radius:13px; padding:0 16px; font-family:inherit; font-size:16px; font-weight:600; color:#16203A; background:#F8FAFD; outline:none;">
+              </div>
+            </div>
+          </sc-if>
+        </div>
+
+        <button onClick="{{ suNext }}" disabled="{{ suNextDisabled }}" style="width:100%; height:60px; margin-top:8px; border:none; border-radius:14px; background:{{ suNextBg }}; cursor:{{ suNextCursor }}; font-family:inherit; font-size:17px; font-weight:800; color:#fff;">{{ suNextLabel }}</button>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <div style="width:236px; flex:none; height:100vh; background:#fff; border-right:1px solid #E1E8F2; display:flex; flex-direction:column; padding:24px 18px;">
+    <div style="display:flex; align-items:center; gap:11px; padding:4px 8px 0;">
+      <div style="width:38px; height:38px; border-radius:11px; background:#2F57E6; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 16px rgba(47,87,230,0.3);">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 12h3l2.5-6 4 14 3-8 1.5 0H21" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </div>
+      <div>
+        <div style="font-size:19px; font-weight:800; letter-spacing:-0.3px; line-height:1;">Cadence</div>
+        <div style="font-size:11px; font-weight:700; letter-spacing:1px; color:#8A96B0; margin-top:3px;">CLINICIAN</div>
+      </div>
+    </div>
+
+    <div style="height:1px; background:#EDF1F7; margin:22px 6px;"></div>
+
+    <div style="display:flex; flex-direction:column; gap:4px;">
+      <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="3">
+        <button onClick="{{ item.onClick }}" style="display:flex; align-items:center; gap:13px; width:100%; text-align:left; padding:12px 14px; border:none; border-radius:12px; cursor:pointer; font-family:inherit; font-size:16px; font-weight:700; color:{{ item.color }}; background:{{ item.bg }};">
+          <span style="display:flex;">{{ item.icon }}</span>
+          {{ item.label }}
+          <sc-if value="{{ item.badge }}" hint-placeholder-val="{{ false }}">
+            <span style="margin-left:auto; min-width:22px; height:22px; padding:0 7px; border-radius:11px; background:#2F57E6; color:#fff; font-size:12px; font-weight:800; display:flex; align-items:center; justify-content:center;">{{ item.badge }}</span>
+          </sc-if>
+        </button>
+      </sc-for>
+    </div>
+
+    <div style="margin-top:auto; display:flex; align-items:center; gap:11px; padding:12px; background:#F5F8FD; border-radius:14px;">
+      <div style="width:40px; height:40px; flex:none; border-radius:50%; background:#E5EBFD; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:800; color:#2F57E6;">{{ docInitials }}</div>
+      <div style="min-width:0;">
+        <div style="font-size:14px; font-weight:700; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ docName }}</div>
+        <div style="font-size:12px; font-weight:600; color:#8A96B0; margin-top:1px;">{{ docCredential }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== MAIN ===================== -->
+  <div style="flex:1; min-width:0; display:flex; flex-direction:column; height:100vh;">
+
+    <!-- pending-invite banner -->
+    <sc-if value="{{ showBanner }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ goReviewInvites }}" style="display:flex; align-items:center; gap:14px; margin:0; padding:15px 28px; border:none; border-bottom:1px solid #C9D9F7; background:#E8EEFC; cursor:pointer; font-family:inherit; text-align:left;">
+        <span style="width:30px; height:30px; flex:none; border-radius:50%; background:#2F57E6; display:flex; align-items:center; justify-content:center;">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 5v9M12 18h.01M5 9a7 7 0 0 1 14 0c0 6 2 7 2 7H3s2-1 2-7Z" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </span>
+        <span style="font-size:15px; font-weight:700; color:#1F3A8A;">{{ bannerText }}</span>
+        <span style="margin-left:auto; font-size:14px; font-weight:800; color:#2F57E6; display:flex; align-items:center; gap:5px;">Review below
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#2F57E6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </span>
+        <span onClick="{{ dismissBanner }}" style="width:30px; height:30px; flex:none; border-radius:8px; display:flex; align-items:center; justify-content:center;" style-hover="background:#D6E2F8">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="#5876B8" stroke-width="2.2" stroke-linecap="round"></path></svg>
+        </span>
+      </button>
+    </sc-if>
+
+    <div style="flex:1; overflow-y:auto; min-height:0;">
+    <div style="max-width:1180px; margin:0 auto; padding:34px 40px 28px; min-height:100%; display:flex; flex-direction:column; box-sizing:border-box;">
+
+      <!-- ================= PATIENTS ================= -->
+      <sc-if value="{{ isPatients }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:26px;">
+          <div>
+            <div style="font-size:30px; font-weight:800; letter-spacing:-0.6px;">Patients</div>
+            <div style="display:flex; align-items:center; gap:12px; margin-top:7px;">
+              <div style="font-size:15px; font-weight:600; color:#6B7794;">{{ patientCountLabel }}</div>
+              <span style="width:4px; height:4px; border-radius:50%; background:#C2CADD;"></span>
+              <div style="display:inline-flex; align-items:center; gap:7px; height:28px; padding:0 12px; border-radius:8px; background:#EEF3FB;">
+                <span style="font-size:12px; font-weight:700; letter-spacing:0.5px; color:#8A96B0;">YOUR PROVIDER ID</span>
+                <span style="font-size:14px; font-weight:800; letter-spacing:0.5px; color:#2F57E6;">{{ providerId }}</span>
+              </div>
+            </div>
+          </div>
+          <div style="position:relative; width:300px;">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" style="position:absolute; left:15px; top:50%; transform:translateY(-50%);"><circle cx="11" cy="11" r="7" stroke="#9AA6BE" stroke-width="2"></circle><path d="M16.5 16.5 21 21" stroke="#9AA6BE" stroke-width="2" stroke-linecap="round"></path></svg>
+            <input value="{{ search }}" onInput="{{ setSearch }}" placeholder="Search patients" style="width:100%; height:48px; border:1px solid #DCE4F0; border-radius:12px; padding:0 16px 0 44px; font-family:inherit; font-size:15px; font-weight:600; color:#16203A; background:#fff; outline:none;">
+          </div>
+        </div>
+
+        <!-- pending invites -->
+        <sc-if value="{{ hasPending }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:13px; font-weight:800; letter-spacing:0.8px; color:#2F57E6; margin:0 2px 12px;">CONNECTION REQUESTS</div>
+          <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:30px;">
+            <sc-for list="{{ pendingInvites }}" as="inv" hint-placeholder-count="1">
+              <div style="display:flex; align-items:center; gap:16px; padding:18px 22px; background:#fff; border:1px solid #C9D9F7; border-left:4px solid #2F57E6; border-radius:14px; box-shadow:0 1px 3px rgba(28,46,92,0.06);">
+                <div style="width:46px; height:46px; flex:none; border-radius:50%; background:#E5EBFD; display:flex; align-items:center; justify-content:center; font-size:17px; font-weight:800; color:#2F57E6;">{{ inv.initials }}</div>
+                <div style="flex:1; min-width:0;">
+                  <div style="font-size:17px; font-weight:800;">{{ inv.patient }}</div>
+                  <div style="font-size:14px; font-weight:600; color:#6B7794; margin-top:2px;">Requested to share their motor record · {{ inv.via }}{{ inv.ago }}</div>
+                </div>
+                <button onClick="{{ inv.onDecline }}" style="height:44px; padding:0 20px; border:1px solid #DCE4F0; border-radius:11px; background:#fff; cursor:pointer; font-family:inherit; font-size:15px; font-weight:700; color:#6B7794;" style-hover="background:#F5F8FD">Decline</button>
+                <button onClick="{{ inv.onAccept }}" style="height:44px; padding:0 22px; border:none; border-radius:11px; background:#2F57E6; cursor:pointer; font-family:inherit; font-size:15px; font-weight:800; color:#fff; box-shadow:0 6px 16px rgba(47,87,230,0.26);" style-hover="background:#274BCB">Accept</button>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <!-- table -->
+        <sc-if value="{{ hasPatients }}" hint-placeholder-val="{{ true }}">
+        <div style="background:#fff; border:1px solid #E4EAF3; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(28,46,92,0.06);">
+          <div style="display:grid; grid-template-columns:1.7fr 0.6fr 1fr 1fr 1fr 1fr 0.85fr 1.1fr; gap:12px; padding:14px 24px; background:#F6F8FC; border-bottom:1px solid #E9EEF6; font-size:12px; font-weight:800; letter-spacing:0.5px; color:#8A96B0;">
+            <div>PATIENT</div><div>AGE</div><div>DX DURATION</div><div>LAST SYNC</div><div>MOTOR STATE</div><div>7-DAY ON-TIME</div><div>FREEZES</div><div>NEXT VISIT</div>
+          </div>
+          <sc-for list="{{ patientRows }}" as="p" hint-placeholder-count="6">
+            <button onClick="{{ p.onClick }}" style="display:grid; grid-template-columns:1.7fr 0.6fr 1fr 1fr 1fr 1fr 0.85fr 1.1fr; gap:12px; align-items:center; width:100%; text-align:left; padding:16px 24px; border:none; border-bottom:1px solid #EEF2F8; background:#fff; cursor:pointer; font-family:inherit;" style-hover="background:#F8FAFD">
+              <div style="display:flex; align-items:center; gap:12px; min-width:0;">
+                <div style="width:38px; height:38px; flex:none; border-radius:50%; background:{{ p.avBg }}; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:800; color:{{ p.avColor }};">{{ p.initials }}</div>
+                <div style="min-width:0;">
+                  <div style="font-size:16px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ p.name }}</div>
+                  <sc-if value="{{ p.subnote }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px; font-weight:700; color:#C0392B; margin-top:1px; white-space:nowrap;">{{ p.subnote }}</div></sc-if>
+                </div>
+              </div>
+              <div style="font-size:15px; font-weight:600; color:#3A4A66;">{{ p.age }}</div>
+              <div style="font-size:15px; font-weight:600; color:#3A4A66;">{{ p.dx }}</div>
+              <div style="font-size:14px; font-weight:600; color:{{ p.syncColor }};">{{ p.lastSync }}</div>
+              <div><span style="display:inline-flex; align-items:center; gap:6px; height:28px; padding:0 11px; border-radius:8px; background:{{ p.stateBg }}; font-size:13px; font-weight:800; color:{{ p.stateColor }};"><span style="width:8px; height:8px; border-radius:50%; background:{{ p.stateColor }};"></span>{{ p.state }}</span></div>
+              <div style="display:flex; align-items:center; gap:9px;">
+                <div style="flex:1; max-width:64px; height:7px; border-radius:4px; background:#EAEFF7; overflow:hidden;"><div style="width:{{ p.onTimeW }}; height:100%; background:{{ p.onTimeColor }}; border-radius:4px;"></div></div>
+                <span style="font-size:15px; font-weight:800; color:#16203A;">{{ p.onTime }}</span>
+              </div>
+              <div style="font-size:15px; font-weight:700; color:{{ p.freezeColor }};">{{ p.freezes }}</div>
+              <div style="font-size:14px; font-weight:600; color:#3A4A66;">{{ p.nextVisit }}</div>
+            </button>
+          </sc-for>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ noPatients }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#fff; border:1px solid #E4EAF3; border-radius:16px; padding:70px 40px; text-align:center;">
+            <div style="width:64px; height:64px; margin:0 auto 18px; border-radius:50%; background:#EEF3FB; display:flex; align-items:center; justify-content:center;">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM5 20a7 7 0 0 1 14 0" stroke="#9AA6BE" stroke-width="2" stroke-linecap="round"></path></svg>
+            </div>
+            <div style="font-size:20px; font-weight:800;">No patients yet</div>
+            <div style="font-size:15px; font-weight:600; color:#6B7794; margin-top:8px; max-width:380px; margin-left:auto; margin-right:auto; line-height:1.5;">When a patient invites you from the Cadence app, their request appears here for you to accept.</div>
+          </div>
+        </sc-if>
+      </sc-if>
+
+      <!-- ================= PATIENT DETAIL ================= -->
+      <sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:18px;">
+          <button onClick="{{ goPatients }}" style="display:inline-flex; align-items:center; gap:7px; border:none; background:none; cursor:pointer; font-family:inherit; font-size:14px; font-weight:700; color:#6B7794; padding:0;" style-hover="color:#2F57E6">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            All patients
+          </button>
+          <div style="display:flex; align-items:center; gap:4px; background:#fff; border:1px solid #E1E8F2; border-radius:11px; padding:4px;">
+            <button onClick="{{ setThisWeek }}" style="height:34px; padding:0 16px; border:none; border-radius:8px; cursor:pointer; font-family:inherit; font-size:13.5px; font-weight:700; background:{{ periodThisBg }}; color:{{ periodThisColor }};">This week</button>
+            <button onClick="{{ setLastWeek }}" style="height:34px; padding:0 16px; border:none; border-radius:8px; cursor:pointer; font-family:inherit; font-size:13.5px; font-weight:700; background:{{ periodLastBg }}; color:{{ periodLastColor }};">Last week</button>
+          </div>
+        </div>
+
+        <!-- Section A: header strip -->
+        <div style="display:flex; align-items:center; gap:20px; background:#fff; border:1px solid #E4EAF3; border-radius:16px; padding:22px 26px; box-shadow:0 1px 3px rgba(28,46,92,0.06); margin-bottom:22px;">
+          <div style="width:58px; height:58px; flex:none; border-radius:50%; background:#E5EBFD; display:flex; align-items:center; justify-content:center; font-size:21px; font-weight:800; color:#2F57E6;">{{ d_initials }}</div>
+          <div style="flex:none;">
+            <div style="font-size:26px; font-weight:600; letter-spacing:-0.4px; font-family:'Newsreader',serif; font-style:italic;">{{ d_name }}</div>
+            <div style="font-size:14px; font-weight:600; color:#6B7794; margin-top:3px;">{{ d_age }} years old · {{ d_dx }} since diagnosis</div>
+          </div>
+          <div style="width:1px; height:46px; background:#E9EEF6; margin:0 6px;"></div>
+          <div style="flex:1; min-width:0;">
+            <div style="font-size:12px; font-weight:800; letter-spacing:0.6px; color:#9AA6BE;">MEDICATION</div>
+            <div style="font-size:15px; font-weight:700; color:#3A4A66; margin-top:4px;">{{ d_med }}</div>
+          </div>
+          <div style="flex:none; text-align:right;">
+            <div style="font-size:12px; font-weight:800; letter-spacing:0.6px; color:#9AA6BE;">LAST SYNC</div>
+            <div style="font-size:15px; font-weight:700; color:#3A4A66; margin-top:4px;">{{ d_lastSync }}</div>
+          </div>
+          <span style="flex:none; display:inline-flex; align-items:center; gap:8px; height:38px; padding:0 16px; border-radius:11px; background:{{ d_stateBg }}; font-size:15px; font-weight:800; color:{{ d_stateColor }};"><span style="width:10px; height:10px; border-radius:50%; background:{{ d_stateColor }};"></span>Currently {{ d_state }}</span>
+        </div>
+
+        <!-- Section A2: care plan -->
+        <div style="display:grid; grid-template-columns:1.3fr 1fr; gap:16px; margin-bottom:22px;">
+          <!-- dose schedule editor -->
+          <div style="background:#fff; border:1px solid #E4EAF3; border-radius:16px; padding:22px 24px; box-shadow:0 1px 3px rgba(28,46,92,0.06);">
+            <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+              <div>
+                <div style="font-size:18px; font-weight:800;">Dose schedule</div>
+                <div style="font-size:14px; font-weight:600; color:#6B7794; margin-top:3px;">Propose a medication schedule. {{ d_firstName }} confirms it in the Cadence app.</div>
+              </div>
+              <sc-if value="{{ planStatus }}" hint-placeholder-val="{{ false }}">
+                <span style="flex:none; display:inline-flex; align-items:center; height:30px; padding:0 12px; border-radius:9px; background:{{ planStatusBg }}; font-size:12.5px; font-weight:800; color:{{ planStatusColor }};">{{ planStatus }}</span>
+              </sc-if>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:10px; margin-top:18px;">
+              <sc-for list="{{ planRowVals }}" as="r" hint-placeholder-count="4">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <input value="{{ r.time }}" onInput="{{ r.setTime }}" placeholder="7:00" style="width:96px; flex:none; height:46px; border:1px solid #DCE4F0; border-radius:11px; padding:0 12px; font-family:inherit; font-size:15px; font-weight:700; color:#16203A; background:#F8FAFD; outline:none;">
+                  <input value="{{ r.label }}" onInput="{{ r.setLabel }}" placeholder="Label" style="flex:1; min-width:0; height:46px; border:1px solid #DCE4F0; border-radius:11px; padding:0 14px; font-family:inherit; font-size:15px; font-weight:600; color:#16203A; background:#F8FAFD; outline:none;">
+                  <button onClick="{{ r.onRemove }}" style="width:42px; height:42px; flex:none; border:1px solid #DCE4F0; border-radius:11px; background:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="background:#FBF0F0; border-color:#F0CDCD">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 12h12" stroke="#B9700F" stroke-width="2.2" stroke-linecap="round"></path></svg>
+                  </button>
+                </div>
+              </sc-for>
+            </div>
+            <button onClick="{{ addPlanDose }}" style="display:inline-flex; align-items:center; gap:7px; height:42px; padding:0 16px; margin-top:12px; border:1.5px dashed #C2CEE4; border-radius:11px; background:#fff; cursor:pointer; font-family:inherit; font-size:14px; font-weight:700; color:#2F57E6;" style-hover="background:#F5F8FD">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#2F57E6" stroke-width="2.2" stroke-linecap="round"></path></svg>
+              Add dose
+            </button>
+            <div style="display:flex; align-items:flex-end; gap:14px; margin-top:18px; padding-top:18px; border-top:1px solid #EEF1F7;">
+              <div style="flex:1;">
+                <div style="font-size:12px; font-weight:800; letter-spacing:0.5px; color:#9AA6BE;">STRENGTH</div>
+                <input value="{{ planStrength }}" onInput="{{ setPlanStrength }}" style="width:100%; height:44px; border:1px solid #DCE4F0; border-radius:11px; padding:0 12px; margin-top:6px; font-family:inherit; font-size:15px; font-weight:700; color:#16203A; background:#F8FAFD; outline:none;">
+              </div>
+              <button onClick="{{ sendPlan }}" style="flex:none; height:46px; padding:0 22px; border:none; border-radius:11px; background:#2F57E6; cursor:pointer; font-family:inherit; font-size:15px; font-weight:800; color:#fff; box-shadow:0 6px 16px rgba(47,87,230,0.24);" style-hover="background:#274BCB">{{ sendPlanLabel }}</button>
+            </div>
+          </div>
+
+          <!-- next visit setter -->
+          <div style="background:#fff; border:1px solid #E4EAF3; border-radius:16px; padding:22px 24px; box-shadow:0 1px 3px rgba(28,46,92,0.06);">
+            <div style="font-size:18px; font-weight:800;">Next visit</div>
+            <div style="font-size:14px; font-weight:600; color:#6B7794; margin-top:3px;">Set the next appointment. It appears in {{ d_firstName }}'s app.</div>
+            <div style="display:flex; flex-direction:column; gap:14px; margin-top:18px;">
+              <div style="display:flex; gap:10px;">
+                <div style="flex:1; min-width:0;">
+                  <div style="font-size:12px; font-weight:800; letter-spacing:0.5px; color:#9AA6BE; margin-bottom:6px;">DATE</div>
+                  <input type="date" value="{{ visitDate }}" onInput="{{ setVisitDate }}" style="width:100%; height:46px; border:1px solid #DCE4F0; border-radius:11px; padding:0 12px; font-family:inherit; font-size:15px; font-weight:700; color:#16203A; background:#F8FAFD; outline:none;">
+                </div>
+                <div style="width:118px; flex:none;">
+                  <div style="font-size:12px; font-weight:800; letter-spacing:0.5px; color:#9AA6BE; margin-bottom:6px;">TIME</div>
+                  <input value="{{ visitTime }}" onInput="{{ setVisitTime }}" style="width:100%; height:46px; border:1px solid #DCE4F0; border-radius:11px; padding:0 12px; font-family:inherit; font-size:15px; font-weight:700; color:#16203A; background:#F8FAFD; outline:none;">
+                </div>
+              </div>
+              <div>
+                <div style="font-size:12px; font-weight:800; letter-spacing:0.5px; color:#9AA6BE; margin-bottom:6px;">LOCATION</div>
+                <input value="{{ visitLocation }}" onInput="{{ setVisitLocation }}" style="width:100%; height:46px; border:1px solid #DCE4F0; border-radius:11px; padding:0 12px; font-family:inherit; font-size:15px; font-weight:600; color:#16203A; background:#F8FAFD; outline:none;">
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px; margin-top:18px;">
+              <button onClick="{{ saveVisit }}" style="height:46px; padding:0 22px; border:none; border-radius:11px; background:#16203A; cursor:pointer; font-family:inherit; font-size:15px; font-weight:800; color:#fff;" style-hover="background:#222F4D">{{ saveVisitLabel }}</button>
+              <sc-if value="{{ visitSaved }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; gap:6px; font-size:14px; font-weight:700; color:#15724A;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 12.5 10.5 17 18 7.5" stroke="#15724A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Shared with {{ d_firstName }}</span></sc-if>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section A3: algorithm & timing controls -->
+        <div style="background:#fff; border:1px solid #E4EAF3; border-radius:16px; padding:22px 24px; box-shadow:0 1px 3px rgba(28,46,92,0.06); margin-bottom:22px;">
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:4px;">
+            <div>
+              <div style="font-size:18px; font-weight:800;">Algorithm &amp; timing</div>
+              <div style="font-size:14px; font-weight:600; color:#6B7794; margin-top:3px;">Tune how Cadence forecasts off windows and times {{ d_firstName }}'s dose nudges. Changes apply to this patient only.</div>
+            </div>
+            <span style="flex:none; display:inline-flex; align-items:center; height:30px; padding:0 12px; border-radius:9px; background:#EEF3FB; font-size:12.5px; font-weight:800; color:#2F57E6;">{{ algoMode }}</span>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:22px 32px; margin-top:20px;">
+            <!-- dose timing window -->
+            <div>
+              <div style="display:flex; align-items:baseline; justify-content:space-between;">
+                <span style="font-size:14px; font-weight:800; color:#16203A;">Dose timing window</span>
+                <span style="font-size:14px; font-weight:800; color:#2F57E6;">{{ algoShiftLabel }}</span>
+              </div>
+              <div style="font-size:12.5px; font-weight:600; color:#9AA6BE; margin-top:2px; margin-bottom:10px;">How far a dose may be nudged from its scheduled time.</div>
+              <input type="range" min="0" max="45" step="5" value="{{ algoShift }}" onInput="{{ setAlgoShift }}" style="width:100%; accent-color:#2F57E6; cursor:pointer;">
+            </div>
+            <!-- forecast lead time -->
+            <div>
+              <div style="display:flex; align-items:baseline; justify-content:space-between;">
+                <span style="font-size:14px; font-weight:800; color:#16203A;">Forecast lead time</span>
+                <span style="font-size:14px; font-weight:800; color:#2F57E6;">{{ algoLeadLabel }}</span>
+              </div>
+              <div style="font-size:12.5px; font-weight:600; color:#9AA6BE; margin-top:2px; margin-bottom:10px;">How early to warn before a predicted off window.</div>
+              <input type="range" min="5" max="45" step="5" value="{{ algoLead }}" onInput="{{ setAlgoLead }}" style="width:100%; accent-color:#2F57E6; cursor:pointer;">
+            </div>
+            <!-- min dose interval -->
+            <div>
+              <div style="display:flex; align-items:baseline; justify-content:space-between;">
+                <span style="font-size:14px; font-weight:800; color:#16203A;">Minimum dose interval</span>
+                <span style="font-size:14px; font-weight:800; color:#2F57E6;">{{ algoIntervalLabel }}</span>
+              </div>
+              <div style="font-size:12.5px; font-weight:600; color:#9AA6BE; margin-top:2px; margin-bottom:10px;">Safety floor, nudges never push doses closer than this.</div>
+              <input type="range" min="120" max="360" step="15" value="{{ algoInterval }}" onInput="{{ setAlgoInterval }}" style="width:100%; accent-color:#2F57E6; cursor:pointer;">
+            </div>
+            <!-- on-threshold sensitivity -->
+            <div>
+              <div style="font-size:14px; font-weight:800; color:#16203A;">Off-detection sensitivity</div>
+              <div style="font-size:12.5px; font-weight:600; color:#9AA6BE; margin-top:2px; margin-bottom:10px;">How readily the model calls a slowdown an off period.</div>
+              <div style="display:flex; gap:8px;">
+                <sc-for list="{{ sensOptions }}" as="o" hint-placeholder-count="3">
+                  <button onClick="{{ o.onClick }}" style="flex:1; height:42px; border:1.5px solid {{ o.border }}; border-radius:11px; background:{{ o.bg }}; cursor:pointer; font-family:inherit; font-size:13.5px; font-weight:800; color:{{ o.color }};">{{ o.label }}</button>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:14px; margin-top:22px; padding-top:18px; border-top:1px solid #EEF1F7;">
+            <div style="flex:1;">
+              <div style="font-size:14px; font-weight:800; color:#16203A;">Ankle freeze cue</div>
+              <div style="font-size:12.5px; font-weight:600; color:#9AA6BE; margin-top:2px;">Haptic cue on the ankle band to help {{ d_firstName }} restart during a freeze.</div>
+            </div>
+            <button onClick="{{ toggleFreezeCue }}" style="width:52px; height:30px; flex:none; border-radius:999px; background:{{ freezeCueTrack }}; border:none; position:relative; cursor:pointer; padding:0;">
+              <span style="position:absolute; top:3px; left:{{ freezeCueKnob }}; width:24px; height:24px; border-radius:50%; background:#fff; box-shadow:0 2px 5px rgba(0,0,0,0.2); transition:left 0.18s;"></span>
+            </button>
+            <button onClick="{{ resetAlgo }}" style="flex:none; height:42px; padding:0 16px; border:1px solid #DCE4F0; border-radius:11px; background:#fff; cursor:pointer; font-family:inherit; font-size:13.5px; font-weight:800; color:#6B7794;" style-hover="background:#F5F8FD">Reset to defaults</button>
+          </div>
+        </div>
+
+        <!-- Section B: motor state timeline (hero) -->
+        <div style="background:#fff; border:1px solid #E4EAF3; border-radius:16px; padding:24px 26px 26px; box-shadow:0 1px 3px rgba(28,46,92,0.06); margin-bottom:22px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+            <div>
+              <div style="font-size:18px; font-weight:800;">Motor state · last 7 days</div>
+              <div style="font-size:14px; font-weight:600; color:#6B7794; margin-top:3px;">Continuous reading from the wrist and ankle bands. This replaces the patient diary.</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:18px;">
+              <div style="display:flex; align-items:center; gap:7px;"><span style="width:13px; height:13px; border-radius:4px; background:#8FB4EE;"></span><span style="font-size:13px; font-weight:700; color:#6B7794;">On</span></div>
+              <div style="display:flex; align-items:center; gap:7px;"><span style="width:13px; height:13px; border-radius:4px; background:#EBAB4C;"></span><span style="font-size:13px; font-weight:700; color:#6B7794;">Off</span></div>
+              <div style="display:flex; align-items:center; gap:7px;"><span style="width:13px; height:13px; border-radius:4px; background:#D9E0EC;"></span><span style="font-size:13px; font-weight:700; color:#6B7794;">Unknown</span></div>
+            </div>
+          </div>
+
+          <!-- hour axis -->
+          <div style="display:flex; align-items:center; gap:14px; margin-bottom:7px;">
+            <div style="width:96px; flex:none;"></div>
+            <div style="flex:1; display:flex; justify-content:space-between; font-size:12px; font-weight:700; color:#A6B0C4;">
+              <sc-for list="{{ hourLabels }}" as="h" hint-placeholder-count="6"><span>{{ h }}</span></sc-for>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:9px;">
+            <sc-for list="{{ timelineDays }}" as="day" hint-placeholder-count="7">
+              <div style="display:flex; align-items:center; gap:14px;">
+                <div style="width:96px; flex:none; display:flex; align-items:center; gap:8px;">
+                  <span style="font-size:14px; font-weight:800; color:{{ day.labelColor }};">{{ day.label }}</span>
+                  <sc-if value="{{ day.isToday }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px; font-weight:800; color:#2F57E6; background:#E5EBFD; padding:2px 6px; border-radius:6px;">TODAY</span></sc-if>
+                </div>
+                <div style="flex:1; position:relative; height:34px; border-radius:8px; background:#8FB4EE; overflow:hidden;">
+                  <sc-for list="{{ day.segments }}" as="seg" hint-placeholder-count="2">
+                    <div style="position:absolute; top:0; bottom:0; left:{{ seg.left }}; width:{{ seg.width }}; background:{{ seg.color }};"></div>
+                  </sc-for>
+                  <sc-for list="{{ day.doses }}" as="dose" hint-placeholder-count="4">
+                    <div style="position:absolute; top:0; bottom:0; left:{{ dose.left }}; width:2px; background:rgba(22,32,58,0.34);"></div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex; align-items:center; gap:7px; margin-top:16px; font-size:13px; font-weight:600; color:#8A96B0;">
+            <div style="width:2px; height:14px; background:rgba(22,32,58,0.34);"></div> Vertical lines mark dose times
+          </div>
+        </div>
+
+        <!-- Section C: metrics -->
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:22px;">
+          <sc-for list="{{ metrics }}" as="m" hint-placeholder-count="4">
+            <div style="background:#fff; border:1px solid #E4EAF3; border-radius:16px; padding:20px; box-shadow:0 1px 3px rgba(28,46,92,0.06);">
+              <div style="font-size:13px; font-weight:700; color:#8A96B0;">{{ m.label }}</div>
+              <div style="display:flex; align-items:baseline; gap:9px; margin-top:9px;">
+                <span style="font-size:34px; font-weight:800; letter-spacing:-1px;">{{ m.value }}</span>
+                <span style="display:inline-flex; align-items:center; gap:3px; font-size:13px; font-weight:800; color:{{ m.deltaColor }};">{{ m.deltaArrow }}{{ m.delta }}</span>
+              </div>
+              <div style="font-size:13px; font-weight:600; color:#6B7794; margin-top:9px; line-height:1.45;">{{ m.note }}</div>
+            </div>
+          </sc-for>
+        </div>
+
+        <!-- Section D: dose response chart -->
+        <div style="background:#fff; border:1px solid #E4EAF3; border-radius:16px; padding:24px 26px 22px; box-shadow:0 1px 3px rgba(28,46,92,0.06); margin-bottom:22px;">
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:6px;">
+            <div>
+              <div style="font-size:18px; font-weight:800;">Dose response · representative day</div>
+              <div style="font-size:14px; font-weight:600; color:#6B7794; margin-top:3px;">Simulated levodopa level against measured motor state. Shows whether he goes Off before the next dose is due.</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:16px; padding-top:4px;">
+              <div style="display:flex; align-items:center; gap:7px;"><span style="width:18px; height:3px; border-radius:2px; background:#2F57E6;"></span><span style="font-size:13px; font-weight:700; color:#6B7794;">Levodopa level</span></div>
+              <div style="display:flex; align-items:center; gap:7px;"><span style="width:14px; height:11px; border-radius:3px; background:#FBEAD0; border:1px solid #EBAB4C;"></span><span style="font-size:13px; font-weight:700; color:#6B7794;">Off window</span></div>
+            </div>
+          </div>
+          <svg viewBox="0 0 880 300" style="width:100%; height:auto; display:block; margin-top:6px;">
+            <text x="14" y="120" transform="rotate(-90 14 120)" font-family="Public Sans" font-size="12" font-weight="700" fill="#A6B0C4" text-anchor="middle">Relative drug level</text>
+            <line x1="56" y1="24" x2="56" y2="210" stroke="#E4EAF3" stroke-width="1.5"></line>
+            <line x1="56" y1="210" x2="856" y2="210" stroke="#E4EAF3" stroke-width="1.5"></line>
+            <sc-for list="{{ gridLines }}" as="g" hint-placeholder-count="3"><line x1="56" y1="{{ g.y }}" x2="856" y2="{{ g.y }}" stroke="#F0F3F9" stroke-width="1"></line></sc-for>
+            <sc-for list="{{ offBands }}" as="b" hint-placeholder-count="2"><rect x="{{ b.x }}" y="24" width="{{ b.w }}" height="186" fill="#FBEAD0" opacity="0.6"></rect></sc-for>
+            <line x1="56" y1="{{ thresholdY }}" x2="856" y2="{{ thresholdY }}" stroke="#EBAB4C" stroke-width="1.6" stroke-dasharray="5 5"></line>
+            <text x="852" y="{{ thresholdLabelY }}" font-family="Public Sans" font-size="11" font-weight="800" fill="#C68A2E" text-anchor="end">On threshold</text>
+            <path d="{{ areaPath }}" fill="#2F57E6" opacity="0.07"></path>
+            <path d="{{ plasmaPath }}" fill="none" stroke="#2F57E6" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"></path>
+            <sc-for list="{{ doseTicks }}" as="t" hint-placeholder-count="4">
+              <line x1="{{ t.x }}" y1="210" x2="{{ t.x }}" y2="216" stroke="#9AA6BE" stroke-width="1.5"></line>
+              <circle cx="{{ t.x }}" cy="{{ t.cy }}" r="4" fill="#2F57E6"></circle>
+              <text x="{{ t.x }}" y="234" font-family="Public Sans" font-size="11.5" font-weight="800" fill="#6B7794" text-anchor="middle">{{ t.label }}</text>
+              <text x="{{ t.x }}" y="248" font-family="Public Sans" font-size="10" font-weight="700" fill="#A6B0C4" text-anchor="middle">dose</text>
+            </sc-for>
+            <text x="56" y="272" font-family="Public Sans" font-size="11.5" font-weight="700" fill="#A6B0C4" text-anchor="start">6 am</text>
+            <text x="456" y="272" font-family="Public Sans" font-size="11.5" font-weight="700" fill="#A6B0C4" text-anchor="middle">2 pm</text>
+            <text x="856" y="272" font-family="Public Sans" font-size="11.5" font-weight="700" fill="#A6B0C4" text-anchor="end">11 pm</text>
+          </svg>
+          <div style="display:flex; gap:10px; background:#F6F8FC; border-radius:12px; padding:14px 16px; margin-top:8px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex:none; margin-top:1px;"><circle cx="12" cy="12" r="9" stroke="#2F57E6" stroke-width="1.8"></circle><path d="M12 11v5M12 8h.01" stroke="#2F57E6" stroke-width="1.8" stroke-linecap="round"></path></svg>
+            <div style="font-size:14px; font-weight:600; color:#3A4A66; line-height:1.5;">{{ d_chartNote }}</div>
+          </div>
+        </div>
+
+        <!-- Section D2: dose-by-dose response -->
+        <div style="background:#fff; border:1px solid #E4EAF3; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(28,46,92,0.06); margin-bottom:22px;">
+          <div style="padding:22px 26px 16px;">
+            <div style="font-size:18px; font-weight:800;">Dose-by-dose response</div>
+            <div style="font-size:14px; font-weight:600; color:#6B7794; margin-top:3px;">How each scheduled dose performed over the last 7 days.</div>
+          </div>
+          <div style="display:grid; grid-template-columns:1.1fr 0.9fr 1fr 1.7fr; gap:12px; padding:10px 26px; background:#F6F8FC; border-top:1px solid #E9EEF6; border-bottom:1px solid #E9EEF6; font-size:12px; font-weight:800; letter-spacing:0.5px; color:#8A96B0;">
+            <div>DOSE</div><div>ADHERENCE</div><div>MEAN ONSET</div><div>ON AFTER DOSE</div>
+          </div>
+          <sc-for list="{{ doseBreakdown }}" as="db" hint-placeholder-count="4">
+            <div style="display:grid; grid-template-columns:1.1fr 0.9fr 1fr 1.7fr; gap:12px; align-items:center; padding:15px 26px; border-bottom:1px solid #EEF2F8;">
+              <div><div style="font-size:15px; font-weight:800; color:#16203A;">{{ db.time }}</div><div style="font-size:13px; font-weight:600; color:#8A96B0; margin-top:1px;">{{ db.label }}</div></div>
+              <div style="font-size:15px; font-weight:800; color:{{ db.adhColor }};">{{ db.adherence }}</div>
+              <div style="font-size:15px; font-weight:700; color:{{ db.respColor }};">{{ db.response }}</div>
+              <div style="display:flex; align-items:center; gap:11px;">
+                <div style="flex:none; width:96px; height:8px; border-radius:5px; background:#EAEFF7; overflow:hidden;"><div style="width:{{ db.onW }}; height:100%; background:{{ db.onColor }}; border-radius:5px;"></div></div>
+                <span style="font-size:14px; font-weight:800; color:#16203A; width:42px; flex:none;">{{ db.onAfter }}</span>
+                <span style="font-size:13px; font-weight:600; color:#6B7794; min-width:0;">{{ db.pattern }}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+
+        <!-- Section E: freeze log -->
+        <div style="background:#fff; border:1px solid #E4EAF3; border-radius:16px; overflow:hidden; box-shadow:0 1px 3px rgba(28,46,92,0.06); margin-bottom:22px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:22px 26px 16px;">
+            <div>
+              <div style="font-size:18px; font-weight:800;">Freeze events</div>
+              <div style="font-size:14px; font-weight:600; color:#6B7794; margin-top:3px;">{{ d_freezeSummary }}</div>
+            </div>
+            <button onClick="{{ toggleFreezeSort }}" style="display:inline-flex; align-items:center; gap:6px; height:38px; padding:0 14px; border:1px solid #DCE4F0; border-radius:10px; background:#fff; cursor:pointer; font-family:inherit; font-size:13px; font-weight:700; color:#6B7794;" style-hover="background:#F5F8FD">
+              {{ freezeSortLabel }}
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M7 10l5 5 5-5" stroke="#6B7794" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </button>
+          </div>
+          <div style="display:grid; grid-template-columns:1.4fr 0.9fr 1fr 1fr; gap:12px; padding:10px 26px; background:#F6F8FC; border-top:1px solid #E9EEF6; border-bottom:1px solid #E9EEF6; font-size:12px; font-weight:800; letter-spacing:0.5px; color:#8A96B0;">
+            <div>DATE / TIME</div><div>DURATION</div><div>ANKLE CUE</div><div>HELPED</div>
+          </div>
+          <sc-for list="{{ freezeRows }}" as="f" hint-placeholder-count="4">
+            <div style="display:grid; grid-template-columns:1.4fr 0.9fr 1fr 1fr; gap:12px; align-items:center; padding:14px 26px; border-bottom:1px solid #EEF2F8; font-size:14px;">
+              <div style="font-weight:700; color:#16203A;">{{ f.when }}</div>
+              <div style="font-weight:700; color:{{ f.durColor }};">{{ f.dur }}</div>
+              <div><span style="display:inline-flex; align-items:center; gap:5px; font-weight:700; color:{{ f.cueColor }};">{{ f.cue }}</span></div>
+              <div><span style="display:inline-flex; align-items:center; height:26px; padding:0 10px; border-radius:7px; background:{{ f.helpedBg }}; font-size:12px; font-weight:800; color:{{ f.helpedColor }};">{{ f.helped }}</span></div>
+            </div>
+          </sc-for>
+        </div>
+
+        <!-- Section F: notes + suggestion -->
+        <div style="display:grid; grid-template-columns:1.15fr 1fr; gap:16px; margin-bottom:8px;">
+          <div style="background:#fff; border:1px solid #E4EAF3; border-radius:16px; padding:22px 24px; box-shadow:0 1px 3px rgba(28,46,92,0.06);">
+            <div style="font-size:17px; font-weight:800;">Clinician notes</div>
+            <div style="font-size:13px; font-weight:600; color:#8A96B0; margin-top:3px; margin-bottom:14px;">Saved to this patient's record.</div>
+            <textarea value="{{ noteDraft }}" onInput="{{ setNote }}" placeholder="Add a note for the next visit…" style="width:100%; min-height:150px; resize:vertical; border:1px solid #DCE4F0; border-radius:12px; padding:14px 16px; font-family:inherit; font-size:15px; font-weight:600; color:#16203A; line-height:1.5; background:#F8FAFD; outline:none;"></textarea>
+            <div style="display:flex; align-items:center; gap:14px; margin-top:14px;">
+              <button onClick="{{ saveNote }}" style="height:44px; padding:0 22px; border:none; border-radius:11px; background:#2F57E6; cursor:pointer; font-family:inherit; font-size:15px; font-weight:800; color:#fff;" style-hover="background:#274BCB">Save note</button>
+              <sc-if value="{{ noteSaved }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex; align-items:center; gap:6px; font-size:14px; font-weight:700; color:#15724A;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M6 12.5 10.5 17 18 7.5" stroke="#15724A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Saved</span></sc-if>
+            </div>
+          </div>
+
+          <div style="background:#F3F6FD; border:1px solid #D8E2F6; border-radius:16px; padding:22px 24px; display:flex; flex-direction:column;">
+            <div style="display:flex; align-items:center; gap:9px;">
+              <span style="width:30px; height:30px; border-radius:9px; background:#2F57E6; display:flex; align-items:center; justify-content:center;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 3 13.6 8.4 19 10l-5.4 1.6L12 17l-1.6-5.4L5 10l5.4-1.6L12 3Z" fill="#fff"></path></svg></span>
+              <span style="font-size:16px; font-weight:800; color:#1F3A8A;">Suggested for discussion</span>
+            </div>
+            <div style="font-size:15.5px; font-weight:600; color:#27375C; line-height:1.55; margin-top:14px; flex:1;">{{ d_suggestion }}</div>
+            <div style="font-size:12.5px; font-weight:600; color:#7C8AA6; line-height:1.5; margin-top:16px; padding-top:14px; border-top:1px solid #D8E2F6;">Cadence provides observational data to support clinical decisions. All treatment decisions remain with the treating clinician.</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ================= REPORTS ================= -->
+      <sc-if value="{{ isReports }}" hint-placeholder-val="{{ false }}">
+        <div style="font-size:30px; font-weight:800; letter-spacing:-0.6px;">Reports</div>
+        <div style="font-size:15px; font-weight:600; color:#6B7794; margin-top:5px; margin-bottom:26px;">Generate a shareable summary for a visit or referral.</div>
+        <div style="background:#fff; border:1px solid #E4EAF3; border-radius:16px; padding:28px 30px; box-shadow:0 1px 3px rgba(28,46,92,0.06); max-width:760px;">
+          <div style="margin-bottom:22px;">
+            <div style="font-size:13px; font-weight:800; letter-spacing:0.6px; color:#8A96B0; margin-bottom:8px;">PATIENT</div>
+            <div style="position:relative;">
+              <select value="{{ reportPatientId }}" onChange="{{ setReportPatient }}" style="width:100%; height:50px; border:1.5px solid #DCE4F0; border-radius:12px; padding:0 42px 0 16px; font-family:inherit; font-size:16px; font-weight:700; color:#16203A; background:#F8FAFD; outline:none; cursor:pointer; appearance:none; -webkit-appearance:none;">
+                <sc-for list="{{ reportPatientOptions }}" as="o" hint-placeholder-count="3">
+                  <option value="{{ o.id }}">{{ o.label }}</option>
+                </sc-for>
+              </select>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="position:absolute; right:16px; top:16px; pointer-events:none;"><path d="M6 9l6 6 6-6" stroke="#6B7794" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div style="width:52px; height:52px; flex:none; border-radius:14px; background:#E5EBFD; display:flex; align-items:center; justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M7 3h7l4 4v14H7zM14 3v4h4" stroke="#2F57E6" stroke-width="1.9" stroke-linejoin="round"></path><path d="M9.5 13h5M9.5 16.5h5" stroke="#2F57E6" stroke-width="1.9" stroke-linecap="round"></path></svg></div>
+            <div style="flex:1;">
+              <div style="font-size:19px; font-weight:800;">30-day patient summary</div>
+              <div style="font-size:14px; font-weight:600; color:#6B7794; margin-top:3px;">{{ reportPatientName }} · prepared by {{ docName }}</div>
+            </div>
+            <button onClick="{{ exportReport }}" style="height:48px; padding:0 24px; border:none; border-radius:12px; background:{{ reportBtnBg }}; cursor:pointer; font-family:inherit; font-size:15px; font-weight:800; color:#fff; display:inline-flex; align-items:center; gap:9px; box-shadow:0 6px 16px rgba(47,87,230,0.24);">
+              <span style="display:flex;">{{ reportBtnIcon }}</span>{{ reportBtnLabel }}
+            </button>
+          </div>
+          <div style="height:1px; background:#EDF1F7; margin:22px 0;"></div>
+          <div style="font-size:13px; font-weight:800; letter-spacing:0.6px; color:#8A96B0; margin-bottom:14px;">THE REPORT WILL INCLUDE</div>
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <sc-for list="{{ reportContents }}" as="c" hint-placeholder-count="4">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <span style="width:26px; height:26px; flex:none; border-radius:8px; background:#E6F5EC; display:flex; align-items:center; justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M6 12.5 10.5 17 18 7.5" stroke="#1F8A5B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+                <span style="font-size:15px; font-weight:700; color:#27375C;">{{ c }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <sc-if value="{{ reportDone }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; align-items:center; gap:10px; background:#E6F5EC; border-radius:12px; padding:14px 16px; margin-top:22px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2 20 5v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3Z" stroke="#1F8A5B" stroke-width="1.9" stroke-linejoin="round"></path><path d="M8.5 12 11 14.5 16 9" stroke="#1F8A5B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              <span style="font-size:15px; font-weight:700; color:#15724A;">Report generated · {{ reportFileName }} is ready to download.</span>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <!-- ================= SETTINGS ================= -->
+      <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+        <div style="font-size:30px; font-weight:800; letter-spacing:-0.6px;">Settings</div>
+        <div style="font-size:15px; font-weight:600; color:#6B7794; margin-top:5px; margin-bottom:26px;">Your profile and preferences.</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:880px;">
+          <div style="background:#fff; border:1px solid #E4EAF3; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(28,46,92,0.06);">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+              <div style="font-size:13px; font-weight:800; letter-spacing:0.6px; color:#8A96B0;">CLINICIAN PROFILE</div>
+              <sc-if value="{{ profileView }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ openProfileEdit }}" style="display:inline-flex; align-items:center; gap:6px; height:32px; padding:0 13px; border:1px solid #DCE4F0; border-radius:9px; background:#fff; cursor:pointer; font-family:inherit; font-size:13px; font-weight:800; color:#2F57E6;" style-hover="background:#F5F8FD"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 20h4l10-10-4-4L4 16v4Z" stroke="#2F57E6" stroke-width="2" stroke-linejoin="round"></path></svg>Edit</button>
+              </sc-if>
+            </div>
+            <sc-if value="{{ profileView }}" hint-placeholder-val="{{ true }}">
+            <sc-for list="{{ profileRows }}" as="r" hint-placeholder-count="3">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; padding:13px 0; border-bottom:{{ r.border }};">
+                <span style="font-size:14px; font-weight:600; color:#8A96B0; flex:none;">{{ r.label }}</span>
+                <span style="font-size:15px; font-weight:700; color:#16203A; text-align:right;">{{ r.value }}</span>
+              </div>
+            </sc-for>
+            </sc-if>
+            <sc-if value="{{ profileEdit }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; flex-direction:column; gap:14px;">
+              <div><div style="font-size:12px; font-weight:800; letter-spacing:0.5px; color:#9AA6BE; margin-bottom:6px;">NAME</div><input value="{{ peName }}" onInput="{{ setPeName }}" style="width:100%; height:44px; border:1px solid #DCE4F0; border-radius:11px; padding:0 12px; font-family:inherit; font-size:15px; font-weight:600; color:#16203A; background:#F8FAFD; outline:none;"></div>
+              <div><div style="font-size:12px; font-weight:800; letter-spacing:0.5px; color:#9AA6BE; margin-bottom:6px;">CREDENTIALS</div><input value="{{ peCred }}" onInput="{{ setPeCred }}" style="width:100%; height:44px; border:1px solid #DCE4F0; border-radius:11px; padding:0 12px; font-family:inherit; font-size:15px; font-weight:600; color:#16203A; background:#F8FAFD; outline:none;"></div>
+              <div><div style="font-size:12px; font-weight:800; letter-spacing:0.5px; color:#9AA6BE; margin-bottom:6px;">INSTITUTION</div><input value="{{ peInstitution }}" onInput="{{ setPeInstitution }}" style="width:100%; height:44px; border:1px solid #DCE4F0; border-radius:11px; padding:0 12px; font-family:inherit; font-size:15px; font-weight:600; color:#16203A; background:#F8FAFD; outline:none;"></div>
+              <div style="display:flex; gap:12px;">
+                <div style="flex:1;"><div style="font-size:12px; font-weight:800; letter-spacing:0.5px; color:#9AA6BE; margin-bottom:6px;">WORK EMAIL</div><input value="{{ peEmail }}" onInput="{{ setPeEmail }}" style="width:100%; height:44px; border:1px solid #DCE4F0; border-radius:11px; padding:0 12px; font-family:inherit; font-size:15px; font-weight:600; color:#16203A; background:#F8FAFD; outline:none;"></div>
+                <div style="width:130px; flex:none;"><div style="font-size:12px; font-weight:800; letter-spacing:0.5px; color:#9AA6BE; margin-bottom:6px;">NPI</div><input value="{{ peNpi }}" onInput="{{ setPeNpi }}" style="width:100%; height:44px; border:1px solid #DCE4F0; border-radius:11px; padding:0 12px; font-family:inherit; font-size:15px; font-weight:600; color:#16203A; background:#F8FAFD; outline:none;"></div>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px; margin-top:4px;">
+                <button onClick="{{ saveProfile }}" style="height:44px; padding:0 22px; border:none; border-radius:11px; background:#2F57E6; cursor:pointer; font-family:inherit; font-size:14px; font-weight:800; color:#fff;" style-hover="background:#274BCB">Save changes</button>
+                <button onClick="{{ cancelProfileEdit }}" style="height:44px; padding:0 18px; border:1px solid #DCE4F0; border-radius:11px; background:#fff; cursor:pointer; font-family:inherit; font-size:14px; font-weight:700; color:#6B7794;" style-hover="background:#F5F8FD">Cancel</button>
+              </div>
+            </div>
+            </sc-if>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            <div style="background:#fff; border:1px solid #E4EAF3; border-radius:16px; padding:24px; box-shadow:0 1px 3px rgba(28,46,92,0.06);">
+              <div style="font-size:13px; font-weight:800; letter-spacing:0.6px; color:#8A96B0; margin-bottom:16px;">NOTIFICATIONS</div>
+              <sc-for list="{{ settingToggles }}" as="t" hint-placeholder-count="3">
+                <div style="display:flex; align-items:center; gap:14px; padding:11px 0; border-bottom:{{ t.border }};">
+                  <div style="flex:1;"><div style="font-size:15px; font-weight:700;">{{ t.title }}</div><div style="font-size:13px; font-weight:600; color:#8A96B0; margin-top:1px;">{{ t.desc }}</div></div>
+                  <button onClick="{{ t.onClick }}" style="background:none; border:none; padding:0; cursor:pointer;"><div style="width:50px; height:29px; border-radius:999px; background:{{ t.track }}; position:relative;"><div style="position:absolute; top:3px; left:{{ t.knob }}; width:23px; height:23px; border-radius:50%; background:#fff; box-shadow:0 2px 5px rgba(0,0,0,0.2);"></div></div></button>
+                </div>
+              </sc-for>
+            </div>
+            <div style="background:#fff; border:1px solid #E4EAF3; border-radius:16px; padding:22px 24px; box-shadow:0 1px 3px rgba(28,46,92,0.06);">
+              <div style="display:flex; align-items:center; justify-content:space-between;">
+                <div><div style="font-size:15px; font-weight:800;">Connected patients</div><div style="font-size:13px; font-weight:600; color:#8A96B0; margin-top:2px;">Active in your panel</div></div>
+                <div style="font-size:30px; font-weight:800; color:#2F57E6;">{{ connectedCount }}</div>
+              </div>
+              <div style="display:flex; gap:10px; background:#F6F8FC; border-radius:11px; padding:13px 15px; margin-top:16px;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" style="flex:none; margin-top:1px;"><path d="M12 3l7 3v6c0 4-3 7.4-7 9-4-1.6-7-5-7-9V6l7-3Z" stroke="#6B7794" stroke-width="1.7" stroke-linejoin="round"></path></svg>
+                <span style="font-size:13px; font-weight:600; color:#6B7794; line-height:1.5;">Patients control what they share and can disconnect from your panel at any time.</span>
+              </div>
+            </div>
+            <button onClick="{{ signOut }}" style="width:100%; height:50px; border:1px solid #F0CDCD; border-radius:14px; background:#fff; cursor:pointer; font-family:inherit; font-size:14px; font-weight:800; color:#C0392B;" style-hover="background:#FBF0F0">Sign out</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- footer disclaimer (every screen) -->
+      <div style="width:100%; margin-top:auto; padding-top:18px; border-top:1px solid #E1E8F2; font-size:12.5px; font-weight:600; color:#9AA6BE; line-height:1.5; text-align:center;">
+        Cadence is an observational monitoring tool. It does not provide medical advice or replace clinical judgment. All treatment decisions remain with the treating clinician.
+      </div>
+
+    </div>
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    screen: 'patients',
+    selectedId: 'robert',
+    search: '',
+    week: 'good',
+    account: { name: 'Dr. Naomi Okafor', credential: 'MD, Movement Disorders', institution: 'Bayfront Neurology', npi: '1487 562 003', email: 'n.okafor@bayfront.health', providerId: 'CDN-2003' },
+    setupMode: 'create', setupStep: 0,
+    suName: '', suCred: 'MD, Movement Disorders', suInstitution: '', suNpi: '', suEmail: '',
+    profileEdit: false, peName: '', peCred: '', peInstitution: '', peNpi: '', peEmail: '',
+    invites: [],
+    accepted: [],
+    declined: [],
+    bannerDismissed: false,
+    noteDraft: '',
+    noteSaved: false,
+    reportState: 'idle',
+    reportDone: false,
+    reportPatientId: 'robert',
+    freezeSort: 'desc',
+    notifPrefs: { requests: true, offline: true, weekly: false },
+    planRows: [
+      { id: 1, time: '7:00', label: 'Morning' },
+      { id: 2, time: '11:45', label: 'Midday' },
+      { id: 3, time: '4:00', label: 'Afternoon' },
+      { id: 4, time: '8:00', label: 'Evening' },
+    ],
+    planStrength: '25 / 100 mg', planNote: '',
+    algo: { shift: 30, lead: 20, interval: 180, sens: 'balanced', freezeCue: true },
+    planSentTs: null, planConfirmedTs: null,
+    visitDate: '', visitTime: '10:30 AM', visitLocation: 'Bayfront Neurology', visitNote: '',
+    visitSavedTs: null, _nextDoseId: 5,
+  };
+
+  componentDidMount() {
+    this.loadAccount();
+    this.loadInvites();
+    this._invTimer = setInterval(() => this.loadInvites(), 1800);
+    this.loadNote('robert');
+    this.hydrateCarePlan();
+    this._planTimer = setInterval(() => this.pollCarePlan(), 1500);
+  }
+  componentWillUnmount() { clearInterval(this._invTimer); clearInterval(this._planTimer); }
+
+  loadAccount() {
+    try {
+      const a = JSON.parse(localStorage.getItem('cadence_clinician_account'));
+      if (a && a.name) { this.setState({ account: a }); return; }
+    } catch (e) {}
+    this.setState({ screen: 'setup', setupStep: 0 });
+  }
+  saveAccount(a) { try { localStorage.setItem('cadence_clinician_account', JSON.stringify(a)); } catch (e) {} }
+  acctInitials(name) {
+    const parts = (name || '').replace(/^(dr\.?|prof\.?|mr\.?|ms\.?|mrs\.?)\s+/i, '').trim().split(/\s+/).filter(Boolean);
+    return (parts.map(w => w[0]).join('').slice(0, 2) || 'DR').toUpperCase();
+  }
+  acctShortCred(cred) { return (cred || '').split(',').slice(-1)[0].trim() || cred || ''; }
+  finishSetup() {
+    const s = this.state;
+    const a = {
+      name: s.suName.trim() || 'Dr. Naomi Okafor',
+      credential: s.suCred.trim() || 'MD, Movement Disorders',
+      institution: s.suInstitution.trim() || 'Bayfront Neurology',
+      npi: s.suNpi.trim() || ', ',
+      email: s.suEmail.trim() || '',
+    };
+    this.saveAccount(a);
+    this.setState({ account: a, screen: 'patients', setupStep: 0 });
+  }
+  signInDemo() {
+    this.saveAccount(this.state.account);
+    this.setState({ screen: 'patients' });
+  }
+  openProfileEdit() {
+    const a = this.state.account;
+    this.setState({ profileEdit: true, peName: a.name, peCred: a.credential, peInstitution: a.institution, peNpi: a.npi, peEmail: a.email });
+  }
+  saveProfile() {
+    const s = this.state;
+    const a = { name: s.peName.trim() || s.account.name, credential: s.peCred.trim() || s.account.credential, institution: s.peInstitution.trim() || s.account.institution, npi: s.peNpi.trim() || s.account.npi, email: s.peEmail.trim() || s.account.email };
+    this.saveAccount(a);
+    this.setState({ account: a, profileEdit: false });
+  }
+
+  carePlanObj() { try { return JSON.parse(localStorage.getItem('cadence_care_plan')) || {}; } catch (e) { return {}; } }
+  writeCarePlan(obj) { try { localStorage.setItem('cadence_care_plan', JSON.stringify(obj)); } catch (e) {} }
+
+  hydrateCarePlan() {
+    const cp = this.carePlanObj();
+    const patch = { carePlan: cp };
+    if (Array.isArray(cp.schedule) && cp.schedule.length) {
+      patch.planRows = cp.schedule.map((d, i) => ({ id: i + 1, time: d.time, label: d.label }));
+      patch._nextDoseId = cp.schedule.length + 1;
+    }
+    if (cp.strength) patch.planStrength = cp.strength;
+    if (cp.note != null) patch.planNote = cp.note;
+    if (cp.proposedTs) patch.planSentTs = cp.proposedTs;
+    if (cp.patientConfirmedTs) patch.planConfirmedTs = cp.patientConfirmedTs;
+    if (cp.nextVisit) {
+      patch.visitDate = cp.nextVisit.date || '';
+      patch.visitTime = cp.nextVisit.time || '10:30 AM';
+      patch.visitLocation = cp.nextVisit.location || 'Bayfront Neurology';
+      patch.visitNote = cp.nextVisit.note || '';
+      patch.visitSavedTs = cp.nextVisit.setTs || null;
+    }
+    this.setState(patch);
+  }
+  pollCarePlan() {
+    const cp = this.carePlanObj();
+    this.setState({ carePlan: cp, planConfirmedTs: cp.patientConfirmedTs || null });
+  }
+  setPlanRow(id, field, val) { this.setState(s => ({ planRows: s.planRows.map(r => r.id === id ? { ...r, [field]: val } : r) })); }
+  setAlgo(field, val) { this.setState(s => ({ algo: { ...s.algo, [field]: val } })); }
+  addPlanDose() { this.setState(s => ({ planRows: [...s.planRows, { id: s._nextDoseId, time: '', label: '' }], _nextDoseId: s._nextDoseId + 1 })); }
+  removePlanDose(id) { this.setState(s => ({ planRows: s.planRows.filter(r => r.id !== id) })); }
+  sendPlan() {
+    const cp = this.carePlanObj();
+    const ts = Date.now();
+    cp.schedule = this.state.planRows.filter(r => r.time.trim()).map(r => ({ time: r.time.trim(), label: r.label.trim() || 'Dose' }));
+    cp.strength = this.state.planStrength;
+    cp.note = this.state.planNote;
+    cp.proposedBy = this.state.account.name;
+    cp.proposedTs = ts;
+    delete cp.patientConfirmedTs;
+    this.writeCarePlan(cp);
+    this.setState({ carePlan: cp, planSentTs: ts, planConfirmedTs: null });
+  }
+  saveVisit() {
+    const cp = this.carePlanObj();
+    cp.nextVisit = { date: this.state.visitDate, time: this.state.visitTime, location: this.state.visitLocation, note: this.state.visitNote, setTs: Date.now(), setBy: this.state.account.name };
+    this.writeCarePlan(cp);
+    this.setState({ carePlan: cp, visitSavedTs: cp.nextVisit.setTs });
+  }
+  fmtVisitShort(date) {
+    if (!date) return null;
+    const d = new Date(date + 'T00:00:00');
+    if (isNaN(d.getTime())) return null;
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  }
+  fmtVisitLong(date) {
+    if (!date) return null;
+    const d = new Date(date + 'T00:00:00');
+    if (isNaN(d.getTime())) return null;
+    return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  }
+  visitRelative(date) {
+    if (!date) return null;
+    const d = new Date(date + 'T00:00:00');
+    if (isNaN(d.getTime())) return null;
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const diff = Math.round((d - today) / 86400000);
+    if (diff < 0) return 'past due';
+    if (diff === 0) return 'today';
+    if (diff === 1) return 'tomorrow';
+    if (diff < 14) return 'in ' + diff + ' days';
+    return 'in ' + Math.round(diff / 7) + ' weeks';
+  }
+  robertSummary() {
+    const good = this.state.week === 'good';
+    return { state: good ? 'On' : 'Off', onTime: good ? 74 : 58, freezes: good ? 3 : 9, lastSync: good ? '2 min ago' : '6 min ago', synced: true };
+  }
+  robertNextVisit() {
+    const cp = this.state.carePlan || {};
+    if (cp.nextVisit && cp.nextVisit.date) { const r = this.visitRelative(cp.nextVisit.date); if (r) return r; }
+    return 'in 4 days';
+  }
+
+  readLS(key) { try { return JSON.parse(localStorage.getItem(key)) || []; } catch (e) { return []; } }
+  writeLS(key, v) { try { localStorage.setItem(key, JSON.stringify(v)); } catch (e) {} }
+
+  loadInvites() {
+    const invites = this.readLS('cadence_doctor_invites');
+    this.setState({ invites });
+  }
+
+  pending() {
+    return this.state.invites
+      .map((inv, i) => ({ inv, key: (inv.ts || i) + '_' + i }))
+      .filter(({ inv, key }) => (inv.status !== 'accepted') && !this.state.accepted.includes(key) && !this.state.declined.includes(key));
+  }
+
+  acceptInvite(key, inv) {
+    const invites = this.readLS('cadence_doctor_invites').map(x => (x.ts === inv.ts ? { ...x, status: 'accepted' } : x));
+    this.writeLS('cadence_doctor_invites', invites);
+    this.setState(s => ({ accepted: [...s.accepted, key], invites }));
+  }
+  declineInvite(key) { this.setState(s => ({ declined: [...s.declined, key] })); }
+
+  loadNote(id) {
+    const raw = (() => { try { return localStorage.getItem('cadence_clinician_notes_' + id); } catch (e) { return null; } })();
+    this.setState({ noteDraft: raw || '', noteSaved: false });
+  }
+  saveNote() {
+    try { localStorage.setItem('cadence_clinician_notes_' + this.state.selectedId, this.state.noteDraft); } catch (e) {}
+    this.setState({ noteSaved: true });
+    clearTimeout(this._noteTimer);
+    this._noteTimer = setTimeout(() => this.setState({ noteSaved: false }), 2600);
+  }
+
+  select(id) {
+    this.setState({ screen: 'detail', selectedId: id });
+    this.loadNote(id);
+  }
+
+  reportPatientName() {
+    const p = this.basePatients().find(x => x.id === this.state.reportPatientId);
+    return p ? p.name : 'Patient';
+  }
+
+  exportReport() {
+    if (this.state.reportState === 'working') return;
+    this.setState({ reportState: 'working', reportDone: false });
+    clearTimeout(this._repTimer);
+    this._repTimer = setTimeout(() => this.setState({ reportState: 'done', reportDone: true }), 1100);
+  }
+
+  ago(ts) {
+    if (!ts) return 'recently';
+    const m = Math.max(1, Math.round((Date.now() - ts) / 60000));
+    if (m < 60) return m + ' min ago';
+    const h = Math.round(m / 60);
+    if (h < 24) return h + (h === 1 ? ' hour ago' : ' hours ago');
+    const d = Math.round(h / 24);
+    return d + (d === 1 ? ' day ago' : ' days ago');
+  }
+  initials(name) { return (name || '?').split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase(); }
+
+  // ---------- mock patient panel ----------
+  basePatients() {
+    return [
+      { id: 'robert', name: 'Robert Chen', age: 72, dx: '8 years', lastSync: '2 min ago', synced: true, state: 'On', onTime: 74, freezes: 3, nextVisit: 'in 4 days', avBg: '#E5EBFD', avColor: '#2F57E6' },
+      { id: 'eleanor', name: 'Eleanor Vance', age: 68, dx: '3 years', lastSync: '11 min ago', synced: true, state: 'On', onTime: 88, freezes: 1, nextVisit: 'in 2 weeks', avBg: '#E6F5EC', avColor: '#1F8A5B' },
+      { id: 'james', name: 'James Okonkwo', age: 75, dx: '12 years', lastSync: '24 min ago', synced: true, state: 'Off', onTime: 52, freezes: 9, nextVisit: 'tomorrow', avBg: '#FBEDE0', avColor: '#B9700F' },
+      { id: 'patricia', name: 'Patricia Lindqvist', age: 70, dx: '6 years', lastSync: '1 hour ago', synced: true, state: 'On', onTime: 79, freezes: 4, nextVisit: 'in 9 days', avBg: '#E4E7FA', avColor: '#4B5DC4' },
+      { id: 'harold', name: 'Harold Greene', age: 81, dx: '15 years', lastSync: '3 days ago', synced: false, state: 'Unknown', onTime: null, freezes: null, nextVisit: 'in 6 days', avBg: '#EAEFF7', avColor: '#6B7794' },
+      { id: 'maria', name: 'Maria Delgado', age: 64, dx: '2 years', lastSync: '5 min ago', synced: true, state: 'On', onTime: 91, freezes: 0, nextVisit: 'in 3 weeks', avBg: '#E6F5EC', avColor: '#1F8A5B' },
+    ];
+  }
+  allPatients() {
+    const base = this.basePatients();
+    const extra = this.state.accepted.map(key => {
+      const found = this.state.invites.find((inv, i) => ((inv.ts || i) + '_' + i) === key);
+      if (!found) return null;
+      const nm = found.patient || found.name || 'New patient';
+      if (base.some(b => b.name === nm)) return null;
+      return { id: 'inv_' + key, name: nm, age: ', ', dx: 'newly connected', lastSync: 'just now', synced: true, state: 'Unknown', onTime: null, freezes: null, nextVisit: 'not scheduled', avBg: '#E5EBFD', avColor: '#2F57E6' };
+    }).filter(Boolean);
+    return [...extra, ...base];
+  }
+
+  stateColors(st) {
+    if (st === 'On') return { bg: '#E2EEDF', color: '#1F8A5B' };
+    if (st === 'Off') return { bg: '#FBEAD0', color: '#B9700F' };
+    return { bg: '#EAEFF7', color: '#8593AD' };
+  }
+
+  // ---------- Robert detail dataset ----------
+  detailData() {
+    const good = this.state.week === 'good';
+    const W0 = 360, SPAN = 1020; // 6:00 .. 23:00
+    const pct = (m) => ((m - W0) / SPAN * 100).toFixed(2) + '%';
+    const doses = [420, 705, 960, 1200];
+    const doseMarks = doses.map(d => ({ left: pct(d) }));
+
+    const dayDefs = good ? [
+      { label: 'Mon', offs: [[665, 700]] },
+      { label: 'Tue', offs: [[1175, 1210]] },
+      { label: 'Wed', offs: [[648, 712], [1150, 1205]] },
+      { label: 'Thu', offs: [[605, 718], [905, 1010], [1145, 1265]] },
+      { label: 'Fri', offs: [[660, 706], [978, 1016]] },
+      { label: 'Sat', offs: [[672, 698]] },
+      { label: 'Sun', offs: [[690, 722]], today: true },
+    ] : [
+      { label: 'Mon', offs: [[600, 700], [900, 1010], [1150, 1280]] },
+      { label: 'Tue', offs: [[610, 720], [930, 1040], [1160, 1300]] },
+      { label: 'Wed', offs: [[595, 715], [880, 1020], [1120, 1290]] },
+      { label: 'Thu', offs: [[600, 740], [900, 1060], [1140, 1320]] },
+      { label: 'Fri', offs: [[615, 720], [905, 1030], [1150, 1295]] },
+      { label: 'Sat', offs: [[600, 705], [890, 1000], [1130, 1270]] },
+      { label: 'Sun', offs: [[600, 730], [910, 1050], [1150, 1310]], today: true },
+    ];
+
+    const timelineDays = dayDefs.map((d, i) => ({
+      key: 'tl' + i, label: d.label, isToday: !!d.today,
+      labelColor: d.today ? '#2F57E6' : '#16203A',
+      segments: d.offs.map((o, j) => ({ key: 'sg' + i + '_' + j, left: pct(o[0]), width: ((o[1] - o[0]) / SPAN * 100).toFixed(2) + '%', color: '#EBAB4C' })),
+      doses: doseMarks.map((m, j) => ({ key: 'dm' + i + '_' + j, left: m.left })),
+    }));
+
+    const hourLabels = ['6a', '9a', '12p', '3p', '6p', '9p'];
+
+    const metrics = good ? [
+      { label: '7-day on-time', value: '74%', delta: '6 pts', deltaArrow: '\u2191', deltaColor: '#1F8A5B', note: 'Up from 68% last week. More of his day spent On.' },
+      { label: 'Weekly freezes', value: '3', delta: '4', deltaArrow: '\u2193', deltaColor: '#1F8A5B', note: 'Down from 7. The ankle cue is firing reliably.' },
+      { label: 'Mean dose response', value: '46 min', delta: '3 min', deltaArrow: '\u2191', deltaColor: '#B9700F', note: 'Time from a dose until On state. Slightly slower.' },
+      { label: 'Off-forecast accuracy', value: '81%', delta: '2 pts', deltaArrow: '\u2191', deltaColor: '#1F8A5B', note: 'How often the predicted Off window was right.' },
+    ] : [
+      { label: '7-day on-time', value: '58%', delta: '16 pts', deltaArrow: '\u2193', deltaColor: '#C0392B', note: 'Down from 74%. Off periods are taking more of the day.' },
+      { label: 'Weekly freezes', value: '9', delta: '6', deltaArrow: '\u2191', deltaColor: '#C0392B', note: 'Up from 3, with several in the afternoon.' },
+      { label: 'Mean dose response', value: '71 min', delta: '25 min', deltaArrow: '\u2191', deltaColor: '#C0392B', note: 'Doses are taking much longer to bring him On.' },
+      { label: 'Off-forecast accuracy', value: '78%', delta: '3 pts', deltaArrow: '\u2193', deltaColor: '#B9700F', note: 'Pattern is less regular this week, harder to predict.' },
+    ];
+
+    // dose-response chart
+    const X0 = 56, X1 = 856, Y0 = 24, Y1 = 210;
+    const px = (m) => X0 + (m - W0) / SPAN * (X1 - X0);
+    const rise = 26, decay = good ? 150 : 118, amp = good ? 1 : 0.86;
+    const level = (t) => {
+      let s = 0;
+      for (const d of doses) { if (t >= d) { s += amp * (Math.exp(-(t - d) / decay) - Math.exp(-(t - d) / rise)); } }
+      return s;
+    };
+    const samples = [];
+    for (let t = W0; t <= 1380; t += 12) samples.push({ t, v: level(t) });
+    let maxV = 0; samples.forEach(s => { if (s.v > maxV) maxV = s.v; });
+    maxV = maxV || 1;
+    const py = (v) => Y1 - (v / maxV) * (Y1 - Y0);
+    const thr = (good ? 0.40 : 0.46) * maxV;
+    const thresholdY = +py(thr).toFixed(1);
+    const plasmaPath = samples.map((s, i) => (i ? 'L' : 'M') + px(s.t).toFixed(1) + ' ' + py(s.v).toFixed(1)).join(' ');
+    const areaPath = 'M' + px(W0).toFixed(1) + ' ' + Y1 + ' ' + samples.map(s => 'L' + px(s.t).toFixed(1) + ' ' + py(s.v).toFixed(1)).join(' ') + ' L' + px(1380).toFixed(1) + ' ' + Y1 + ' Z';
+
+    // off bands where level < threshold (after first dose onset)
+    const offBands = []; let bandStart = null;
+    for (let i = 0; i < samples.length; i++) {
+      const below = samples[i].v < thr && samples[i].t > doses[0] + 20;
+      if (below && bandStart === null) bandStart = samples[i].t;
+      if ((!below || i === samples.length - 1) && bandStart !== null) {
+        const end = samples[i].t;
+        if (end - bandStart > 24) offBands.push({ key: 'ob' + bandStart, x: +px(bandStart).toFixed(1), w: +(px(end) - px(bandStart)).toFixed(1) });
+        bandStart = null;
+      }
+    }
+    const doseTicks = doses.map((d, i) => ({ key: 'dt' + i, x: +px(d).toFixed(1), cy: +py(level(d + 4)).toFixed(1), label: ['7:00', '11:45', '4:00', '8:00'][i] }));
+    const gridLines = [0.25, 0.5, 0.75].map((f, i) => ({ key: 'gl' + i, y: +(Y1 - f * (Y1 - Y0)).toFixed(1) }));
+
+    const chartNote = good
+      ? 'Levodopa level dips below the On threshold for roughly 25 minutes before the afternoon dose at 4:00, Robert is going Off slightly early in that interval.'
+      : 'Levels are falling below the On threshold well before each afternoon and evening dose, leaving extended Off windows across the day.';
+
+    const freezeAll = good ? [
+      { when: 'Sun · 9:15 am', loc: 'Hallway', dur: '14s', durLong: false, cue: true, helped: 'Yes' },
+      { when: 'Sun · 10:50 am', loc: 'Kitchen doorway', dur: '9s', durLong: false, cue: true, helped: 'Yes' },
+      { when: 'Thu · 5:40 pm', loc: 'Living room', dur: '31s', durLong: true, cue: true, helped: 'Partly' },
+      { when: 'Tue · 8:20 am', loc: 'Bathroom doorway', dur: '12s', durLong: false, cue: true, helped: 'Yes' },
+      { when: 'Mon · 6:05 pm', loc: 'Hallway', dur: '18s', durLong: false, cue: false, helped: 'No' },
+      { when: 'Sat · 11:10 am', loc: 'Front step', dur: '22s', durLong: true, cue: true, helped: 'Yes' },
+    ] : [
+      { when: 'Sun · 5:30 pm', loc: 'Hallway', dur: '48s', durLong: true, cue: true, helped: 'Partly' },
+      { when: 'Sun · 1:15 pm', loc: 'Kitchen doorway', dur: '37s', durLong: true, cue: true, helped: 'Partly' },
+      { when: 'Sat · 6:10 pm', loc: 'Living room', dur: '52s', durLong: true, cue: true, helped: 'No' },
+      { when: 'Fri · 4:50 pm', loc: 'Bathroom doorway', dur: '29s', durLong: true, cue: true, helped: 'Yes' },
+      { when: 'Thu · 5:05 pm', loc: 'Hallway', dur: '41s', durLong: true, cue: false, helped: 'No' },
+      { when: 'Wed · 2:20 pm', loc: 'Front step', dur: '33s', durLong: true, cue: true, helped: 'Partly' },
+    ];
+    const freezeSorted = [...freezeAll];
+    if (this.state.freezeSort === 'asc') freezeSorted.reverse();
+    const freezeRows = freezeSorted.map((f, i) => ({
+      key: 'fz' + i, when: f.when, loc: f.loc, dur: f.dur,
+      durColor: f.durLong ? '#B9700F' : '#16203A',
+      cue: f.cue ? 'Fired' : 'No cue', cueColor: f.cue ? '#1F8A5B' : '#8593AD',
+      helped: f.helped, helpedBg: f.helped === 'Yes' ? '#E2EEDF' : (f.helped === 'No' ? '#FBE5E5' : '#FBF0DC'),
+      helpedColor: f.helped === 'Yes' ? '#1F8A5B' : (f.helped === 'No' ? '#C0392B' : '#B9700F'),
+    }));
+
+    const doseDefsGood = [
+      { time: '7:00', label: 'Morning', adh: 100, resp: 38, on: 86, pattern: 'Steady onset' },
+      { time: '11:45', label: 'Midday', adh: 96, resp: 44, on: 79, pattern: 'Slight early wear-off' },
+      { time: '4:00', label: 'Afternoon', adh: 89, resp: 52, on: 64, pattern: 'Wears off ~25 min early' },
+      { time: '8:00', label: 'Evening', adh: 93, resp: 49, on: 72, pattern: 'Slower onset' },
+    ];
+    const doseDefsBad = [
+      { time: '7:00', label: 'Morning', adh: 96, resp: 52, on: 70, pattern: 'Onset slowing' },
+      { time: '11:45', label: 'Midday', adh: 82, resp: 66, on: 55, pattern: 'Frequent early wear-off' },
+      { time: '4:00', label: 'Afternoon', adh: 74, resp: 78, on: 38, pattern: 'Long Off before evening dose' },
+      { time: '8:00', label: 'Evening', adh: 80, resp: 71, on: 47, pattern: 'Delayed, partial response' },
+    ];
+    const doseBreakdown = (good ? doseDefsGood : doseDefsBad).map((d, i) => ({
+      key: 'db' + i, time: d.time, label: d.label,
+      adherence: d.adh + '%', adhColor: d.adh >= 90 ? '#1F8A5B' : (d.adh >= 80 ? '#2F57E6' : '#B9700F'),
+      response: d.resp + ' min', respColor: d.resp <= 45 ? '#1F8A5B' : (d.resp <= 60 ? '#16203A' : '#B9700F'),
+      onAfter: d.on + '%', onW: d.on + '%', onColor: d.on >= 75 ? '#1F8A5B' : (d.on >= 55 ? '#2F57E6' : '#EBAB4C'),
+      pattern: d.pattern,
+    }));
+
+    const sc = this.stateColors(good ? 'On' : 'Off');
+    return {
+      doseBreakdown,
+      name: 'Robert Chen', firstName: 'Robert', initials: 'RC', age: 72, dx: '8 years',
+      med: 'Levodopa / Carbidopa 25/100 · 4× daily', lastSync: good ? '2 min ago' : '6 min ago',
+      state: good ? 'On' : 'Off', stateBg: sc.bg, stateColor: sc.color,
+      timelineDays, hourLabels, metrics,
+      plasmaPath, areaPath, thresholdY, thresholdLabelY: thresholdY - 6, offBands, doseTicks, gridLines, chartNote,
+      freezeRows, freezeSummary: good ? '3 this week · 12 in the last 30 days' : '9 this week · 24 in the last 30 days',
+      suggestion: good
+        ? 'Based on the last 7 days, Robert\u2019s afternoon dose may be wearing off 20\u201330 minutes early. It could be worth discussing a small timing adjustment at the next visit.'
+        : 'Off periods have lengthened this week, with the afternoon and evening doses appearing to wear off well before the next is due. It may be worth reviewing dose timing and interval at the next visit.',
+    };
+  }
+
+  carePlanRenderVals(d) {
+    const s = this.state;
+    const fn = d.firstName;
+    const planRowVals = s.planRows.map(r => ({
+      key: 'pr' + r.id, time: r.time, label: r.label,
+      setTime: (e) => this.setPlanRow(r.id, 'time', e.target.value),
+      setLabel: (e) => this.setPlanRow(r.id, 'label', e.target.value),
+      onRemove: () => this.removePlanDose(r.id),
+    }));
+    let planStatus = null, planStatusBg = '#EAEFF7', planStatusColor = '#6B7794';
+    if (s.planConfirmedTs && s.planSentTs && s.planConfirmedTs >= s.planSentTs) { planStatus = 'Confirmed by ' + fn; planStatusBg = '#E2EEDF'; planStatusColor = '#1F8A5B'; }
+    else if (s.planSentTs) { planStatus = 'Proposed · awaiting ' + fn; planStatusBg = '#FBF0DC'; planStatusColor = '#B9700F'; }
+    return {
+      planRowVals,
+      planStrength: s.planStrength,
+      algoMode: ({ conservative: 'Conservative', balanced: 'Balanced', sensitive: 'Sensitive' })[s.algo.sens] + ' profile',
+      algoShift: s.algo.shift,
+      algoShiftLabel: s.algo.shift === 0 ? 'Fixed times' : '\u00B1' + s.algo.shift + ' min',
+      setAlgoShift: (e) => this.setAlgo('shift', +e.target.value),
+      algoLead: s.algo.lead,
+      algoLeadLabel: s.algo.lead + ' min ahead',
+      setAlgoLead: (e) => this.setAlgo('lead', +e.target.value),
+      algoInterval: s.algo.interval,
+      algoIntervalLabel: Math.floor(s.algo.interval / 60) + 'h' + (s.algo.interval % 60 ? ' ' + (s.algo.interval % 60) + 'm' : ''),
+      setAlgoInterval: (e) => this.setAlgo('interval', +e.target.value),
+      sensOptions: [
+        { key: 'conservative', label: 'Conservative' },
+        { key: 'balanced', label: 'Balanced' },
+        { key: 'sensitive', label: 'Sensitive' },
+      ].map(o => ({
+        key: o.key, label: o.label,
+        onClick: () => this.setAlgo('sens', o.key),
+        bg: s.algo.sens === o.key ? '#2F57E6' : '#fff',
+        color: s.algo.sens === o.key ? '#fff' : '#6B7794',
+        border: s.algo.sens === o.key ? '#2F57E6' : '#DCE4F0',
+      })),
+      freezeCueTrack: s.algo.freezeCue ? '#1F8A5B' : '#CBD4E6',
+      freezeCueKnob: s.algo.freezeCue ? '25px' : '3px',
+      toggleFreezeCue: () => this.setAlgo('freezeCue', !s.algo.freezeCue),
+      resetAlgo: () => this.setState({ algo: { shift: 30, lead: 20, interval: 180, sens: 'balanced', freezeCue: true } }),
+      setPlanStrength: (e) => this.setState({ planStrength: e.target.value }),
+      addPlanDose: () => this.addPlanDose(),
+      sendPlan: () => this.sendPlan(),
+      sendPlanLabel: s.planSentTs ? 'Re-send to ' + fn : 'Send to ' + fn,
+      planStatus, planStatusBg, planStatusColor,
+      visitDate: s.visitDate, visitTime: s.visitTime, visitLocation: s.visitLocation,
+      setVisitDate: (e) => this.setState({ visitDate: e.target.value }),
+      setVisitTime: (e) => this.setState({ visitTime: e.target.value }),
+      setVisitLocation: (e) => this.setState({ visitLocation: e.target.value }),
+      saveVisit: () => this.saveVisit(),
+      saveVisitLabel: s.visitSavedTs ? 'Update visit' : 'Save visit',
+      visitSaved: !!s.visitSavedTs,
+    };
+  }
+
+  setupRenderVals() {
+    const s = this.state;
+    const isWelcome = s.setupStep === 0, isName = s.setupStep === 1, isPractice = s.setupStep === 2;
+    const nameValid = s.suName.trim().length > 2;
+    const practiceValid = s.suInstitution.trim().length > 1 && /.+@.+\..+/.test(s.suEmail.trim());
+    const valid = isName ? nameValid : (isPractice ? practiceValid : true);
+    return {
+      isSetup: s.screen === 'setup',
+      setupHighlights: ['Continuous on/off state, no diaries', 'Dose response & freeze events per patient', 'Patients invite you and control their data'],
+      suIsWelcome: isWelcome, suIsName: isName, suIsPractice: isPractice,
+      suInForm: isName || isPractice,
+      suEyebrow: isName ? 'STEP 1 OF 2' : 'STEP 2 OF 2',
+      suTitle: isName ? 'Your name & credentials' : 'Your practice',
+      suBody: isName ? 'This is how patients and colleagues see you across Cadence.' : 'Where you see patients, plus your NPI so patients can verify it\u2019s you.',
+      suProgress1Bg: s.setupStep >= 1 ? '#2F57E6' : '#D5DEF0',
+      suProgress2Bg: s.setupStep >= 2 ? '#2F57E6' : '#D5DEF0',
+      suName: s.suName, suCred: s.suCred, suInstitution: s.suInstitution, suNpi: s.suNpi, suEmail: s.suEmail,
+      setSuName: (e) => this.setState({ suName: e.target.value }),
+      setSuCred: (e) => this.setState({ suCred: e.target.value }),
+      setSuInstitution: (e) => this.setState({ suInstitution: e.target.value }),
+      setSuNpi: (e) => this.setState({ suNpi: e.target.value }),
+      setSuEmail: (e) => this.setState({ suEmail: e.target.value }),
+      suNextLabel: isPractice ? 'Enter Cadence' : 'Continue',
+      suNextDisabled: !valid, suNextBg: valid ? '#2F57E6' : '#A9B6D6', suNextCursor: valid ? 'pointer' : 'default',
+      suNext: () => {
+        if (isName && nameValid) this.setState({ setupStep: 2 });
+        else if (isPractice && practiceValid) this.finishSetup();
+      },
+      suBackVisible: isName || isPractice,
+      suBack: () => this.setState(st => ({ setupStep: Math.max(0, st.setupStep - 1) })),
+      startCreate: () => this.setState({ setupMode: 'create', setupStep: 1 }),
+      signInDemo: () => this.signInDemo(),
+    };
+  }
+
+  profileEditVals() {
+    const s = this.state;
+    return {
+      profileEdit: s.profileEdit, profileView: !s.profileEdit,
+      peName: s.peName, peCred: s.peCred, peInstitution: s.peInstitution, peNpi: s.peNpi, peEmail: s.peEmail,
+      setPeName: (e) => this.setState({ peName: e.target.value }),
+      setPeCred: (e) => this.setState({ peCred: e.target.value }),
+      setPeInstitution: (e) => this.setState({ peInstitution: e.target.value }),
+      setPeNpi: (e) => this.setState({ peNpi: e.target.value }),
+      setPeEmail: (e) => this.setState({ peEmail: e.target.value }),
+      openProfileEdit: () => this.openProfileEdit(),
+      saveProfile: () => this.saveProfile(),
+      cancelProfileEdit: () => this.setState({ profileEdit: false }),
+    };
+  }
+
+  renderVals() {
+    const s = this.state;
+    const nav = [
+      { key: 'patients', label: 'Patients', screen: 'patients' },
+      { key: 'reports', label: 'Reports', screen: 'reports' },
+      { key: 'settings', label: 'Settings', screen: 'settings' },
+    ];
+    const onPatientsGroup = (s.screen === 'patients' || s.screen === 'detail');
+    const pendingCount = this.pending().length;
+    const navItems = nav.map(n => {
+      const active = n.key === 'patients' ? onPatientsGroup : s.screen === n.key;
+      return {
+        key: n.key, label: n.label,
+        color: active ? '#2F57E6' : '#5A6786',
+        bg: active ? '#EEF3FE' : 'transparent',
+        icon: this.navIcon(n.key, active ? '#2F57E6' : '#8A96B0'),
+        badge: (n.key === 'patients' && pendingCount) ? pendingCount : null,
+        onClick: () => this.setState(prev => ({ screen: n.screen, ...(n.key === 'reports' ? { reportPatientId: prev.selectedId, reportState: 'idle', reportDone: false } : {}) })),
+      };
+    });
+
+    const all = this.allPatients();
+    const q = s.search.trim().toLowerCase();
+    const filtered = q ? all.filter(p => p.name.toLowerCase().includes(q)) : all;
+    const patientRows = filtered.map(p0 => {
+      const p = p0.id === 'robert' ? { ...p0, ...this.robertSummary(), nextVisit: this.robertNextVisit() } : p0;
+      const sc = this.stateColors(p.state);
+      const ot = p.onTime;
+      return {
+        key: p.id, name: p.name, initials: this.initials(p.name), age: p.age, dx: p.dx,
+        avBg: p.avBg, avColor: p.avColor,
+        subnote: p.synced ? null : 'Band offline · data paused',
+        lastSync: p.lastSync, syncColor: p.synced ? '#3A4A66' : '#C0392B',
+        state: p.state, stateBg: sc.bg, stateColor: sc.color,
+        onTime: ot == null ? ', ' : ot + '%', onTimeW: (ot == null ? 0 : ot) + '%',
+        onTimeColor: ot == null ? '#CAD4E6' : (ot >= 80 ? '#1F8A5B' : (ot >= 65 ? '#2F57E6' : '#B9700F')),
+        freezes: p.freezes == null ? ', ' : p.freezes, freezeColor: (p.freezes != null && p.freezes >= 6) ? '#C0392B' : '#16203A',
+        nextVisit: p.nextVisit,
+        onClick: () => this.select(p.id),
+      };
+    });
+
+    const pend = this.pending();
+    const pendingInvites = pend.map(({ inv, key }) => ({
+      key, patient: inv.patient || inv.name || 'New patient', initials: this.initials(inv.patient || inv.name),
+      via: inv.providerId ? ('via ' + inv.providerId + ' · ') : '',
+      ago: this.ago(inv.ts),
+      onAccept: () => this.acceptInvite(key, inv),
+      onDecline: () => this.declineInvite(key),
+    }));
+
+    const d = this.detailData();
+    const acct = s.account;
+    const profileRows = [
+      { label: 'Name', value: acct.name, border: '1px solid #EEF1F7' },
+      { label: 'Provider ID', value: acct.providerId || 'CDN-2003', border: '1px solid #EEF1F7' },
+      { label: 'Credentials', value: acct.credential, border: '1px solid #EEF1F7' },
+      { label: 'Institution', value: acct.institution, border: '1px solid #EEF1F7' },
+      { label: 'Work email', value: acct.email || ', ', border: '1px solid #EEF1F7' },
+      { label: 'NPI', value: acct.npi, border: 'none' },
+    ];
+    const tg = (on) => ({ track: on ? '#1F8A5B' : '#CBD4E6', knob: on ? '24px' : '3px' });
+    const stDefs = [
+      { key: 'requests', title: 'New connection requests', desc: 'When a patient invites you' },
+      { key: 'offline', title: 'Patient bands offline', desc: 'When a panel patient stops syncing' },
+      { key: 'weekly', title: 'Weekly digest', desc: 'A Monday summary of your panel' },
+    ];
+    const settingToggles = stDefs.map((t, i, a) => ({
+      key: t.key, title: t.title, desc: t.desc,
+      border: i === a.length - 1 ? 'none' : '1px solid #EEF1F7',
+      ...tg(s.notifPrefs[t.key]),
+      onClick: () => this.setState(st => ({ notifPrefs: { ...st.notifPrefs, [t.key]: !st.notifPrefs[t.key] } })),
+    }));
+
+    const rState = s.reportState;
+    return {
+      navItems, docInitials: this.acctInitials(acct.name), docName: acct.name, docCredential: this.acctShortCred(acct.credential),
+
+      ...this.setupRenderVals(),
+      ...this.profileEditVals(),
+
+      isPatients: s.screen === 'patients', isDetail: s.screen === 'detail',
+      isReports: s.screen === 'reports', isSettings: s.screen === 'settings',
+      goPatients: () => this.setState({ screen: 'patients' }),
+
+      showBanner: pendingCount > 0 && !s.bannerDismissed && s.screen !== 'patients',
+      bannerText: pendingCount + ' new patient connection request' + (pendingCount > 1 ? 's are' : ' is') + ' waiting for you.',
+      goReviewInvites: () => this.setState({ screen: 'patients' }),
+      dismissBanner: () => this.setState({ bannerDismissed: true }),
+
+      search: s.search, setSearch: (e) => this.setState({ search: e.target.value }),
+      patientCountLabel: filtered.length + ' patient' + (filtered.length === 1 ? '' : 's') + ' in your panel',
+      providerId: s.account.providerId || 'CDN-2003',
+      patientRows, hasPatients: patientRows.length > 0, noPatients: patientRows.length === 0,
+      hasPending: pendingInvites.length > 0, pendingInvites,
+
+      // detail
+      d_initials: d.initials, d_name: d.name, d_age: d.age, d_dx: d.dx, d_med: d.med, d_lastSync: d.lastSync,
+      d_state: d.state, d_stateBg: d.stateBg, d_stateColor: d.stateColor,
+      timelineDays: d.timelineDays, hourLabels: d.hourLabels, metrics: d.metrics,
+      plasmaPath: d.plasmaPath, areaPath: d.areaPath, thresholdY: d.thresholdY, thresholdLabelY: d.thresholdLabelY,
+      offBands: d.offBands, doseTicks: d.doseTicks, gridLines: d.gridLines, d_chartNote: d.chartNote,
+      freezeRows: d.freezeRows, d_freezeSummary: d.freezeSummary, d_suggestion: d.suggestion,
+      d_firstName: d.firstName, doseBreakdown: d.doseBreakdown,
+      ...this.carePlanRenderVals(d),
+      freezeSortLabel: s.freezeSort === 'desc' ? 'Newest first' : 'Oldest first',
+      toggleFreezeSort: () => this.setState(st => ({ freezeSort: st.freezeSort === 'desc' ? 'asc' : 'desc' })),
+
+      noteDraft: s.noteDraft, setNote: (e) => this.setState({ noteDraft: e.target.value, noteSaved: false }),
+      saveNote: () => this.saveNote(), noteSaved: s.noteSaved,
+
+      weekLabel: s.week === 'good' ? 'Good week' : 'Difficult week',
+      toggleWeek: () => this.setState(st => ({ week: st.week === 'good' ? 'bad' : 'good' })),
+      periodThisActive: s.week === 'good', periodLastActive: s.week === 'bad',
+      periodThisBg: s.week === 'good' ? '#2F57E6' : 'transparent', periodThisColor: s.week === 'good' ? '#fff' : '#6B7794',
+      periodLastBg: s.week === 'bad' ? '#2F57E6' : 'transparent', periodLastColor: s.week === 'bad' ? '#fff' : '#6B7794',
+      setThisWeek: () => this.setState({ week: 'good' }), setLastWeek: () => this.setState({ week: 'bad' }),
+
+      // reports
+      reportPatientId: s.reportPatientId,
+      reportPatientOptions: this.basePatients().map(p => ({ id: p.id, label: p.name + ' · ' + p.dx })),
+      reportPatientName: this.reportPatientName(),
+      reportFileName: this.reportPatientName().replace(/\s+/g, '_') + '_30-day-summary.pdf',
+      setReportPatient: (e) => { clearTimeout(this._repTimer); this.setState({ reportPatientId: e.target.value, reportState: 'idle', reportDone: false }); },
+      reportContents: ['7-day motor state timeline', 'Dose adherence & response times', '30-day freeze event log', 'Clinician notes & observations'],
+      reportBtnLabel: rState === 'working' ? 'Generating…' : (rState === 'done' ? 'Export again' : 'Export 30-day report'),
+      reportBtnBg: rState === 'working' ? '#A9B6D6' : '#2F57E6',
+      reportBtnIcon: this.dlIcon(), reportDone: s.reportDone, exportReport: () => this.exportReport(),
+
+      // settings
+      profileRows, settingToggles, connectedCount: this.basePatients().length + this.state.accepted.length,
+      signOut: () => { try { localStorage.removeItem('cadence_clinician_account'); } catch (e) {} this.setState({ screen: 'setup', setupStep: 0, profileEdit: false, suName: '', suInstitution: '', suNpi: '', suEmail: '', suCred: 'MD, Movement Disorders' }); },
+    };
+  }
+
+  navIcon(key, c) {
+    const e = React.createElement;
+    const svg = (ch) => e('svg', { width: 20, height: 20, viewBox: '0 0 24 24', fill: 'none' }, ch);
+    if (key === 'patients') return svg([e('circle', { key: 'a', cx: 9, cy: 8, r: 3.2, stroke: c, strokeWidth: 1.9 }), e('path', { key: 'b', d: 'M3.5 19a5.5 5.5 0 0 1 11 0', stroke: c, strokeWidth: 1.9, strokeLinecap: 'round' }), e('path', { key: 'c', d: 'M16 7.2a3 3 0 0 1 0 5.6M18 19a5 5 0 0 0-3-4.6', stroke: c, strokeWidth: 1.9, strokeLinecap: 'round' })]);
+    if (key === 'reports') return svg([e('path', { key: 'a', d: 'M7 3h7l4 4v14H7z', stroke: c, strokeWidth: 1.9, strokeLinejoin: 'round' }), e('path', { key: 'b', d: 'M14 3v4h4', stroke: c, strokeWidth: 1.9, strokeLinejoin: 'round' }), e('path', { key: 'c', d: 'M9.5 13h5M9.5 16.5h5', stroke: c, strokeWidth: 1.9, strokeLinecap: 'round' })]);
+    return svg([e('circle', { key: 'a', cx: 12, cy: 12, r: 3, stroke: c, strokeWidth: 1.9 }), e('path', { key: 'b', d: 'M12 2.5v2.5M12 19v2.5M21.5 12H19M5 12H2.5M18.7 5.3 17 7M7 17l-1.7 1.7M18.7 18.7 17 17M7 7 5.3 5.3', stroke: c, strokeWidth: 1.9, strokeLinecap: 'round' })]);
+  }
+  dlIcon() {
+    const e = React.createElement;
+    return e('svg', { width: 18, height: 18, viewBox: '0 0 24 24', fill: 'none' }, e('path', { d: 'M12 3v11M8 10l4 4 4-4M5 20h14', stroke: '#fff', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' }));
+  }
+}
+</script>
+</body>
+</html>

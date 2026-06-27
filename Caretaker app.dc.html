@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&amp;family=Newsreader:ital,opsz,wght@1,6..72,500;1,6..72,600&amp;display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  @keyframes cadencePulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.9); opacity: 0.3; } }
+</style>
+</helmet>
+
+<div style="min-height:100vh; width:100%; display:flex; align-items:center; justify-content:center; background:radial-gradient(120% 90% at 50% 0%, #DCE6FA 0%, #C9D6F2 60%, #B9C8EC 100%); padding:40px 0; font-family:'Public Sans',system-ui,sans-serif;">
+
+  <!-- PHONE -->
+  <div style="position:relative; width:392px; height:844px; background:#EEF3FB; border-radius:54px; box-shadow:0 40px 90px rgba(28,46,92,0.38), 0 0 0 12px #11182B, 0 0 0 14px #2A3450; overflow:hidden;">
+
+    <!-- soft decorative blob -->
+    <div style="position:absolute; top:-90px; right:-70px; width:300px; height:300px; border-radius:50%; background:{{ blobBg }}; pointer-events:none;"></div>
+
+    <!-- status bar -->
+    <div style="position:relative; height:54px; display:flex; align-items:center; justify-content:space-between; padding:18px 30px 0;">
+      <span style="font-size:16px; font-weight:700; color:#16203A;">10:54</span>
+      <div style="display:flex; align-items:center; gap:7px;">
+        <svg width="20" height="14" viewBox="0 0 20 14"><g fill="#16203A"><rect x="0" y="9" width="3" height="5" rx="1"></rect><rect x="5" y="6" width="3" height="8" rx="1"></rect><rect x="10" y="3" width="3" height="11" rx="1"></rect><rect x="15" y="0" width="3" height="14" rx="1"></rect></g></svg>
+        <svg width="20" height="14" viewBox="0 0 20 14" fill="none"><path d="M10 12.5 1.5 4.2A12 12 0 0 1 18.5 4.2L10 12.5Z" stroke="#16203A" stroke-width="1.6" stroke-linejoin="round"></path></svg>
+        <svg width="26" height="14" viewBox="0 0 26 14"><rect x="0.5" y="1" width="21" height="12" rx="3.5" fill="none" stroke="#16203A" stroke-width="1.4"></rect><rect x="2.5" y="3" width="15" height="8" rx="1.5" fill="#16203A"></rect><rect x="23" y="4.5" width="2" height="5" rx="1" fill="#16203A"></rect></svg>
+      </div>
+    </div>
+
+    <!-- ================= SIGN IN ================= -->
+    <sc-if value="{{ isSignIn }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute; top:54px; left:0; right:0; bottom:0; overflow-y:auto; padding:0 30px 40px; display:flex; flex-direction:column;">
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:30px;">
+          <div style="width:52px; height:52px; border-radius:16px; background:#2F57E6; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 24px rgba(47,87,230,0.32);">
+            <span style="position:relative; width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center;">
+              <span style="position:absolute; width:16px; height:16px; border-radius:50%; background:#fff; opacity:0.5; animation:cadencePulse 2.4s ease-in-out infinite;"></span>
+              <span style="position:relative; width:9px; height:9px; border-radius:50%; background:#fff;"></span>
+            </span>
+          </div>
+          <div>
+            <div style="font-size:24px; font-weight:800; color:#16203A; letter-spacing:-0.4px;">Cadence,</div>
+            <div style="font-size:14px; font-weight:700; color:#3A4A66; letter-spacing:0.4px;">FOR CAREGIVERS.</div>
+          </div>
+        </div>
+        <div style="font-size:30px; font-weight:800; color:#16203A; letter-spacing:-0.6px; line-height:1.15; margin-bottom:8px;">Welcome back, Margaret.</div>
+        <div style="font-size:17px; font-weight:500; color:#3A4A66; line-height:1.5; margin-bottom:28px;">Sign in to see how Robert is doing today.</div>
+
+        <div style="font-size:15px; font-weight:700; color:#3A4A66; margin-bottom:7px;">Email</div>
+        <input value="margaret@family.com" readonly="readonly" style="width:100%; min-height:58px; border:2px solid #D5DEF0; border-radius:16px; padding:0 16px; font-family:inherit; font-size:18px; font-weight:600; color:#16203A; background:#F8FAFD; outline:none; margin-bottom:16px;">
+        <div style="font-size:15px; font-weight:700; color:#3A4A66; margin-bottom:7px;">Password</div>
+        <input type="password" value="000000000" readonly="readonly" style="width:100%; min-height:58px; border:2px solid #D5DEF0; border-radius:16px; padding:0 16px; font-family:inherit; font-size:18px; font-weight:600; color:#16203A; background:#F8FAFD; outline:none; margin-bottom:24px;">
+
+        <button onClick="{{ signIn }}" style="width:100%; min-height:64px; background:#2F57E6; border:none; border-radius:18px; font-family:inherit; font-size:20px; font-weight:800; color:#fff; cursor:pointer; box-shadow:0 14px 30px rgba(47,87,230,0.34);" style-active="transform:scale(0.99)">Sign in</button>
+        <div style="text-align:center; font-size:16px; font-weight:700; color:#2F57E6; margin-top:20px;">Forgot password?</div>
+        <button onClick="{{ goCreate }}" style="width:100%; min-height:56px; margin-top:6px; background:transparent; border:none; font-family:inherit; font-size:17px; font-weight:700; color:#536084; cursor:pointer;">New caregiver? <span style="color:#2F57E6;">Create an account</span></button>
+      </div>
+      <div style="text-align:center; font-size:14px; font-weight:600; color:#3A4A66; line-height:1.5;">You see only what Robert chooses to share.</div>
+    </div>
+    </sc-if>
+
+    <!-- ================= CREATE ACCOUNT ================= -->
+    <sc-if value="{{ isCreate }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute; top:54px; left:0; right:0; bottom:0; background:#EEF3FB; z-index:30; display:flex; flex-direction:column; padding:20px 24px 32px;">
+      <!-- progress + back -->
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:18px;">
+        <button onClick="{{ authBack }}" style="width:44px; height:44px; flex:none; border-radius:13px; background:#fff; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 16px rgba(28,46,92,0.08);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M15 5 8 12l7 7" stroke="#16203A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </button>
+        <div style="flex:1; display:flex; gap:7px;">
+          {{ authProgress }}
+        </div>
+      </div>
+
+      <div style="flex:1; overflow-y:auto; overflow-x:hidden; display:flex; flex-direction:column; padding-top:8px;">
+        <div style="font-size:13px; font-weight:700; letter-spacing:1.2px; color:#2F57E6; margin-bottom:10px;">{{ authEyebrow }}</div>
+        <div style="font-size:32px; font-weight:800; color:#16203A; line-height:1.1; letter-spacing:-0.7px;">{{ authTitle }}</div>
+        <div style="font-size:18px; font-weight:500; color:#3A4A66; margin-top:12px; line-height:1.5;">{{ authBody }}</div>
+
+        <!-- step: name -->
+        <sc-if value="{{ stepName }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-top:26px;">
+          <div style="font-size:15px; font-weight:700; color:#536084; margin:0 2px 8px;">Your full name</div>
+          <input value="{{ authName }}" onInput="{{ setAuthName }}" placeholder="Margaret Hale" style="width:100%; min-height:60px; border:2px solid #D5DEF0; border-radius:16px; padding:0 18px; font-family:inherit; font-size:18px; font-weight:600; color:#16203A; background:#fff; outline:none; box-sizing:border-box;">
+        </div>
+        </sc-if>
+
+        <!-- step: credentials -->
+        <sc-if value="{{ stepCred }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:26px;">
+          <div style="font-size:15px; font-weight:700; color:#536084; margin:0 2px 8px;">Email</div>
+          <input value="{{ authEmail }}" onInput="{{ setAuthEmail }}" placeholder="you@email.com" style="width:100%; min-height:60px; border:2px solid #D5DEF0; border-radius:16px; padding:0 18px; font-family:inherit; font-size:18px; font-weight:600; color:#16203A; background:#fff; outline:none; box-sizing:border-box;">
+          <div style="font-size:15px; font-weight:700; color:#536084; margin:18px 2px 8px;">Create a password</div>
+          <input type="password" value="{{ authPassword }}" onInput="{{ setAuthPassword }}" placeholder="At least 8 characters" style="width:100%; min-height:60px; border:2px solid #D5DEF0; border-radius:16px; padding:0 18px; font-family:inherit; font-size:18px; font-weight:600; color:#16203A; background:#fff; outline:none; box-sizing:border-box;">
+          <div style="font-size:14px; font-weight:500; color:#8A96B0; margin-top:10px; line-height:1.4;">Use 8 or more characters with a mix of letters and numbers.</div>
+        </div>
+        </sc-if>
+
+        <!-- step: details (relationship + phone) -->
+        <sc-if value="{{ stepDetails }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:24px;">
+          <div style="font-size:15px; font-weight:700; color:#536084; margin:0 2px 10px;">Your relationship to Robert</div>
+          <div style="display:flex; flex-wrap:wrap; gap:10px;">
+            <sc-for list="{{ relChips }}" as="chip" hint-placeholder-count="6">
+            <button onClick="{{ chip.onClick }}" style="min-height:48px; padding:0 18px; border-radius:14px; border:2px solid {{ chip.border }}; background:{{ chip.bg }}; font-family:inherit; font-size:16px; font-weight:700; color:{{ chip.color }}; cursor:pointer;" style-active="transform:scale(0.97)">{{ chip.label }}</button>
+            </sc-for>
+          </div>
+          <div style="font-size:15px; font-weight:700; color:#536084; margin:22px 2px 8px;">Mobile number</div>
+          <input type="tel" value="{{ authPhone }}" onInput="{{ setAuthPhone }}" placeholder="(415) 555-0182" style="width:100%; min-height:60px; border:2px solid #D5DEF0; border-radius:16px; padding:0 18px; font-family:inherit; font-size:18px; font-weight:600; color:#16203A; background:#fff; outline:none; box-sizing:border-box;">
+          <div style="font-size:14px; font-weight:500; color:#8A96B0; margin-top:10px; line-height:1.4;">We use your number only to reach you for urgent alerts about Robert.</div>
+        </div>
+        </sc-if>
+
+        <!-- step: verify -->
+        <sc-if value="{{ stepVerify }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:26px;">
+          <div style="display:flex; gap:10px;">
+            {{ authCodeBoxes }}
+          </div>
+          <input value="{{ authCode }}" onInput="{{ setAuthCode }}" inputmode="numeric" maxlength="6" placeholder="Enter 6-digit code" style="width:100%; min-height:56px; border:2px solid #D5DEF0; border-radius:16px; padding:0 18px; font-family:inherit; font-size:18px; font-weight:700; letter-spacing:2px; color:#16203A; background:#fff; outline:none; box-sizing:border-box; margin-top:16px;">
+          <div style="display:flex; align-items:center; gap:6px; margin-top:14px;">
+            <span style="font-size:15px; font-weight:600; color:#536084;">Didn't get it?</span>
+            <span style="font-size:15px; font-weight:700; color:#2F57E6;">Resend code</span>
+          </div>
+          <div style="background:#E5EBFD; border-radius:14px; padding:12px 16px; margin-top:16px;">
+            <div style="font-size:14px; font-weight:600; color:#2F57E6; line-height:1.4;">Your verification code is <b>508124</b>.</div>
+          </div>
+
+          <div onClick="{{ toggleTermsTos }}" style="display:flex; align-items:flex-start; gap:14px; background:#fff; border-radius:18px; padding:16px 18px; cursor:pointer; border:2px solid {{ tosBorder }}; box-shadow:0 8px 22px rgba(28,46,92,0.06); margin-top:16px;">
+            <div style="width:30px; height:30px; flex:none; border-radius:9px; background:{{ tosBoxBg }}; border:2px solid {{ tosBoxBorder }}; display:flex; align-items:center; justify-content:center; margin-top:1px;">{{ tosCheck }}</div>
+            <div style="flex:1;"><div style="font-size:17px; font-weight:700; color:#16203A; line-height:1.4;">I agree to the Terms of Service and Privacy Policy</div></div>
+          </div>
+        </div>
+        </sc-if>
+
+        <!-- step: pairing code -->
+        <sc-if value="{{ stepPair }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-top:24px;">
+          <div style="display:flex; gap:10px;">
+            {{ pairCodeBoxes }}
+          </div>
+          <input value="{{ pairCode }}" onInput="{{ setPairCode }}" inputmode="numeric" maxlength="6" placeholder="Enter your patient's code" style="width:100%; min-height:56px; border:2px solid #D5DEF0; border-radius:16px; padding:0 18px; font-family:inherit; font-size:18px; font-weight:700; letter-spacing:2px; color:#16203A; background:#fff; outline:none; box-sizing:border-box; margin-top:16px;">
+
+          <!-- patient matched -->
+          <sc-if value="{{ pairFound }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex; align-items:center; gap:14px; background:#E6F5EC; border:2px solid #BFE5CE; border-radius:18px; padding:16px 18px; margin-top:16px;">
+            <div style="width:46px; height:46px; flex:none; border-radius:50%; background:#1F8A5B; display:flex; align-items:center; justify-content:center;">
+              <span style="font-size:20px; font-weight:800; color:#fff;">R</span>
+            </div>
+            <div style="flex:1;">
+              <div style="font-size:13px; font-weight:700; letter-spacing:0.6px; color:#15724A;">PATIENT FOUND</div>
+              <div style="font-size:19px; font-weight:800; color:#16203A; margin-top:1px;">Robert Hale</div>
+            </div>
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M6 12.5 10.5 17 18 7.5" stroke="#1F8A5B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </div>
+          </sc-if>
+
+          <div style="display:flex; gap:12px; background:#fff; border-radius:18px; padding:16px 18px; margin-top:16px; box-shadow:0 8px 22px rgba(28,46,92,0.06);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style="flex:none; margin-top:1px;"><path d="M12 3l7 3v6c0 4-3 7.4-7 9-4-1.6-7-5-7-9V6l7-3Z" stroke="#2F57E6" stroke-width="1.8" stroke-linejoin="round"></path><path d="M9 12l2 2 4-4" stroke="#2F57E6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <div style="font-size:15px; font-weight:500; color:#3A4A66; line-height:1.5;">Your patient generates this code in their Cadence app under <b>Caregivers</b>. It links your accounts, they stay in control of what you see.</div>
+          </div>
+          <div style="background:#E5EBFD; border-radius:14px; padding:12px 16px; margin-top:12px;">
+            <div style="font-size:14px; font-weight:600; color:#2F57E6; line-height:1.4;">Robert's code is <b>{{ inviteHint }}</b>.</div>
+          </div>
+        </div>
+        </sc-if>
+      </div>
+
+      <button onClick="{{ authNext }}" disabled="{{ authNextDisabled }}" style="width:100%; min-height:72px; background:{{ authNextBg }}; border:none; border-radius:22px; cursor:{{ authNextCursor }}; font-family:inherit; font-size:22px; font-weight:800; color:#fff; box-shadow:0 14px 30px rgba(47,87,230,0.22); flex:none; margin-top:14px;" style-active="transform:scale(0.985)">{{ authButton }}</button>
+    </div>
+    </sc-if>
+
+    <!-- ================= PAIRED CONFIRMATION ================= -->
+    <sc-if value="{{ isPaired }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute; top:54px; left:0; right:0; bottom:0; background:#EEF3FB; z-index:30; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 36px;">
+      <div style="width:96px; height:96px; border-radius:50%; background:#E6F5EC; display:flex; align-items:center; justify-content:center; margin-bottom:26px;">
+        <svg width="50" height="50" viewBox="0 0 24 24" fill="none"><path d="M6 12.5 10.5 17 18 7.5" stroke="#1F8A5B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </div>
+      <div style="font-size:32px; font-weight:800; color:#16203A; letter-spacing:-0.6px; line-height:1.15;">You're connected<br>to Robert</div>
+      <div style="font-size:18px; font-weight:500; color:#3A4A66; line-height:1.5; margin-top:14px;">Your accounts are linked. You'll see what Robert chooses to share, and we'll alert you when he needs you.</div>
+      <button onClick="{{ finishPair }}" style="width:100%; min-height:68px; background:#2F57E6; border:none; border-radius:20px; cursor:pointer; font-family:inherit; font-size:21px; font-weight:800; color:#fff; box-shadow:0 14px 30px rgba(47,87,230,0.30); margin-top:34px;" style-active="transform:scale(0.985)">See how Robert is doing</button>
+    </div>
+    </sc-if>
+
+    <!-- ================= SCROLLABLE APP ================= -->
+    <sc-if value="{{ isApp }}" hint-placeholder-val="{{ true }}">
+    <div style="position:absolute; top:54px; left:0; right:0; bottom:0; overflow-y:auto; overflow-x:hidden; padding:8px 22px 128px;">
+
+      <!-- ============ HOME ============ -->
+      <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+      <!-- header -->
+      <div style="display:flex; align-items:center; justify-content:space-between; margin:12px 2px 22px;">
+        <div>
+          <div style="font-size:17px; font-weight:600; color:#3A4A66;">Good morning, Margaret</div>
+          <div style="font-size:27px; font-weight:600; color:#16203A; letter-spacing:-0.5px; line-height:1.12; margin-top:3px; font-family:'Newsreader',serif; font-style:italic;">Here's how Robert<br>is doing.</div>
+        </div>
+        <div style="width:54px; height:54px; flex:none; border-radius:50%; background:#2F57E6; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 20px rgba(47,87,230,0.32);">
+          <span style="font-size:22px; font-weight:700; color:#fff;">R</span>
+        </div>
+      </div>
+
+      <!-- ALERT: call action at top -->
+      <sc-if value="{{ isAlert }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ callRobert }}" style="width:100%; min-height:72px; background:#2F57E6; border:none; border-radius:22px; padding:14px 22px; display:flex; align-items:center; gap:16px; cursor:pointer; box-shadow:0 14px 30px rgba(47,87,230,0.34); font-family:inherit; text-align:left; margin-bottom:16px;" style-active="transform:scale(0.985)">
+        <div style="width:48px; height:48px; flex:none; border-radius:14px; background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M5 4h3l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" stroke="#fff" stroke-width="2" stroke-linejoin="round"></path></svg>
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:22px; font-weight:800; color:#fff; letter-spacing:-0.3px;">Call Robert</div>
+          <div style="font-size:15px; font-weight:600; color:rgba(255,255,255,0.92); margin-top:1px;">Check in with him now</div>
+        </div>
+      </button>
+      </sc-if>
+
+      <!-- HERO: CALM -->
+      <sc-if value="{{ isCalm }}" hint-placeholder-val="{{ true }}">
+      <button onClick="{{ goStatus }}" style="display:block; width:100%; text-align:left; position:relative; background:linear-gradient(160deg, #E6F5EC 0%, #DCF1E6 100%); border:none; border-radius:30px; padding:26px 26px 24px; margin-bottom:16px; overflow:hidden; cursor:pointer; font-family:inherit;" style-active="transform:scale(0.99)">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+          <span style="position:relative; width:14px; height:14px; display:inline-flex; align-items:center; justify-content:center;">
+            <span style="position:absolute; width:14px; height:14px; border-radius:50%; background:#1F8A5B; animation:cadencePulse 2.6s ease-in-out infinite;"></span>
+            <span style="position:relative; width:14px; height:14px; border-radius:50%; background:#1F8A5B;"></span>
+          </span>
+          <span style="font-size:14px; font-weight:700; letter-spacing:1.4px; color:#15724A;">RIGHT NOW</span>
+        </div>
+        <div style="font-size:34px; font-weight:600; color:#16203A; line-height:1.08; letter-spacing:-0.8px; font-family:'Newsreader',serif; font-style:italic;">Robert is doing well</div>
+        <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(31,138,91,0.13); border-radius:999px; padding:8px 16px; margin-top:16px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 12.5 10.5 17 18 7.5" stroke="#15724A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span style="font-size:17px; font-weight:700; color:#15724A;">On and steady</span>
+        </div>
+        <div style="font-size:18px; font-weight:500; color:#2C5340; margin-top:16px; line-height:1.5;">Movement has been smooth all morning. Nothing needs your attention right now.</div>
+        <div style="display:flex; align-items:center; gap:6px; margin-top:16px; font-size:15px; font-weight:700; color:#15724A;">See more detail<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#15724A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+      </button>
+      </sc-if>
+
+      <!-- HERO: OFF PREDICTED -->
+      <sc-if value="{{ isOff }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ goStatus }}" style="display:block; width:100%; text-align:left; position:relative; background:linear-gradient(160deg, #FBEDD8 0%, #F6E2C0 100%); border:none; border-radius:30px; padding:26px 26px 24px; margin-bottom:16px; overflow:hidden; cursor:pointer; font-family:inherit; box-shadow:0 16px 36px rgba(185,112,15,0.22);" style-active="transform:scale(0.99)">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+          <span style="position:relative; width:14px; height:14px; display:inline-flex; align-items:center; justify-content:center;">
+            <span style="position:absolute; width:14px; height:14px; border-radius:50%; background:#B9700F; animation:cadencePulse 2s ease-in-out infinite;"></span>
+            <span style="position:relative; width:14px; height:14px; border-radius:50%; background:#B9700F;"></span>
+          </span>
+          <span style="font-size:14px; font-weight:700; letter-spacing:1.4px; color:#8A4B00;">NEEDS ATTENTION</span>
+        </div>
+        <div style="font-size:30px; font-weight:800; color:#16203A; line-height:1.12; letter-spacing:-0.6px;">Robert may be entering an off period</div>
+        <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(185,112,15,0.14); border-radius:999px; padding:8px 16px; margin-top:16px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#8A4B00" stroke-width="2"></circle><path d="M12 7.5V12l3 2" stroke="#8A4B00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span style="font-size:17px; font-weight:700; color:#8A4B00;">Predicted 11:40 – 12:10</span>
+        </div>
+        <div style="font-size:18px; font-weight:500; color:#5C4318; margin-top:16px; line-height:1.5;">His symptoms may return for a short stretch. Robert has been reminded to take his dose ahead of it.</div>
+        <div style="display:flex; align-items:center; gap:6px; margin-top:16px; font-size:15px; font-weight:700; color:#8A4B00;">See more detail<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#8A4B00" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+      </button>
+      </sc-if>
+
+      <!-- HERO: FREEZE (resolved) -->
+      <sc-if value="{{ isFreeze }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ goStatus }}" style="display:block; width:100%; text-align:left; position:relative; background:linear-gradient(160deg, #FBEDD8 0%, #F6E2C0 100%); border:none; border-radius:30px; padding:26px 26px 24px; margin-bottom:16px; overflow:hidden; cursor:pointer; font-family:inherit; box-shadow:0 16px 36px rgba(185,112,15,0.22);" style-active="transform:scale(0.99)">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+          <span style="position:relative; width:14px; height:14px; display:inline-flex; align-items:center; justify-content:center;">
+            <span style="position:absolute; width:14px; height:14px; border-radius:50%; background:#B9700F; animation:cadencePulse 2.4s ease-in-out infinite;"></span>
+            <span style="position:relative; width:14px; height:14px; border-radius:50%; background:#B9700F;"></span>
+          </span>
+          <span style="font-size:14px; font-weight:700; letter-spacing:1.4px; color:#8A4B00;">A FEW MINUTES AGO</span>
+        </div>
+        <div style="font-size:31px; font-weight:800; color:#16203A; line-height:1.1; letter-spacing:-0.6px;">A brief freeze, resolved</div>
+        <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(31,138,91,0.15); border-radius:999px; padding:8px 16px; margin-top:16px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 12.5 10.5 17 18 7.5" stroke="#15724A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span style="font-size:17px; font-weight:700; color:#15724A;">The ankle cue helped him restart</span>
+        </div>
+        <div style="font-size:18px; font-weight:500; color:#5C4318; margin-top:16px; line-height:1.5;">At 10:50 his steps paused briefly. He recovered on his own, no action is needed right now.</div>
+        <div style="display:flex; align-items:center; gap:6px; margin-top:16px; font-size:15px; font-weight:700; color:#8A4B00;">See more detail<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#8A4B00" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+      </button>
+      </sc-if>
+
+      <!-- UPDATED + NEXT DOSE strip -->
+      <div style="display:flex; gap:12px; margin-bottom:18px;">
+        <div style="flex:1; background:#fff; border-radius:20px; padding:16px 18px; box-shadow:0 8px 22px rgba(28,46,92,0.06);">
+          <div style="font-size:14px; font-weight:700; color:#3A4A66; margin-bottom:4px;">Updated</div>
+          <div style="font-size:19px; font-weight:800; color:#16203A;">2 min ago</div>
+        </div>
+        <div style="flex:1; background:#fff; border-radius:20px; padding:16px 18px; box-shadow:0 8px 22px rgba(28,46,92,0.06);">
+          <div style="font-size:14px; font-weight:700; color:#3A4A66; margin-bottom:4px;">Next dose</div>
+          <div style="font-size:19px; font-weight:800; color:#16203A;">11:45 am</div>
+        </div>
+      </div>
+
+      <!-- PRIMARY ACTIONS -->
+      <!-- CALM: Call primary + Message secondary -->
+      <sc-if value="{{ isCalm }}" hint-placeholder-val="{{ true }}">
+      <button onClick="{{ callRobert }}" style="width:100%; min-height:66px; background:#2F57E6; border:none; border-radius:20px; padding:0 22px; display:flex; align-items:center; justify-content:center; gap:12px; cursor:pointer; box-shadow:0 14px 30px rgba(47,87,230,0.30); font-family:inherit; margin-bottom:12px;" style-active="transform:scale(0.99)">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M5 4h3l2 5-2.5 1.5a11 11 0 0 0 5 5L16 13l5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" stroke="#fff" stroke-width="2" stroke-linejoin="round"></path></svg>
+        <span style="font-size:20px; font-weight:800; color:#fff;">Call Robert</span>
+      </button>
+      </sc-if>
+
+      <button onClick="{{ sendMessage }}" style="width:100%; min-height:60px; background:#fff; border:none; border-radius:20px; padding:0 22px; display:flex; align-items:center; justify-content:center; gap:12px; cursor:pointer; box-shadow:0 8px 22px rgba(28,46,92,0.06); font-family:inherit; margin-bottom:20px;" style-active="transform:scale(0.99)">
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none"><path d="M4 5h16v11H8l-4 4V5Z" stroke="#2F57E6" stroke-width="2" stroke-linejoin="round"></path></svg>
+        <span style="font-size:19px; font-weight:800; color:#2F57E6;">Send a message</span>
+      </button>
+
+      <!-- shared-by note -->
+      <div style="display:flex; align-items:center; gap:10px; justify-content:center; padding:4px 8px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.3-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.7-7 10-7 10Z" stroke="#3A4A66" stroke-width="1.8" stroke-linejoin="round"></path></svg>
+        <span style="font-size:14px; font-weight:600; color:#3A4A66; text-align:center; line-height:1.45;">Robert chose to share this with you.</span>
+      </div>
+      </sc-if>
+
+      <!-- ============ STATUS DETAIL ============ -->
+      <sc-if value="{{ isStatus }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; align-items:center; gap:6px; margin:8px 0 18px;">
+        <button onClick="{{ goHome }}" style="display:flex; align-items:center; gap:4px; background:transparent; border:none; padding:8px 8px 8px 0; font-family:inherit; cursor:pointer; min-height:44px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="#2F57E6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span style="font-size:17px; font-weight:700; color:#2F57E6;">Home</span>
+        </button>
+      </div>
+      <div style="font-size:28px; font-weight:800; color:#16203A; letter-spacing:-0.5px; margin:0 2px 4px;">Robert's status</div>
+      <div style="font-size:16px; font-weight:600; color:#3A4A66; margin:0 2px 20px;">Updated 2 min ago · a shared, limited view</div>
+
+      <!-- motor state card -->
+      <div style="background:{{ stMotorBg }}; border-radius:26px; padding:22px 24px; margin-bottom:14px;">
+        <div style="display:flex; align-items:center; gap:11px; margin-bottom:12px;">
+          <span style="position:relative; width:13px; height:13px; display:inline-flex; align-items:center; justify-content:center;">
+            <span style="position:absolute; width:13px; height:13px; border-radius:50%; background:{{ stMotorDot }}; animation:cadencePulse 2.6s ease-in-out infinite;"></span>
+            <span style="position:relative; width:13px; height:13px; border-radius:50%; background:{{ stMotorDot }};"></span>
+          </span>
+          <span style="font-size:14px; font-weight:700; letter-spacing:1.3px; color:{{ stMotorLabelColor }};">MOTOR STATE</span>
+        </div>
+        <div style="font-size:28px; font-weight:800; color:#16203A; letter-spacing:-0.4px;">{{ stMotorState }}</div>
+        <div style="font-size:17px; font-weight:500; color:#3A4A66; margin-top:8px; line-height:1.45;">{{ stMotorNote }}</div>
+      </div>
+
+      <!-- two stats -->
+      <div style="display:flex; gap:14px; margin-bottom:14px;">
+        <div style="flex:1; background:#fff; border-radius:22px; padding:20px; box-shadow:0 8px 22px rgba(28,46,92,0.06);">
+          <div style="font-size:14px; font-weight:700; color:#3A4A66; margin-bottom:8px;">Freezes today</div>
+          <div style="font-size:34px; font-weight:800; color:#16203A; line-height:1;">{{ stFreezeCount }}</div>
+          <div style="font-size:14px; font-weight:600; color:#3A4A66; margin-top:6px;">{{ stFreezeNote }}</div>
+        </div>
+        <div style="flex:1; background:#fff; border-radius:22px; padding:20px; box-shadow:0 8px 22px rgba(28,46,92,0.06);">
+          <div style="font-size:14px; font-weight:700; color:#3A4A66; margin-bottom:8px;">Next dose</div>
+          <div style="font-size:34px; font-weight:800; color:#16203A; line-height:1;">11:45</div>
+          <div style="font-size:14px; font-weight:600; color:#3A4A66; margin-top:6px;">in about 50 min</div>
+        </div>
+      </div>
+
+      <!-- bands -->
+      <div style="font-size:16px; font-weight:700; color:#16203A; margin:8px 2px 12px;">Band connection</div>
+      <div style="display:flex; gap:14px; margin-bottom:18px;">
+        <div style="flex:1; background:#fff; border-radius:22px; padding:18px; box-shadow:0 8px 22px rgba(28,46,92,0.06);">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+            <span style="width:11px; height:11px; border-radius:50%; background:#1F8A5B;"></span>
+            <span style="font-size:16px; font-weight:700; color:#16203A;">Wrist</span>
+          </div>
+          <div style="font-size:14px; font-weight:700; color:#3A4A66; margin-bottom:8px;">Connected · 82%</div>
+          <div style="height:9px; border-radius:6px; background:#EAEFF8;"><div style="width:82%; height:100%; border-radius:6px; background:#1F8A5B;"></div></div>
+        </div>
+        <div style="flex:1; background:#fff; border-radius:22px; padding:18px; box-shadow:0 8px 22px rgba(28,46,92,0.06);">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+            <span style="width:11px; height:11px; border-radius:50%; background:#1F8A5B;"></span>
+            <span style="font-size:16px; font-weight:700; color:#16203A;">Ankle</span>
+          </div>
+          <div style="font-size:14px; font-weight:700; color:#3A4A66; margin-bottom:8px;">Connected · 67%</div>
+          <div style="height:9px; border-radius:6px; background:#EAEFF8;"><div style="width:67%; height:100%; border-radius:6px; background:#1F8A5B;"></div></div>
+        </div>
+      </div>
+
+      <!-- expandable explainer -->
+      <button onClick="{{ toggleExplain }}" style="width:100%; text-align:left; background:#fff; border:none; border-radius:22px; padding:20px 22px; box-shadow:0 8px 22px rgba(28,46,92,0.06); cursor:pointer; font-family:inherit; margin-bottom:14px;" style-active="transform:scale(0.995)">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+          <span style="font-size:18px; font-weight:700; color:#16203A;">What does an off period mean?</span>
+          <span style="transform:{{ explainCaret }}; transition:transform 0.2s; flex:none;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="#2F57E6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </span>
+        </div>
+        <sc-if value="{{ explainOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="font-size:17px; font-weight:500; color:#3A4A66; line-height:1.55; margin-top:14px;">Parkinson's medication works in cycles. When it's active, movement feels easier, that's an "on" period. As a dose wears off, stiffness or slowness can return for a while, an "off" period. These come and go through the day and are a normal part of the condition.</div>
+        <div style="font-size:15px; font-weight:600; color:#3A4A66; line-height:1.5; margin-top:12px;">For anything that worries you, contact Robert's care team.</div>
+        </sc-if>
+      </button>
+
+      <div style="display:flex; align-items:flex-start; gap:10px; padding:4px 10px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex:none; margin-top:1px;"><rect x="5" y="10.5" width="14" height="9" rx="2" stroke="#3A4A66" stroke-width="1.8"></rect><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" stroke="#3A4A66" stroke-width="1.8"></path></svg>
+        <span style="font-size:14px; font-weight:600; color:#3A4A66; line-height:1.45;">This is a read-only view. Nothing here changes Robert's care.</span>
+      </div>
+      </sc-if>
+
+      <!-- ============ ALERTS ============ -->
+      <sc-if value="{{ isAlerts }}" hint-placeholder-val="{{ false }}">
+      <div style="font-size:28px; font-weight:800; color:#16203A; letter-spacing:-0.5px; margin:12px 2px 4px;">Alerts<div style="font-size:16px; font-weight:600; color:#3A4A66; margin:0 2px 20px;">Only off windows and freezes.</div></div>
+      
+
+      <!-- EMPTY (calm) -->
+      <sc-if value="{{ alertsEmpty }}" hint-placeholder-val="{{ true }}">
+      <div style="background:linear-gradient(160deg, #E6F5EC 0%, #DCF1E6 100%); border-radius:28px; padding:40px 28px; text-align:center; margin-top:8px;">
+        <div style="width:64px; height:64px; border-radius:50%; background:rgba(31,138,91,0.16); display:flex; align-items:center; justify-content:center; margin:0 auto 18px;">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none"><path d="M6 12.5 10.5 17 18 7.5" stroke="#15724A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </div>
+        <div style="font-size:23px; font-weight:800; color:#16203A; letter-spacing:-0.3px;">No alerts today</div>
+        <div style="font-size:17px; font-weight:500; color:#2C5340; line-height:1.5; margin-top:8px;">Robert has been steady. We'll only let you know if something needs your attention.</div>
+      </div>
+      </sc-if>
+
+      <!-- FEED (when alert sim active) -->
+      <sc-if value="{{ alertsHasItems }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <sc-for list="{{ alertItems }}" as="al" hint-placeholder-count="3">
+        <div style="background:#fff; border-radius:22px; padding:18px 20px; box-shadow:0 8px 22px rgba(28,46,92,0.06); display:flex; gap:14px;" data-comment-anchor="c0d10a636f-div">
+          <div style="width:44px; height:44px; flex:none; border-radius:14px; background:{{ al.iconBg }}; display:flex; align-items:center; justify-content:center;">{{ al.icon }}</div>
+          <div style="flex:1;">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+              <span style="font-size:18px; font-weight:700; color:#16203A;">{{ al.title }}</span>
+              <span style="font-size:14px; font-weight:700; color:#3A4A66; flex:none;">{{ al.time }}</span>
+            </div>
+            <div style="font-size:16px; font-weight:500; color:#3A4A66; line-height:1.45; margin-top:5px;">{{ al.body }}</div>
+            <div style="display:inline-flex; align-items:center; gap:7px; background:{{ al.tagBg }}; border-radius:999px; padding:5px 12px; margin-top:11px;">
+              <span style="width:8px; height:8px; border-radius:50%; background:{{ al.tagDot }};"></span>
+              <span style="font-size:13px; font-weight:700; color:{{ al.tagColor }};">{{ al.tag }}</span>
+            </div>
+          </div>
+        </div>
+        </sc-for>
+      </div>
+      <div style="text-align:center; font-size:14px; font-weight:600; color:#3A4A66; margin-top:20px;">That's everything from today.</div>
+      </sc-if>
+      </sc-if>
+
+      <!-- ============ SETTINGS ============ -->
+      <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+      <div style="font-size:28px; font-weight:800; color:#16203A; letter-spacing:-0.5px; margin:12px 2px 20px;">Settings</div>
+
+      <!-- profile -->
+      <div style="background:#fff; border-radius:24px; padding:20px; box-shadow:0 8px 22px rgba(28,46,92,0.06); display:flex; align-items:center; gap:16px; margin-bottom:22px;">
+        <div style="width:56px; height:56px; flex:none; border-radius:50%; background:#E5EBFD; display:flex; align-items:center; justify-content:center;">
+          <span style="font-size:22px; font-weight:800; color:#2F57E6;">M</span>
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:20px; font-weight:800; color:#16203A;">Margaret Hale</div>
+          <div style="font-size:15px; font-weight:600; color:#3A4A66; margin-top:2px;">Caring for Robert · Daughter</div>
+        </div>
+      </div>
+
+      <div style="font-size:14px; font-weight:700; letter-spacing:0.8px; color:#3A4A66; margin:0 4px 12px;">ALERT PREFERENCES</div>
+      <div style="background:#fff; border-radius:24px; padding:6px 20px; box-shadow:0 8px 22px rgba(28,46,92,0.06); margin-bottom:22px;">
+        <sc-for list="{{ toggleRows }}" as="row" hint-placeholder-count="2">
+        <div style="display:flex; align-items:center; gap:14px; padding:16px 0; border-bottom:{{ row.border }};">
+          <div style="flex:1;">
+            <div style="font-size:18px; font-weight:700; color:#16203A;">{{ row.title }}</div>
+            <div style="font-size:14px; font-weight:600; color:#3A4A66; margin-top:3px; line-height:1.4;">{{ row.desc }}</div>
+          </div>
+          <button onClick="{{ row.onClick }}" style="width:56px; height:32px; flex:none; border-radius:999px; background:{{ row.trackBg }}; border:none; position:relative; cursor:pointer; padding:0;">
+            <span style="position:absolute; top:3px; left:{{ row.knobLeft }}; width:26px; height:26px; border-radius:50%; background:#fff; box-shadow:0 2px 5px rgba(0,0,0,0.2); transition:left 0.18s;"></span>
+          </button>
+        </div>
+        </sc-for>
+        <div style="padding:16px 0;" data-comment-anchor="205875f806-div">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div style="flex:1;">
+              <div style="font-size:18px; font-weight:700; color:#16203A;">Quiet hours</div>
+              <div style="font-size:14px; font-weight:600; color:#3A4A66; margin-top:3px;">{{ quietDesc }}</div>
+            </div>
+            <button onClick="{{ toggleQuiet }}" style="width:56px; height:32px; flex:none; border-radius:999px; background:{{ quietTrackBg }}; border:none; position:relative; cursor:pointer; padding:0;">
+              <span style="position:absolute; top:3px; left:{{ quietKnobLeft }}; width:26px; height:26px; border-radius:50%; background:#fff; box-shadow:0 2px 5px rgba(0,0,0,0.2); transition:left 0.18s;"></span>
+            </button>
+          </div>
+          <sc-if value="{{ quietOn }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex; align-items:center; gap:10px; margin-top:14px;">
+            <div style="flex:1;">
+              <div style="font-size:12px; font-weight:800; letter-spacing:0.5px; color:#8A96B0; margin-bottom:5px;">FROM</div>
+              <input type="time" value="{{ quietStart }}" onInput="{{ setQuietStart }}" style="width:100%; height:46px; border:2px solid #D5DEF0; border-radius:12px; padding:0 12px; font-family:inherit; font-size:16px; font-weight:700; color:#16203A; background:#F8FAFD; outline:none; box-sizing:border-box;">
+            </div>
+            <span style="margin-top:18px; color:#8A96B0; font-weight:700;">–</span>
+            <div style="flex:1;">
+              <div style="font-size:12px; font-weight:800; letter-spacing:0.5px; color:#8A96B0; margin-bottom:5px;">UNTIL</div>
+              <input type="time" value="{{ quietEnd }}" onInput="{{ setQuietEnd }}" style="width:100%; height:46px; border:2px solid #D5DEF0; border-radius:12px; padding:0 12px; font-family:inherit; font-size:16px; font-weight:700; color:#16203A; background:#F8FAFD; outline:none; box-sizing:border-box;">
+            </div>
+          </div>
+          </sc-if>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; justify-content:space-between; margin:0 4px 12px;">
+        <span style="font-size:14px; font-weight:700; letter-spacing:0.8px; color:#3A4A66;">HOW WE REACH YOU</span>
+        <button onClick="{{ toggleCgEdit }}" style="background:transparent; border:none; cursor:pointer; font-family:inherit; font-size:15px; font-weight:800; color:#2F57E6; padding:2px 2px;">{{ cgEditLabel }}</button>
+      </div>
+      <div style="background:#fff; border-radius:24px; padding:6px 20px; box-shadow:0 8px 22px rgba(28,46,92,0.06); margin-bottom:22px;">
+        <div style="display:flex; align-items:center; gap:14px; padding:16px 0; border-bottom:1px solid #EEF1F7;">
+          <span style="font-size:17px; font-weight:600; color:#16203A; flex:1;">Contact method</span>
+          <span style="font-size:16px; font-weight:700; color:#2F57E6;">Push + call</span>
+        </div>
+        <!-- email -->
+        <div style="display:flex; align-items:center; gap:14px; padding:14px 0; border-bottom:1px solid #EEF1F7;">
+          <span style="font-size:17px; font-weight:600; color:#16203A; flex:none;">Email</span>
+          <sc-if value="{{ cgEdit }}" hint-placeholder-val="{{ false }}">
+            <input value="{{ cgEditEmail }}" onInput="{{ setCgEditEmail }}" style="flex:1; min-width:0; min-height:48px; border:2px solid #D5DEF0; border-radius:12px; padding:0 12px; font-family:inherit; font-size:16px; font-weight:700; color:#16203A; background:#F8FAFD; outline:none; box-sizing:border-box;">
+          </sc-if>
+          <sc-if value="{{ cgView }}" hint-placeholder-val="{{ true }}">
+            <span style="flex:1; text-align:right; font-size:16px; font-weight:700; color:#3A4A66; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ cgEmail }}</span>
+          </sc-if>
+        </div>
+        <!-- phone -->
+        <div style="display:flex; align-items:center; gap:14px; padding:14px 0;">
+          <span style="font-size:17px; font-weight:600; color:#16203A; flex:none;">Phone</span>
+          <sc-if value="{{ cgEdit }}" hint-placeholder-val="{{ false }}">
+            <input value="{{ cgEditPhone }}" onInput="{{ setCgEditPhone }}" type="tel" style="flex:1; min-width:0; min-height:48px; border:2px solid #D5DEF0; border-radius:12px; padding:0 12px; font-family:inherit; font-size:16px; font-weight:700; color:#16203A; background:#F8FAFD; outline:none; box-sizing:border-box;">
+          </sc-if>
+          <sc-if value="{{ cgView }}" hint-placeholder-val="{{ true }}">
+            <span style="flex:1; text-align:right; font-size:16px; font-weight:700; color:#3A4A66;">{{ cgPhone }}</span>
+          </sc-if>
+        </div>
+      </div>
+
+      <!-- notification permission prompt -->
+      <sc-if value="{{ showPushPrompt }}" hint-placeholder-val="{{ true }}">
+      <div style="background:#2F57E6; border-radius:24px; padding:22px; margin-bottom:22px; box-shadow:0 14px 30px rgba(47,87,230,0.3);">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+          <div style="width:44px; height:44px; flex:none; border-radius:14px; background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4l2-2Z" stroke="#fff" stroke-width="2" stroke-linejoin="round"></path><path d="M10 20a2 2 0 0 0 4 0" stroke="#fff" stroke-width="2" stroke-linecap="round"></path></svg>
+          </div>
+          <div style="font-size:19px; font-weight:800; color:#fff;">Turn on push alerts</div>
+        </div>
+        <div style="font-size:16px; font-weight:500; color:rgba(255,255,255,0.92); line-height:1.5; margin-bottom:16px;">So a predicted off window or freeze reaches you even when the app is closed.</div>
+        <div style="display:flex; gap:12px;">
+          <button onClick="{{ allowPush }}" style="flex:1; min-height:50px; background:#fff; border:none; border-radius:14px; font-family:inherit; font-size:17px; font-weight:800; color:#2F57E6; cursor:pointer;" style-active="transform:scale(0.98)">Allow</button>
+          <button onClick="{{ dismissPush }}" style="flex:none; min-height:50px; padding:0 18px; background:rgba(255,255,255,0.15); border:none; border-radius:14px; font-family:inherit; font-size:17px; font-weight:700; color:#fff; cursor:pointer;" style-active="transform:scale(0.98)">Not now</button>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- privacy / scope -->
+      <div style="background:#EEF3FB; border-radius:24px; padding:22px; margin-bottom:14px;">
+        <div style="display:flex; align-items:center; gap:11px; margin-bottom:12px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" stroke="#2F57E6" stroke-width="1.9" stroke-linejoin="round"></path><path d="M9 12l2 2 4-4" stroke="#2F57E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span style="font-size:18px; font-weight:800; color:#16203A;">Your view is limited</span>
+        </div>
+        <div style="font-size:17px; font-weight:500; color:#3A4A66; line-height:1.55;">You see what Robert chose to share, his motor state, next dose, recent freezes, and band connection. He can change or stop this at any time.</div>
+      </div>
+
+      <button onClick="{{ signOut }}" style="width:100%; min-height:56px; background:transparent; border:none; font-family:inherit; font-size:18px; font-weight:700; color:#2F57E6; cursor:pointer; margin-top:6px;" style-active="transform:scale(0.99)">Sign out</button>
+      </sc-if>
+
+    </div>
+
+    <!-- SIMULATE FAB -->
+    
+
+    <!-- BOTTOM NAV -->
+    <div style="position:absolute; left:0; right:0; bottom:0; height:96px; background:rgba(255,255,255,0.92); backdrop-filter:blur(12px); border-top:1px solid #E2E9F5; display:flex; align-items:stretch; padding:8px 18px 26px; z-index:12;">
+      <sc-for list="{{ navItems }}" as="nav" hint-placeholder-count="3">
+        <button onClick="{{ nav.onClick }}" style="flex:1; min-height:56px; background:transparent; border:none; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; font-family:inherit;">
+          <div style="color:{{ nav.color }}; display:flex;">{{ nav.icon }}</div>
+          <span style="font-size:13px; font-weight:700; color:{{ nav.color }};">{{ nav.label }}</span>
+        </button>
+      </sc-for>
+    </div>
+
+    <!-- ================= SIMULATE SHEET ================= -->
+    <sc-if value="{{ simOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(17,24,43,0.45); z-index:40; display:flex; flex-direction:column; justify-content:flex-end;">
+      <div style="background:#fff; border-radius:28px 28px 0 0; padding:22px 22px 30px;">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:8px;">
+          <div>
+            <div style="font-size:13px; font-weight:700; letter-spacing:1.2px; color:#3A4A66;">PREVIEW</div>
+            <div style="font-size:24px; font-weight:800; color:#16203A; letter-spacing:-0.4px; margin-top:3px;">See how Robert's updates look</div>
+          </div>
+          <button onClick="{{ closeSim }}" style="min-height:44px; padding:0 10px; background:transparent; border:none; font-family:inherit; font-size:18px; font-weight:700; color:#2F57E6; cursor:pointer;">Done</button>
+        </div>
+        <div style="font-size:16px; font-weight:500; color:#3A4A66; line-height:1.45; margin-bottom:18px;">Caregivers only get alerted for a predicted off window or a freeze. Toggle a state to preview.</div>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <button onClick="{{ simCalm }}" style="width:100%; text-align:left; min-height:64px; padding:14px 18px; background:{{ simCalmBg }}; border:2px solid {{ simCalmBorder }}; border-radius:18px; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:14px;" style-active="transform:scale(0.99)">
+            <span style="width:14px; height:14px; border-radius:50%; background:#1F8A5B; flex:none;"></span>
+            <div style="flex:1;"><div style="font-size:18px; font-weight:800; color:#16203A;">Calm, all is well</div><div style="font-size:14px; font-weight:600; color:#3A4A66; margin-top:1px;">On and steady, no alerts</div></div>
+          </button>
+          <button onClick="{{ simOff }}" style="width:100%; text-align:left; min-height:64px; padding:14px 18px; background:{{ simOffBg }}; border:2px solid {{ simOffBorder }}; border-radius:18px; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:14px;" style-active="transform:scale(0.99)">
+            <span style="width:14px; height:14px; border-radius:50%; background:#B9700F; flex:none;"></span>
+            <div style="flex:1;"><div style="font-size:18px; font-weight:800; color:#16203A;">Predicted off window</div><div style="font-size:14px; font-weight:600; color:#3A4A66; margin-top:1px;">Amber alert, call moves to top</div></div>
+          </button>
+          <button onClick="{{ simFreeze }}" style="width:100%; text-align:left; min-height:64px; padding:14px 18px; background:{{ simFreezeBg }}; border:2px solid {{ simFreezeBorder }}; border-radius:18px; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:14px;" style-active="transform:scale(0.99)">
+            <span style="width:14px; height:14px; border-radius:50%; background:#B9700F; flex:none;"></span>
+            <div style="flex:1;"><div style="font-size:18px; font-weight:800; color:#16203A;">Freeze event (resolved)</div><div style="font-size:14px; font-weight:600; color:#3A4A66; margin-top:1px;">Ankle cue helped him restart</div></div>
+          </button>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+
+  </sc-if></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:392,&quot;height&quot;:844}}">
+class Component extends DCLogic {
+  state = {
+    screen: 'home',      // signin | home | status | alerts | settings
+    sim: 'calm',         // calm | off | freeze
+    simOpen: false,
+    explainOpen: false,
+    offAlerts: true,
+    freezeAlerts: true,
+    showPushPrompt: true,
+    authStep: 0,
+    authName: '', authEmail: '', authPassword: '', authRel: '', authPhone: '', authCode: '', pairCode: '',
+    termsTos: false,
+    cgEmail: 'margaret@family.com', cgPhone: '(415) 555-0182', cgEdit: false, cgEditEmail: '', cgEditPhone: '',
+    quietOn: true, quietStart: '22:00', quietEnd: '06:30',
+    inviteHint: '374905',
+  };
+
+  fmt12(hhmm) {
+    const m = /^(\d{1,2}):(\d{2})$/.exec(hhmm || '');
+    if (!m) return hhmm || '';
+    let h = +m[1]; const mm = m[2]; const ap = h >= 12 ? 'pm' : 'am';
+    h = h % 12; if (h === 0) h = 12;
+    return h + ':' + mm + ' ' + ap;
+  }
+
+  componentDidMount() {
+    try {
+      const invites = JSON.parse(localStorage.getItem('cadence_invites') || '[]');
+      if (invites.length) {
+        const latest = invites[invites.length - 1];
+        this.setState({ inviteHint: latest.code, pairCode: '' });
+      }
+    } catch (e) {}
+  }
+
+  writeSignup() {
+    try {
+      const arr = JSON.parse(localStorage.getItem('cadence_signups') || '[]');
+      arr.push({
+        id: Date.now(),
+        code: this.state.pairCode.replace(/\D/g, ''),
+        name: this.state.authName.trim() || 'Margaret Hale',
+        relation: this.state.authRel || 'Family',
+        phone: this.state.authPhone.trim(),
+        email: this.state.authEmail.trim(),
+        ts: Date.now(),
+      });
+      localStorage.setItem('cadence_signups', JSON.stringify(arr));
+    } catch (e) {}
+  }
+
+  go(screen) { this.setState({ screen }); }
+
+  navIcon(name, color) {
+    const e = React.createElement;
+    const s = { width: 26, height: 26, viewBox: '0 0 26 26', fill: 'none', stroke: color, strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round' };
+    if (name === 'home') return e('svg', s, e('path', { d: 'M4 11.5 13 4l9 7.5M6.5 10v11h13V10' }));
+    if (name === 'alerts') return e('svg', s, e('path', { d: 'M7 17V11a6 6 0 0 1 12 0v6l2 2H5l2-2Z' }), e('path', { d: 'M11 21a2 2 0 0 0 4 0' }));
+    if (name === 'settings') return e('svg', s, e('circle', { cx: 13, cy: 13, r: 3 }), e('path', { d: 'M13 3v3M13 20v3M3 13h3M20 13h3M6 6l2 2M18 18l2 2M20 6l-2 2M6 20l2-2' }));
+    return null;
+  }
+
+  alertIcon(kind) {
+    const e = React.createElement;
+    if (kind === 'off') return e('svg', { width: 24, height: 24, viewBox: '0 0 24 24', fill: 'none' }, e('circle', { cx: 12, cy: 12, r: 9, stroke: '#8A4B00', strokeWidth: 2 }), e('path', { d: 'M12 7.5V12l3 2', stroke: '#8A4B00', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' }));
+    // freeze / footstep
+    return e('svg', { width: 24, height: 24, viewBox: '0 0 24 24', fill: 'none' }, e('path', { d: 'M9 4c1.5 0 2.5 1.6 2.5 4S10.5 13 9 13s-2.5-2-2.5-5S7.5 4 9 4Zm0 11v5M16 9c1.2 0 2 1.3 2 3.2s-.8 3.3-2 3.3-2-1.6-2-3.3S14.8 9 16 9Zm0 9v3', stroke: '#8A4B00', strokeWidth: 1.9, strokeLinecap: 'round', strokeLinejoin: 'round' }));
+  }
+
+  renderVals() {
+    const s = this.state;
+    const isCalm = s.sim === 'calm', isOff = s.sim === 'off', isFreeze = s.sim === 'freeze';
+    const isAlert = isOff || isFreeze;
+    const simLabel = isCalm ? 'Calm' : (isOff ? 'Off window' : 'Freeze');
+
+    // bottom nav
+    const active = '#2F57E6', idle = '#7E8AA6';
+    const navScreen = (s.screen === 'status') ? 'home' : s.screen;
+    const navDefs = [
+      { key: 'home', label: 'Home', screen: 'home' },
+      { key: 'alerts', label: 'Alerts', screen: 'alerts' },
+      { key: 'settings', label: 'Settings', screen: 'settings' },
+    ];
+    const navItems = navDefs.map(n => {
+      const on = navScreen === n.key;
+      const color = on ? active : idle;
+      return { key: n.key, label: n.label, color, icon: this.navIcon(n.key, color), onClick: () => this.go(n.screen) };
+    });
+
+    // status detail values
+    const stCalm = {
+      stMotorBg: 'linear-gradient(160deg, #E6F5EC 0%, #DCF1E6 100%)',
+      stMotorDot: '#1F8A5B', stMotorLabelColor: '#15724A',
+      stMotorState: 'On and steady',
+      stMotorNote: 'Robert\u2019s movement has been smooth this morning.',
+    };
+    const stOff = {
+      stMotorBg: 'linear-gradient(160deg, #FBEDD8 0%, #F6E2C0 100%)',
+      stMotorDot: '#B9700F', stMotorLabelColor: '#8A4B00',
+      stMotorState: 'Off period predicted',
+      stMotorNote: 'A short off window is likely around 11:40 \u2013 12:10.',
+    };
+    const stFreeze = {
+      stMotorBg: 'linear-gradient(160deg, #FBEDD8 0%, #F6E2C0 100%)',
+      stMotorDot: '#B9700F', stMotorLabelColor: '#8A4B00',
+      stMotorState: 'Recovered after a freeze',
+      stMotorNote: 'He paused briefly at 10:50 and restarted with the ankle cue.',
+    };
+    const stVals = isCalm ? stCalm : (isOff ? stOff : stFreeze);
+    const stFreezeCount = isFreeze ? '1' : (isOff ? '0' : '0');
+    const stFreezeNote = isFreeze ? 'resolved by cue' : 'none so far';
+
+    // alerts feed
+    let alertItems = [];
+    if (isOff) {
+      alertItems = [{
+        key: 'a-off', icon: this.alertIcon('off'), iconBg: '#FBF1E1',
+        title: 'Off period predicted', time: '11:40', body: 'A short off window is likely 11:40 \u2013 12:10. Robert was reminded to take his dose ahead of it.',
+        tag: 'Dose due 11:45', tagBg: '#EEF3FB', tagDot: '#2F57E6', tagColor: '#2F57E6',
+      }];
+    } else if (isFreeze) {
+      alertItems = [{
+        key: 'a-frz', icon: this.alertIcon('freeze'), iconBg: '#FBF1E1',
+        title: 'Brief freeze, resolved', time: '10:50', body: 'Robert\u2019s steps paused briefly. The ankle cue helped him restart on his own.',
+        tag: 'Resolved', tagBg: '#E6F5EC', tagDot: '#1F8A5B', tagColor: '#15724A',
+      }];
+    }
+
+    // settings toggles
+    const toggleRows = [
+      { key: 'off', title: 'Off-window alerts', desc: 'When an off period is predicted', on: s.offAlerts, onClick: () => this.setState(p => ({ offAlerts: !p.offAlerts })) },
+      { key: 'frz', title: 'Freeze alerts', desc: 'When a freeze is detected', on: s.freezeAlerts, onClick: () => this.setState(p => ({ freezeAlerts: !p.freezeAlerts })) },
+    ].map((r, i, arr) => ({
+      ...r,
+      trackBg: r.on ? '#1F8A5B' : '#CBD4E6',
+      knobLeft: r.on ? '27px' : '3px',
+      border: '1px solid #EEF1F7',
+    }));
+
+    // ---- create account ----
+    const e = React.createElement;
+    const createSteps = [
+      { key: 'pair', eyebrow: 'CONNECT TO YOUR PATIENT', title: 'Connect to your patient', body: 'Enter the code your patient shared with you. We\u2019ll use it to find their account.', button: 'Find my patient', valid: () => s.pairCode.replace(/\D/g, '').length === 6 },
+      { key: 'name', eyebrow: 'CREATE YOUR ACCOUNT', title: 'What\u2019s your name?', body: 'This is how Robert and his care team will see you.', button: 'Continue', valid: () => s.authName.trim().length > 1 },
+      { key: 'cred', eyebrow: 'CREATE YOUR ACCOUNT', title: 'Create your login', body: 'You\u2019ll use this email and password to sign in.', button: 'Continue', valid: () => /.+@.+\..+/.test(s.authEmail) && s.authPassword.length >= 8 },
+      { key: 'details', eyebrow: 'CREATE YOUR ACCOUNT', title: 'A bit about you', body: 'This helps Robert recognize you and lets us reach you for urgent alerts.', button: 'Continue', valid: () => !!s.authRel && s.authPhone.trim().length >= 7 },
+      { key: 'verify', eyebrow: 'CREATE YOUR ACCOUNT', title: 'Check your email', body: 'We sent a 6-digit code to ' + (s.authEmail || 'your email') + '. Enter it to confirm it\u2019s you.', button: 'Link accounts', valid: () => s.authCode.replace(/\D/g, '').length === 6 && s.termsTos },
+    ];
+    const cs = createSteps[s.authStep] || createSteps[0];
+    const authProgress = createSteps.map((_, i) => e('div', { key: i, style: { flex: 1, height: '7px', borderRadius: '4px', background: i <= s.authStep ? '#2F57E6' : '#D5DEF0' } }));
+    const boxes = (val, accent) => { const d = val.replace(/\D/g, '').slice(0, 6).split(''); return [0, 1, 2, 3, 4, 5].map(i => e('div', { key: i, style: { flex: 1, height: '60px', borderRadius: '14px', background: '#fff', border: '2px solid ' + (d[i] ? accent : '#D5DEF0'), display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '26px', fontWeight: 800, color: '#16203A' } }, d[i] || '')); };
+    const authCodeBoxes = boxes(s.authCode, '#2F57E6');
+    const pairCodeBoxes = boxes(s.pairCode, '#1F8A5B');
+    const tick = (c) => c ? e('svg', { width: 18, height: 18, viewBox: '0 0 24 24', fill: 'none' }, e('path', { d: 'M5 12.5 10 17.5 19 6.5', stroke: '#fff', strokeWidth: 3, strokeLinecap: 'round', strokeLinejoin: 'round' })) : null;
+    const relOptions = ['Daughter', 'Son', 'Spouse', 'Sibling', 'Parent', 'Friend'];
+    const relChips = relOptions.map(r => ({
+      key: r, label: r,
+      bg: s.authRel === r ? '#2F57E6' : '#fff',
+      border: s.authRel === r ? '#2F57E6' : '#D5DEF0',
+      color: s.authRel === r ? '#fff' : '#16203A',
+      onClick: () => this.setState({ authRel: r }),
+    }));
+    const authValid = cs.valid();
+
+    const simSel = (k) => ({
+      bg: s.sim === k ? '#EEF3FB' : '#F8FAFD',
+      border: s.sim === k ? '#2F57E6' : '#E2E9F5',
+    });
+    const cBtn = simSel('calm'), oBtn = simSel('off'), fBtn = simSel('freeze');
+
+    return {
+      isSignIn: s.screen === 'signin',
+      isApp: !['signin', 'create', 'paired'].includes(s.screen),
+      isCreate: s.screen === 'create',
+      isPaired: s.screen === 'paired',
+      // create-account flow
+      authProgress, authTitle: cs.title, authBody: cs.body, authButton: cs.button, authEyebrow: cs.eyebrow,
+      stepName: cs.key === 'name', stepCred: cs.key === 'cred', stepDetails: cs.key === 'details',
+      stepVerify: cs.key === 'verify', stepPair: cs.key === 'pair',
+      authName: s.authName, authEmail: s.authEmail, authPassword: s.authPassword,
+      authPhone: s.authPhone, authCode: s.authCode, pairCode: s.pairCode,
+      authCodeBoxes, pairCodeBoxes, relChips,
+      inviteHint: s.inviteHint,
+      cgEmail: s.cgEmail, cgPhone: s.cgPhone,
+      cgEdit: s.cgEdit, cgView: !s.cgEdit,
+      cgEditLabel: s.cgEdit ? 'Save' : 'Edit',
+      cgEditEmail: s.cgEditEmail, cgEditPhone: s.cgEditPhone,
+      setCgEditEmail: (ev) => this.setState({ cgEditEmail: ev.target.value }),
+      setCgEditPhone: (ev) => this.setState({ cgEditPhone: ev.target.value }),
+      toggleCgEdit: () => {
+        if (s.cgEdit) this.setState({ cgEmail: s.cgEditEmail || s.cgEmail, cgPhone: s.cgEditPhone || s.cgPhone, cgEdit: false });
+        else this.setState({ cgEdit: true, cgEditEmail: s.cgEmail, cgEditPhone: s.cgPhone });
+      },
+      pairFound: s.pairCode.replace(/\D/g, '').length === 6,
+      setAuthName: (ev) => this.setState({ authName: ev.target.value }),
+      setAuthEmail: (ev) => this.setState({ authEmail: ev.target.value }),
+      setAuthPassword: (ev) => this.setState({ authPassword: ev.target.value }),
+      setAuthPhone: (ev) => this.setState({ authPhone: ev.target.value }),
+      setAuthCode: (ev) => this.setState({ authCode: ev.target.value }),
+      setPairCode: (ev) => this.setState({ pairCode: ev.target.value }),
+      tosBorder: s.termsTos ? '#2F57E6' : '#E2E9F5',
+      tosBoxBg: s.termsTos ? '#2F57E6' : '#fff',
+      tosBoxBorder: s.termsTos ? '#2F57E6' : '#CBD4E6',
+      tosCheck: tick(s.termsTos),
+      toggleTermsTos: () => this.setState(p => ({ termsTos: !p.termsTos })),
+      authNextDisabled: !authValid,
+      authNextBg: authValid ? '#2F57E6' : '#A9B6D6',
+      authNextCursor: authValid ? 'pointer' : 'default',
+      goCreate: () => this.setState({ screen: 'create', authStep: 0 }),
+      authBack: () => {
+        if (s.authStep === 0) this.setState({ screen: 'signin' });
+        else this.setState(p => ({ authStep: p.authStep - 1 }));
+      },
+      authNext: () => {
+        if (!authValid) return;
+        if (s.authStep >= createSteps.length - 1) { this.writeSignup(); this.setState({ screen: 'paired' }); }
+        else this.setState(p => ({ authStep: p.authStep + 1 }));
+      },
+      finishPair: () => this.setState({ screen: 'home' }),
+      isHome: s.screen === 'home',
+      isStatus: s.screen === 'status',
+      isAlerts: s.screen === 'alerts',
+      isSettings: s.screen === 'settings',
+      isCalm, isOff, isFreeze, isAlert,
+      blobBg: isAlert ? 'radial-gradient(circle, rgba(185,112,15,0.16), rgba(185,112,15,0) 70%)' : 'radial-gradient(circle, rgba(47,87,230,0.14), rgba(47,87,230,0) 70%)',
+      simLabel, simOpen: s.simOpen,
+      navItems,
+      // status
+      ...stVals, stFreezeCount, stFreezeNote,
+      explainOpen: s.explainOpen,
+      explainCaret: s.explainOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+      toggleExplain: () => this.setState(p => ({ explainOpen: !p.explainOpen })),
+      // alerts
+      alertsEmpty: isCalm,
+      alertsHasItems: isAlert,
+      alertItems,
+      // settings
+      toggleRows,
+      quietOn: s.quietOn,
+      quietStart: s.quietStart,
+      quietEnd: s.quietEnd,
+      quietDesc: s.quietOn ? ('No alerts ' + this.fmt12(s.quietStart) + ' – ' + this.fmt12(s.quietEnd)) : 'Off, alerts come through anytime',
+      quietTrackBg: s.quietOn ? '#1F8A5B' : '#CBD4E6',
+      quietKnobLeft: s.quietOn ? '27px' : '3px',
+      toggleQuiet: () => this.setState(p => ({ quietOn: !p.quietOn })),
+      setQuietStart: (e) => this.setState({ quietStart: e.target.value }),
+      setQuietEnd: (e) => this.setState({ quietEnd: e.target.value }),
+      showPushPrompt: s.showPushPrompt,
+      allowPush: () => this.setState({ showPushPrompt: false }),
+      dismissPush: () => this.setState({ showPushPrompt: false }),
+      signOut: () => this.setState({ screen: 'signin' }),
+      // sim sheet swatches
+      simCalmBg: cBtn.bg, simCalmBorder: cBtn.border,
+      simOffBg: oBtn.bg, simOffBorder: oBtn.border,
+      simFreezeBg: fBtn.bg, simFreezeBorder: fBtn.border,
+      // actions
+      signIn: () => this.setState({ screen: 'home' }),
+      callRobert: () => {}, sendMessage: () => {},
+      goStatus: () => this.setState({ screen: 'status' }),
+      goHome: () => this.setState({ screen: 'home' }),
+      openSim: () => this.setState({ simOpen: true }),
+      closeSim: () => this.setState({ simOpen: false }),
+      simCalm: () => this.setState({ sim: 'calm' }),
+      simOff: () => this.setState({ sim: 'off' }),
+      simFreeze: () => this.setState({ sim: 'freeze' }),
+    };
+  }
+}
+</script>
+</body>
+</html>
