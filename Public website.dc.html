@@ -33,17 +33,71 @@
   [data-site-root] > div:nth-child(7) { animation-delay: 0.44s; }
   [data-site-root] > div:nth-child(n+8) { animation-delay: 0.52s; }
   @media (prefers-reduced-motion: reduce) { [data-site-root] > div { animation: none !important; } }
+  button, a { transition: transform 0.18s cubic-bezier(0.22,0.61,0.36,1), box-shadow 0.22s ease, background 0.22s ease, opacity 0.22s ease, border-color 0.22s ease, color 0.22s ease; }
+  button:hover, a:hover { transform: translateY(-2px); }
+  button:active, a:active { transform: scale(0.96) translateY(0); }
+  .page-enter { animation: cadReveal 0.55s cubic-bezier(0.22,0.61,0.36,1) both; }
+  /* ---------- scroll reveal (apple-style) ---------- */
+  .scroll-reveal { opacity: 0; transform: translateY(48px) scale(0.98); transition: opacity 0.9s cubic-bezier(0.22,0.61,0.36,1), transform 0.9s cubic-bezier(0.22,0.61,0.36,1); }
+  .scroll-reveal.visible { opacity: 1; transform: translateY(0) scale(1); }
+  .scroll-reveal-delay-1 { transition-delay: 0.08s; }
+  .scroll-reveal-delay-2 { transition-delay: 0.16s; }
+  .scroll-reveal-delay-3 { transition-delay: 0.24s; }
+  .scroll-reveal-delay-4 { transition-delay: 0.32s; }
+  /* safety net: if JS observer fails, elements become visible after 4s */
+  @keyframes srSafety { from { opacity:0; } to { opacity:1; } }
+  .scroll-reveal:not(.visible) { animation: srSafety 0.01s 4s forwards; }
+  .scroll-reveal.visible { animation: none; }
+  @media (prefers-reduced-motion: reduce) { .scroll-reveal { opacity: 1; transform: none; transition: none; animation: none; } }
   /* ---------- responsive ---------- */
   [data-navtoggle] { display: none; }
   @media (max-width: 980px) {
     [data-stack] { grid-template-columns: 1fr !important; gap: 24px !important; }
     [data-quad] { grid-template-columns: 1fr 1fr !important; }
   }
+  /* ---------- mobile nav ---------- */
   @media (max-width: 760px) {
     [data-navtoggle] { display: flex !important; }
-    [data-navlinks] { display: none !important; position: absolute; top: calc(100% + 12px); left: 0; right: 0; flex-direction: column; align-items: stretch !important; background: #fff; border-radius: 18px; box-shadow: 0 20px 44px rgba(28,46,92,0.18); padding: 12px; gap: 4px; z-index: 60; }
-    [data-navlinks][data-open="true"] { display: flex !important; }
-    [data-navlinks] > button { width: 100%; text-align: left; padding: 13px 16px !important; margin-left: 0 !important; }
+    [data-navlinks] {
+      display: flex !important;
+      position: absolute;
+      top: calc(100% + 12px); left: 0; right: 0;
+      flex-direction: column; align-items: stretch !important;
+      background: #fff; border-radius: 18px;
+      box-shadow: 0 20px 44px rgba(28,46,92,0.18);
+      padding: 12px; gap: 4px; z-index: 60;
+      opacity: 0;
+      transform: translateY(-8px) scale(0.97);
+      pointer-events: none;
+      transition: opacity 0.32s cubic-bezier(0.22,0.61,0.36,1), transform 0.32s cubic-bezier(0.22,0.61,0.36,1);
+      transform-origin: top center;
+    }
+    [data-navlinks][data-open="true"] {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    [data-navlinks] > button {
+      width: 100%; text-align: left;
+      padding: 14px 18px !important; margin-left: 0 !important;
+      border-radius: 14px;
+      transition: background 0.18s ease, transform 0.18s ease;
+    }
+    [data-navlinks] > button:active { transform: scale(0.98); }
+    /* hamburger -> X */
+    .ham-line { transition: transform 0.28s cubic-bezier(0.22,0.61,0.36,1), opacity 0.18s ease; transform-origin: center; }
+    [data-menu-open="true"] .ham-line-top { transform: translateY(5px) rotate(45deg); }
+    [data-menu-open="true"] .ham-line-mid { opacity: 0; transform: scaleX(0); }
+    [data-menu-open="true"] .ham-line-btm { transform: translateY(-5px) rotate(-45deg); }
+    /* backdrop */
+    [data-navbackdrop] {
+      position: fixed; inset: 0; z-index: 55;
+      background: rgba(22,32,58,0.18);
+      backdrop-filter: blur(3px);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.32s cubic-bezier(0.22,0.61,0.36,1);
+    }
+    [data-navbackdrop][data-open="true"] { opacity: 1; pointer-events: auto; }
     [data-quad] { grid-template-columns: 1fr !important; }
     [data-roadmap-row] { grid-template-columns: 72px 1fr !important; gap: 16px !important; }
     [data-pad] { padding-left: 22px !important; padding-right: 22px !important; }
@@ -56,8 +110,8 @@
   <!-- ===================== NAV ===================== -->
   <div style="position:sticky; top:0; z-index:50; padding:18px 24px 0;">
     <div style="max-width:1180px; margin:0 auto; background:#fff; border-radius:22px; box-shadow:0 10px 30px rgba(28,46,92,0.10); padding:14px 18px 14px 22px; display:flex; align-items:center; justify-content:space-between; position:relative;">
-      <button data-navtoggle="" onClick="{{ toggleMenu }}" aria-label="Menu" style="align-items:center; justify-content:center; width:46px; height:46px; border:none; background:#F4F7FC; border-radius:13px; cursor:pointer;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="#16203A" stroke-width="2.2" stroke-linecap="round"></path></svg></button>
-      <button onClick="{{ goHome }}" style="display:flex; align-items:center; gap:11px; background:none; border:none; cursor:pointer; font-family:inherit; padding:4px;">
+      <button data-navtoggle="" data-menu-open="{{ menuOpenStr }}" onClick="{{ toggleMenu }}" aria-label="Menu" style="align-items:center; justify-content:center; width:46px; height:46px; border:none; background:#F4F7FC; border-radius:13px; cursor:pointer;" style-hover="background:#E8EDF6"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path class="ham-line ham-line-top" d="M4 7h16" stroke="#16203A" stroke-width="2.2" stroke-linecap="round"/><path class="ham-line ham-line-mid" d="M4 12h16" stroke="#16203A" stroke-width="2.2" stroke-linecap="round"/><path class="ham-line ham-line-btm" d="M4 17h16" stroke="#16203A" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+      <button onClick="{{ goHome }}" style="display:flex; align-items:center; gap:11px; background:none; border:none; cursor:pointer; font-family:inherit; padding:4px;" style-hover="opacity:0.78">
         <span style="width:36px; height:36px; border-radius:10px; background:#16203A; display:flex; align-items:center; justify-content:center;">
           <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M2 12h3.5l2-6 3.2 13 3-9 2.3 4.5H22" stroke="#7CF0B7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
         </span>
@@ -65,15 +119,17 @@
       </button>
       <div data-navlinks="" data-open="{{ menuOpenStr }}" style="display:flex; align-items:center; gap:8px;">
         <sc-for list="{{ navLinks }}" as="n" hint-placeholder-count="5">
-          <button onClick="{{ n.onClick }}" style="background: none; border: none; cursor: pointer; font-family: inherit; font-size: 16px; font-weight: {{ n.weight }}; color: {{ n.color }}; padding: 10px 16px; border-radius: 12px; text-transform: lowercase" style-hover="background:#F4F7FC">{{ n.label }}</button>
+          <button onClick="{{ n.onClick }}" style="background: none; border: none; cursor: pointer; font-family: inherit; font-size: 16px; font-weight: {{ n.weight }}; color: {{ n.color }}; padding: 10px 16px; border-radius: 12px; text-transform: lowercase" style-hover="background:#E8EDF6; color:#16203A">{{ n.label }}</button>
         </sc-for>
-        <button onClick="{{ goContact }}" style="margin-left: 6px; background: #16203A; border: none; cursor: pointer; font-family: inherit; font-size: 16px; font-weight: 700; color: #fff; padding: 13px 24px; border-radius: 14px; text-transform: lowercase" style-hover="background:#222F4D">join the waitlist</button>
+        <button onClick="{{ goContact }}" style="margin-left: 6px; background: #16203A; border: none; cursor: pointer; font-family: inherit; font-size: 16px; font-weight: 700; color: #fff; padding: 13px 24px; border-radius: 14px; text-transform: lowercase" style-hover="background:#222F4D; box-shadow:0 10px 24px rgba(22,32,58,0.22)">join the waitlist</button>
       </div>
     </div>
+    <div data-navbackdrop="" data-open="{{ menuOpenStr }}" onClick="{{ closeMenu }}"></div>
   </div>
 
   <!-- ============================================================ HOME ============================================================ -->
   <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <div class="page-enter">
   <div style="max-width:1200px; margin:0 auto; padding:60px 32px 56px; display:grid; grid-template-columns:1.05fr 0.95fr; gap:40px; align-items:center; position:relative;" data-stack="1" data-pad="1">
     <div style="position:absolute; top:-40px; left:-160px; width:520px; height:520px; border-radius:50%; background:radial-gradient(circle, rgba(47,87,230,0.10), rgba(47,87,230,0) 68%); pointer-events:none;"></div>
     <div style="position:relative;">
@@ -84,9 +140,15 @@
       <h1 style="font-size:clamp(34px,7vw,62px); line-height:1.04; font-weight:800; letter-spacing:-1.8px; margin:0 0 22px;">Stay ahead of<br>every <span style="font-style:italic; font-family:'Newsreader',serif; font-weight:600; color:{{ accent }};">off</span> period.</h1>
       <p style="font-size:21px; line-height:1.55; font-weight:500; color:#3A4A66; max-width:480px; margin:0 0 34px;">Cadence learns your rhythm, forecasts when your medication is about to wear off, and times each dose to keep you moving, instead of chasing the clock.</p>
       <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
-        <button onClick="{{ goContact }}" style="font-size:18px; font-weight:700; color:#fff; background:{{ accent }}; border:none; cursor:pointer; font-family:inherit; padding:18px 32px; border-radius:18px; box-shadow:0 16px 34px rgba(47,87,230,0.30);">Get early access</button>
-        <button onClick="{{ goHow }}" style="font-size:18px; font-weight:700; color:#16203A; background:#fff; cursor:pointer; font-family:inherit; padding:18px 26px; border-radius:18px; border:2px solid #DCE3EF;">See how it works</button>
+        <button onClick="{{ goContact }}" style="font-size:18px; font-weight:700; color:#fff; background:{{ accent }}; border:none; cursor:pointer; font-family:inherit; padding:18px 32px; border-radius:18px; box-shadow:0 16px 34px rgba(47,87,230,0.30);" style-hover="box-shadow:0 20px 42px rgba(47,87,230,0.38); background:#1E48C8">Get early access</button>
+        <button onClick="{{ goHow }}" style="font-size:18px; font-weight:700; color:#16203A; background:#fff; cursor:pointer; font-family:inherit; padding:18px 26px; border-radius:18px; border:2px solid #DCE3EF;" style-hover="border-color:#B0C0DC; background:#F8FAFF">See how it works</button>
       </div>
+      <sc-if value="{{ waitlistCount !== null }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex; align-items:center; gap:8px; margin-top:14px;">
+          <span style="position:relative; width:8px; height:8px;"><span style="position:absolute; inset:0; border-radius:50%; background:#2F57E6; animation:cadPulse 2.4s ease-out infinite;"></span><span style="position:relative; display:block; width:8px; height:8px; border-radius:50%; background:#2F57E6;"></span></span>
+          <span style="font-size:13.5px; font-weight:700; color:#8A96B0;">{{ waitlistLabel }}</span>
+        </div>
+      </sc-if>
       <div style="display:flex; align-items:center; gap:22px; margin-top:36px;">
         <div style="display:flex;">
           <span style="width:40px; height:40px; border-radius:50%; background:#CBD8F4; border:3px solid #FBFCFE; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; color:#2F57E6;">R</span>
@@ -98,7 +160,7 @@
     </div>
 
     <!-- PHONE MOCKUP -->
-    <div style="position:relative; display:flex; justify-content:center;">
+    <div class="scroll-reveal scroll-reveal-delay-1" style="position:relative; display:flex; justify-content:center;">
       <div style="position:absolute; top:60px; width:340px; height:560px; border-radius:48px; background:radial-gradient(120% 90% at 50% 0%, #DCE6FA, #C9D6F2); filter:blur(8px); opacity:0.7;"></div>
       <div style="position:relative; width:312px; height:636px; background:#EEF3FB; border-radius:46px; box-shadow:0 40px 80px rgba(28,46,92,0.34), 0 0 0 10px #11182B, 0 0 0 12px #2A3450; overflow:hidden; animation:cadFloat 7s ease-in-out infinite;">
         <div style="height:44px; display:flex; align-items:center; justify-content:space-between; padding:16px 26px 0;">
@@ -141,25 +203,19 @@
   </div>
 
   <!-- TRUST STRIP -->
-  <div style="border-top:1px solid #ECF0F7; border-bottom:1px solid #ECF0F7; background:#F4F7FC;">
-    <div style="max-width:1200px; margin:0 auto; padding:26px 32px; display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;">
-      <span style="font-size:14px; font-weight:700; letter-spacing:1.4px; color:#8A96B0;">GROUNDED IN MOVEMENT-DISORDER CARE</span>
-      <div style="display:flex; align-items:center; gap:40px; flex-wrap:wrap;">
-        <span style="font-size:18px; font-weight:800; color:#A9B4C9;">Mayo-trained advisors</span>
-        <span style="font-size:18px; font-weight:800; color:#A9B4C9;">MDS guidelines</span>
-        <span style="font-size:18px; font-weight:800; color:#A9B4C9;">HIPAA-ready</span>
-        <span style="font-size:18px; font-weight:800; color:#A9B4C9;">CE-marked sensor</span>
-      </div>
+  <div class="scroll-reveal" style="border-top:1px solid #ECF0F7; border-bottom:1px solid #ECF0F7; background:#F4F7FC;">
+    <div style="max-width:1200px; margin:0 auto; padding:22px 32px; text-align:center;">
+      <span style="font-size:14px; font-weight:700; letter-spacing:1.6px; color:#8A96B0;">GROUNDED IN MOVEMENT-DISORDER CARE</span>
     </div>
   </div>
 
   <!-- PROBLEM -->
-  <div style="max-width:1000px; margin:0 auto; padding:96px 32px 30px; text-align:center;">
+  <div class="scroll-reveal" style="max-width:1000px; margin:0 auto; padding:96px 32px 30px; text-align:center;">
     <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:{{ accent }}; margin-bottom:16px;">THE PROBLEM</div>
     <h2 style="font-size:clamp(28px,5.6vw,46px); line-height:1.12; font-weight:800; letter-spacing:-1.2px; margin:0 0 22px;">Parkinson's doesn't keep a schedule,<br>So why does the pill bottle?</h2>
     <p style="font-size:20px; line-height:1.6; font-weight:500; color:#3A4A66; max-width:680px; margin:0 auto;">Medication works until it doesn't. As the day goes on, <span style="font-weight:700; color:#16203A;">on</span> time gets shorter and <span style="font-weight:700; color:#8A4B00;">off</span> periods, stiffness, slowness, tremor, arrive earlier than the clock predicts. Fixed dosing times can't keep up with a body that shifts hour to hour.</p>
   </div>
-  <div style="max-width:880px; margin:0 auto 90px; padding:0 32px;">
+  <div class="scroll-reveal scroll-reveal-delay-1" style="max-width:880px; margin:0 auto 90px; padding:0 32px;">
     <div style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:30px 30px 24px; box-shadow:0 18px 40px rgba(28,46,92,0.06);">
       <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:700; color:#8A96B0; margin-bottom:10px;"><span>8 AM</span><span>12 PM</span><span>4 PM</span><span>8 PM</span></div>
       <div style="display:flex; height:46px; border-radius:13px; overflow:hidden;">
@@ -179,14 +235,14 @@
   </div>
 
   <!-- TWO SYMPTOMS -->
-  <div style="max-width:1100px; margin:0 auto 30px; padding:0 32px;">
+  <div class="scroll-reveal" style="max-width:1100px; margin:0 auto 30px; padding:0 32px;">
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;" data-stack="1">
-      <div style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:34px 32px; box-shadow:0 14px 34px rgba(28,46,92,0.05);">
+      <div class="scroll-reveal" style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:34px 32px; box-shadow:0 14px 34px rgba(28,46,92,0.05);">
         <div style="font-size:13px; font-weight:800; letter-spacing:1.4px; color:#B9700F; margin-bottom:14px;">SYMPTOM ONE · TIMING</div>
         <h3 style="font-size:26px; font-weight:800; letter-spacing:-0.5px; margin:0 0 12px;">off episodes</h3>
         <p style="font-size:17px; line-height:1.6; font-weight:500; color:#536084; margin:0;">the dose wears off before the next one is due and symptoms return, stiffness, slowness, tremor. absorption shifts with meals and gut speed, so the same pill at the same time lands differently from one day to the next. most people only find out they're off once they're already in it, and the next dose can take up to an hour to work.</p>
       </div>
-      <div style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:34px 32px; box-shadow:0 14px 34px rgba(28,46,92,0.05);">
+      <div class="scroll-reveal scroll-reveal-delay-1" style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:34px 32px; box-shadow:0 14px 34px rgba(28,46,92,0.05);">
         <div style="font-size:13px; font-weight:800; letter-spacing:1.4px; color:#2F57E6; margin-bottom:14px;">SYMPTOM TWO · MOVEMENT</div>
         <h3 style="font-size:26px; font-weight:800; letter-spacing:-0.5px; margin:0 0 12px;">freezing of gait</h3>
         <p style="font-size:17px; line-height:1.6; font-weight:500; color:#536084; margin:0;">the feet suddenly feel glued to the floor while the body keeps leaning forward. it strikes in doorways, on turns, and while crossing the street, a leading cause of falls and a big reason people stop leaving the house. today's cueing tools only switch on after the freeze has already started.</p>
@@ -196,31 +252,31 @@
   </div>
 
   <!-- WHO IT'S FOR -->
-  <div style="max-width:980px; margin:0 auto; padding:78px 32px 30px; text-align:center;">
+  <div class="scroll-reveal" style="max-width:980px; margin:0 auto; padding:78px 32px 30px; text-align:center;">
     <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:{{ accent }}; margin-bottom:16px;">WHO IT'S FOR</div>
     <h2 style="font-size:clamp(28px,5.4vw,44px); line-height:1.12; font-weight:800; letter-spacing:-1.2px; margin:0 0 22px;">Built for the middle of the journey.</h2>
     <p style="font-size:20px; line-height:1.6; font-weight:500; color:#3A4A66; max-width:680px; margin:0 auto;">Cadence is made for people in the mid-to-later stages of Parkinson's, on levodopa, living with motor fluctuations, many of them older adults. they want to keep going out, keep their independence, and stop bracing for a fall, and they're tired of dosing blind. the people around them carry that worry too, and the neurologist who sets the schedule sees them for about fifteen minutes every few months.</p>
   </div>
 
   <!-- CARE CIRCLE (condensed) -->
-  <div style="background:#F4F7FC; border-top:1px solid #ECF0F7; border-bottom:1px solid #ECF0F7;">
+  <div class="scroll-reveal" style="background:#F4F7FC; border-top:1px solid #ECF0F7; border-bottom:1px solid #ECF0F7;">
     <div style="max-width:1200px; margin:0 auto; padding:80px 32px;">
-      <div style="text-align:center; margin-bottom:48px;">
+      <div class="scroll-reveal" style="text-align:center; margin-bottom:48px;">
         <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:{{ accent }}; margin-bottom:14px;">THE CARE CIRCLE</div>
         <h2 style="font-size:clamp(28px,5.4vw,44px); line-height:1.1; font-weight:800; letter-spacing:-1.2px; margin:0;">You're not managing this alone.</h2>
       </div>
       <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;" data-stack="1">
-        <div style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:30px 28px;">
+        <div class="scroll-reveal" style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:30px 28px;">
           <div style="width:52px; height:52px; border-radius:15px; background:#E5EBFD; display:flex; align-items:center; justify-content:center; margin-bottom:18px;"><svg width="27" height="27" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#2F57E6" stroke-width="2"></circle><path d="M4 20c0-4 4-6 8-6s8 2 8 6" stroke="#2F57E6" stroke-width="2" stroke-linecap="round"></path></svg></div>
           <h3 style="font-size:22px; font-weight:800; margin:0 0 9px;">For you</h3>
           <p style="font-size:16px; line-height:1.55; font-weight:500; color:#536084; margin:0;">A calm home screen that answers one question: am I on, and what do I do next?</p>
         </div>
-        <div style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:30px 28px;">
+        <div class="scroll-reveal scroll-reveal-delay-1" style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:30px 28px;">
           <div style="width:52px; height:52px; border-radius:15px; background:#E7F4EC; display:flex; align-items:center; justify-content:center; margin-bottom:18px;"><svg width="27" height="27" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.5-7-9.5A4.5 4.5 0 0 1 12 8a4.5 4.5 0 0 1 7 3.5C19 16.5 12 21 12 21z" stroke="#1F8A5B" stroke-width="2" stroke-linejoin="round"></path></svg></div>
           <h3 style="font-size:22px; font-weight:800; margin:0 0 9px;">for your caretaker(s)</h3>
           <p style="font-size:16px; line-height:1.55; font-weight:500; color:#536084; margin:0;">A gentle heads-up before an off window, so help arrives at the right time.</p>
         </div>
-        <div style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:30px 28px;">
+        <div class="scroll-reveal scroll-reveal-delay-2" style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:30px 28px;">
           <div style="width:52px; height:52px; border-radius:15px; background:#EDE7FB; display:flex; align-items:center; justify-content:center; margin-bottom:18px;"><svg width="27" height="27" viewBox="0 0 24 24" fill="none"><path d="M4 19V5h16v14M4 13h4l2 4 3-10 2 6h5" stroke="#6E4FD8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
           <h3 style="font-size:22px; font-weight:800; margin:0 0 9px;">For your neurologist</h3>
           <p style="font-size:16px; line-height:1.55; font-weight:500; color:#536084; margin:0;">weeks of real on/off data, not a recalled diary, to fine-tune the plan, and a way to adjust your dosing schedule straight to the app between visits, no appointment required*</p>
@@ -231,30 +287,31 @@
 
   <!-- QUOTE -->
   
-  </sc-if>
+  </div></sc-if>
 
   <!-- ============================================================ HOW IT WORKS ============================================================ -->
   <sc-if value="{{ isHow }}" hint-placeholder-val="{{ false }}">
-  <div style="max-width:1200px; margin:0 auto; padding:64px 32px 30px; text-align:center;">
+  <div class="page-enter">
+  <div class="scroll-reveal" style="max-width:1200px; margin:0 auto; padding:64px 32px 30px; text-align:center;">
     <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:{{ accent }}; margin-bottom:14px;">HOW IT WORKS</div>
     <h1 style="font-size: clamp(32px,6vw,54px); line-height: 1.08; font-weight: 800; letter-spacing: -1.4px; margin: 0 0 18px; font-family: newsreader serif; font-style: italic">Three steps, all day long.</h1>
     <p style="font-size:20px; line-height:1.55; font-weight:500; color:#3A4A66; max-width:620px; margin:0 auto;">Cadence turns continuous movement data into one clear next action, without a diary, a spreadsheet, or guesswork.</p>
   </div>
-  <div style="max-width:1200px; margin:0 auto; padding:40px 32px;">
+  <div class="scroll-reveal scroll-reveal-delay-1" style="max-width:1200px; margin:0 auto; padding:40px 32px;">
     <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:26px;" data-stack="1">
-      <div style="background:#fff; border:1px solid #ECF0F7; border-radius:28px; padding:34px 30px; box-shadow:0 14px 34px rgba(28,46,92,0.06);">
+      <div class="scroll-reveal" style="background:#fff; border:1px solid #ECF0F7; border-radius:28px; padding:34px 30px; box-shadow:0 14px 34px rgba(28,46,92,0.06);">
         <div style="width:60px; height:60px; border-radius:18px; background:#E7F4EC; display:flex; align-items:center; justify-content:center; margin-bottom:22px;"><svg width="30" height="30" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="#1F8A5B" stroke-width="2"></circle><circle cx="12" cy="12" r="2.6" fill="#1F8A5B"></circle></svg></div>
         <div style="font-size:14px; font-weight:800; color:#A9B4C9; margin-bottom:8px;">01</div>
         <h3 style="font-size:25px; font-weight:800; letter-spacing:-0.4px; margin:0 0 10px;">Wear the sensor</h3>
         <p style="font-size:17px; line-height:1.55; font-weight:500; color:#536084; margin:0;">A discreet wrist and ankle band read your movement state continuously, no buttons, no logging. They just know when you're on and when you're slipping.</p>
       </div>
-      <div style="background:#fff; border:1px solid #ECF0F7; border-radius:28px; padding:34px 30px; box-shadow:0 14px 34px rgba(28,46,92,0.06);">
+      <div class="scroll-reveal scroll-reveal-delay-1" style="background:#fff; border:1px solid #ECF0F7; border-radius:28px; padding:34px 30px; box-shadow:0 14px 34px rgba(28,46,92,0.06);">
         <div style="width:60px; height:60px; border-radius:18px; background:#FBF1E1; display:flex; align-items:center; justify-content:center; margin-bottom:22px;"><svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M3 14l5-6 4 4 5-7 4 5" stroke="#B9700F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
         <div style="font-size:14px; font-weight:800; color:#A9B4C9; margin-bottom:8px;">02</div>
         <h3 style="font-size:25px; font-weight:800; letter-spacing:-0.4px; margin:0 0 10px;">See your forecast</h3>
         <p style="font-size:17px; line-height:1.55; font-weight:500; color:#536084; margin:0;">Cadence predicts when an off window is likely, usually before you feel it, so wearing-off becomes something you see coming, not a surprise.</p>
       </div>
-      <div style="background:#fff; border:1px solid #ECF0F7; border-radius:28px; padding:34px 30px; box-shadow:0 14px 34px rgba(28,46,92,0.06);">
+      <div class="scroll-reveal scroll-reveal-delay-2" style="background:#fff; border:1px solid #ECF0F7; border-radius:28px; padding:34px 30px; box-shadow:0 14px 34px rgba(28,46,92,0.06);">
         <div style="width:60px; height:60px; border-radius:18px; background:#E5EBFD; display:flex; align-items:center; justify-content:center; margin-bottom:22px;"><svg width="30" height="30" viewBox="0 0 28 28" fill="none"><rect x="3.5" y="9" width="21" height="10" rx="5" transform="rotate(-45 14 14)" stroke="#2F57E6" stroke-width="2.4"></rect><path d="M11 11 17 17" stroke="#2F57E6" stroke-width="2.4" stroke-linecap="round"></path></svg></div>
         <div style="font-size:14px; font-weight:800; color:#A9B4C9; margin-bottom:8px;">03</div>
         <h3 style="font-size:25px; font-weight:800; letter-spacing:-0.4px; margin:0 0 10px;">Dose ahead of it</h3>
@@ -264,8 +321,8 @@
   </div>
 
   <!-- forecast ring deep dive -->
-  <div style="background:#F4F7FC; border-top:1px solid #ECF0F7; border-bottom:1px solid #ECF0F7; margin-top:50px;">
-    <div style="max-width:1200px; margin:0 auto; padding:90px 32px; display:grid; grid-template-columns:0.9fr 1.1fr; gap:60px; align-items:center;" data-stack="1" data-pad="1">
+  <div class="scroll-reveal" style="background:#F4F7FC; border-top:1px solid #ECF0F7; border-bottom:1px solid #ECF0F7; margin-top:50px;">
+    <div class="scroll-reveal" style="max-width:1200px; margin:0 auto; padding:90px 32px; display:grid; grid-template-columns:0.9fr 1.1fr; gap:60px; align-items:center;" data-stack="1" data-pad="1">
       <div style="display:flex; justify-content:center;">
         <div style="position:relative; width:300px; height:300px; background:#fff; border-radius:36px; box-shadow:0 26px 60px rgba(28,46,92,0.12); display:flex; align-items:center; justify-content:center;">
           <svg width="232" height="232" viewBox="0 0 232 232">
@@ -295,16 +352,17 @@
   </div>
 
   <!-- safety -->
-  <div style="max-width:760px; margin:0 auto; padding:90px 32px; text-align:center;">
+  <div class="scroll-reveal" style="max-width:760px; margin:0 auto; padding:90px 32px; text-align:center;">
     <span style="display:inline-flex; width:54px; height:54px; border-radius:16px; background:#E7F4EC; align-items:center; justify-content:center; margin-bottom:20px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6l7-3z" stroke="#1F8A5B" stroke-width="2" stroke-linejoin="round"></path><path d="M9 12l2 2 4-4" stroke="#1F8A5B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
     <h2 style="font-size:32px; font-weight:800; letter-spacing:-0.6px; margin:0 0 14px;">your doctor sets the plan. cadence helps you personalize and follow it.</h2>
     <p style="font-size:18px; line-height:1.6; font-weight:500; color:#536084; margin:0;">Cadence never changes your prescription. Every dose nudge stays inside the timing range your neurologist approved. It's a guide for your routine, not medical advice, and you can adjust or ignore it any time.</p>
   </div>
-  </sc-if>
+  </div></sc-if>
 
   <!-- ============================================================ TECHNOLOGY ============================================================ -->
   <sc-if value="{{ isTech }}" hint-placeholder-val="{{ false }}">
-  <div style="max-width:1200px; margin:0 auto; padding:64px 32px 20px; display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center;" data-stack="1" data-pad="1">
+  <div class="page-enter">
+  <div class="scroll-reveal" style="max-width:1200px; margin:0 auto; padding:64px 32px 20px; display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center;" data-stack="1" data-pad="1">
     <div>
       <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:{{ accent }}; margin-bottom:14px;">TECHNOLOGY</div>
       <h1 style="font-size: clamp(32px,6vw,54px); line-height: 1.06; font-weight: 800; letter-spacing: -1.4px; margin: 0 0 20px; font-family: newsreader serif; font-style: italic">A quiet band.<br>A careful model.</h1>
@@ -326,24 +384,24 @@
   </div>
 
   <!-- sensor callouts -->
-  <div style="max-width:1200px; margin:0 auto; padding:30px 32px 20px;">
+  <div class="scroll-reveal scroll-reveal-delay-1" style="max-width:1200px; margin:0 auto; padding:30px 32px 20px;">
     <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:20px;" data-quad="1">
-      <div style="background:#fff; border:1px solid #ECF0F7; border-radius:22px; padding:24px;"><div style="font-size:13px; font-weight:800; color:#2F57E6; letter-spacing:0.6px;">IMU</div><div style="font-size:19px; font-weight:800; margin:8px 0 6px;">6-axis motion</div><p style="font-size:14.5px; line-height:1.5; font-weight:500; color:#536084; margin:0;">Accelerometer + gyroscope capture tremor, bradykinesia, and gait at 200 Hz.</p></div>
-      <div style="background:#fff; border:1px solid #ECF0F7; border-radius:22px; padding:24px;"><div style="font-size:13px; font-weight:800; color:#2F57E6; letter-spacing:0.6px;">EDA</div><div style="font-size:19px; font-weight:800; margin:8px 0 6px;">Skin response</div><p style="font-size:14.5px; line-height:1.5; font-weight:500; color:#536084; margin:0;">A secondary channel that helps separate genuine off periods from rest.</p></div>
-      <div style="background:#fff; border:1px solid #ECF0F7; border-radius:22px; padding:24px;"><div style="font-size:13px; font-weight:800; color:#2F57E6; letter-spacing:0.6px;">TEMP</div><div style="font-size:19px; font-weight:800; margin:8px 0 6px;">Skin temperature</div><p style="font-size:14.5px; line-height:1.5; font-weight:500; color:#536084; margin:0;">Slow-moving context the model uses to normalize across the day.</p></div>
-      <div style="background:#fff; border:1px solid #ECF0F7; border-radius:22px; padding:24px;"><div style="font-size:13px; font-weight:800; color:#2F57E6; letter-spacing:0.6px;">HAPTIC</div><div style="font-size:19px; font-weight:800; margin:8px 0 6px;">Ankle freeze cue</div><p style="font-size:14.5px; line-height:1.5; font-weight:500; color:#536084; margin:0;">A rhythmic pulse on the ankle band to help restart movement during a freeze.</p></div>
+      <div class="scroll-reveal" style="background:#fff; border:1px solid #ECF0F7; border-radius:22px; padding:24px;"><div style="font-size:13px; font-weight:800; color:#2F57E6; letter-spacing:0.6px;">IMU</div><div style="font-size:19px; font-weight:800; margin:8px 0 6px;">6-axis motion</div><p style="font-size:14.5px; line-height:1.5; font-weight:500; color:#536084; margin:0;">Accelerometer + gyroscope capture tremor, bradykinesia, and gait at 200 Hz.</p></div>
+      <div class="scroll-reveal scroll-reveal-delay-1" style="background:#fff; border:1px solid #ECF0F7; border-radius:22px; padding:24px;"><div style="font-size:13px; font-weight:800; color:#2F57E6; letter-spacing:0.6px;">EDA</div><div style="font-size:19px; font-weight:800; margin:8px 0 6px;">Skin response</div><p style="font-size:14.5px; line-height:1.5; font-weight:500; color:#536084; margin:0;">A secondary channel that helps separate genuine off periods from rest.</p></div>
+      <div class="scroll-reveal scroll-reveal-delay-2" style="background:#fff; border:1px solid #ECF0F7; border-radius:22px; padding:24px;"><div style="font-size:13px; font-weight:800; color:#2F57E6; letter-spacing:0.6px;">TEMP</div><div style="font-size:19px; font-weight:800; margin:8px 0 6px;">Skin temperature</div><p style="font-size:14.5px; line-height:1.5; font-weight:500; color:#536084; margin:0;">Slow-moving context the model uses to normalize across the day.</p></div>
+      <div class="scroll-reveal scroll-reveal-delay-3" style="background:#fff; border:1px solid #ECF0F7; border-radius:22px; padding:24px;"><div style="font-size:13px; font-weight:800; color:#2F57E6; letter-spacing:0.6px;">HAPTIC</div><div style="font-size:19px; font-weight:800; margin:8px 0 6px;">Ankle freeze cue</div><p style="font-size:14.5px; line-height:1.5; font-weight:500; color:#536084; margin:0;">A rhythmic pulse on the ankle band to help restart movement during a freeze.</p></div>
     </div>
   </div>
 
   <!-- TWO BANDS, ONE FORECAST -->
-  <div style="max-width:1200px; margin:0 auto; padding:74px 32px 10px;">
-    <div style="text-align:center; margin-bottom:46px;">
+  <div class="scroll-reveal" style="max-width:1200px; margin:0 auto; padding:74px 32px 10px;">
+    <div class="scroll-reveal" style="text-align:center; margin-bottom:46px;">
       <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:{{ accent }}; margin-bottom:14px;">TWO BANDS, ONE FORECAST</div>
       <h2 style="font-size:clamp(28px,5.2vw,42px); line-height:1.12; font-weight:800; letter-spacing:-1.1px; margin:0 0 18px;">Two rhythms the body keeps, read at once.</h2>
       <p style="font-size:19px; line-height:1.6; font-weight:500; color:#3A4A66; max-width:680px; margin:0 auto;">Parkinson's plays out on two clocks at the same time, a chemical one and a mechanical one. Cadence puts a sensor on each and feeds both into a single model that forecasts your motor state through the day.</p>
     </div>
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;" data-stack="1">
-      <div style="background:#fff; border:1px solid #ECF0F7; border-radius:28px; padding:36px 34px; box-shadow:0 16px 38px rgba(28,46,92,0.06);">
+      <div class="scroll-reveal" style="background:#fff; border:1px solid #ECF0F7; border-radius:28px; padding:36px 34px; box-shadow:0 16px 38px rgba(28,46,92,0.06);">
         <div style="display:flex; align-items:center; gap:13px; margin-bottom:18px;">
           <span style="width:50px; height:50px; border-radius:15px; background:#E5EBFD; display:flex; align-items:center; justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.5-7-9.5A4.5 4.5 0 0 1 12 8a4.5 4.5 0 0 1 7 3.5C19 16.5 12 21 12 21z" stroke="#2F57E6" stroke-width="2" stroke-linejoin="round"></path></svg></span>
           <span style="font-size:13px; font-weight:800; letter-spacing:1.2px; color:#2F57E6;">WRIST BAND · CHEMICAL RHYTHM</span>
@@ -352,7 +410,7 @@
         <p style="font-size:16.5px; line-height:1.6; font-weight:500; color:#536084; margin:0 0 18px;">the wrist reads motor state plus the autonomic signals, heart rate, heart-rate variability, skin response and temperature, that shift before a person consciously feels an off period starting.</p>
         <div style="display:inline-flex; align-items:center; gap:9px; background:#EEF3FE; padding:10px 16px; border-radius:13px;"><svg width="18" height="18" viewBox="0 0 28 28" fill="none"><rect x="3.5" y="9" width="21" height="10" rx="5" transform="rotate(-45 14 14)" stroke="#2F57E6" stroke-width="2.4"></rect><path d="M11 11 17 17" stroke="#2F57E6" stroke-width="2.4" stroke-linecap="round"></path></svg><span style="font-size:14.5px; font-weight:700; color:#2F57E6;">buzzes the dose nudge</span></div>
       </div>
-      <div style="background:#fff; border:1px solid #ECF0F7; border-radius:28px; padding:36px 34px; box-shadow:0 16px 38px rgba(28,46,92,0.06);">
+      <div class="scroll-reveal scroll-reveal-delay-1" style="background:#fff; border:1px solid #ECF0F7; border-radius:28px; padding:36px 34px; box-shadow:0 16px 38px rgba(28,46,92,0.06);">
         <div style="display:flex; align-items:center; gap:13px; margin-bottom:18px;">
           <span style="width:50px; height:50px; border-radius:15px; background:#E7F4EC; display:flex; align-items:center; justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3 16l4-5 3 3 4-6 4 5 3-2" stroke="#1F8A5B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
           <span style="font-size:13px; font-weight:800; letter-spacing:1.2px; color:#15724A;">ANKLE BAND · MECHANICAL RHYTHM</span>
@@ -366,9 +424,9 @@
   </div>
 
   <!-- ML overview -->
-  <div style="background:#16203A; margin-top:60px;">
+  <div class="scroll-reveal" style="background:#16203A; margin-top:60px;">
     <div style="max-width:1200px; margin:0 auto; padding:84px 32px;">
-      <div style="text-align:center; margin-bottom:18px;">
+      <div class="scroll-reveal" style="text-align:center; margin-bottom:18px;">
         <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:#7CF0B7; margin-bottom:14px;">THE MODELS</div>
         <h2 style="font-size: clamp(28px,5.2vw,42px); line-height: 1.12; font-weight: 900; letter-spacing: -1.1px; margin: 0; color: #fff; font-family: newsreader serif; font-style: italic">From raw motion to a forecast you can act on.</h2>
       </div>
@@ -382,29 +440,29 @@
         <svg width="26" height="16" viewBox="0 0 26 16" fill="none"><path d="M2 8h20m0 0-5-5m5 5-5 5" stroke="#5E6E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
         <span style="background:#1F8A5B; color:#fff; font-size:14px; font-weight:700; padding:12px 18px; border-radius:13px;">On / off + dose nudge</span>
       </div>
-      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:22px;" data-stack="1">
-        <div style="background:#1E2942; border:1px solid #2C3954; border-radius:24px; padding:30px 28px;"><div style="font-size:20px; font-weight:800; color:#fff; margin-bottom:10px;">State classifier</div><p style="font-size:15.5px; line-height:1.55; font-weight:500; color:#A9B7D0; margin:0;">A temporal model labels each minute as on, off, or uncertain from movement features, the engine behind the live state.</p></div>
-        <div style="background:#1E2942; border:1px solid #2C3954; border-radius:24px; padding:30px 28px;"><div style="font-size:20px; font-weight:800; color:#fff; margin-bottom:10px;">Wearing-off forecaster</div><p style="font-size:15.5px; line-height:1.55; font-weight:500; color:#A9B7D0; margin:0;">A sequence model projects your levodopa response forward to estimate the next likely off window as a calibrated range.</p></div>
-        <div style="background:#1E2942; border:1px solid #2C3954; border-radius:24px; padding:30px 28px;"><div style="font-size:20px; font-weight:800; color:#fff; margin-bottom:10px;">Personalization layer</div><p style="font-size:15.5px; line-height:1.55; font-weight:500; color:#A9B7D0; margin:0;">A lightweight per-patient head adapts the base model to your own rhythm over the first weeks of wear.</p></div>
+      <div class="scroll-reveal scroll-reveal-delay-1" style="display:grid; grid-template-columns:repeat(3,1fr); gap:22px;" data-stack="1">
+        <div class="scroll-reveal" style="background:#1E2942; border:1px solid #2C3954; border-radius:24px; padding:30px 28px;"><div style="font-size:20px; font-weight:800; color:#fff; margin-bottom:10px;">State classifier</div><p style="font-size:15.5px; line-height:1.55; font-weight:500; color:#A9B7D0; margin:0;">A temporal model labels each minute as on, off, or uncertain from movement features, the engine behind the live state.</p></div>
+        <div class="scroll-reveal scroll-reveal-delay-1" style="background:#1E2942; border:1px solid #2C3954; border-radius:24px; padding:30px 28px;"><div style="font-size:20px; font-weight:800; color:#fff; margin-bottom:10px;">Wearing-off forecaster</div><p style="font-size:15.5px; line-height:1.55; font-weight:500; color:#A9B7D0; margin:0;">A sequence model projects your levodopa response forward to estimate the next likely off window as a calibrated range.</p></div>
+        <div class="scroll-reveal scroll-reveal-delay-2" style="background:#1E2942; border:1px solid #2C3954; border-radius:24px; padding:30px 28px;"><div style="font-size:20px; font-weight:800; color:#fff; margin-bottom:10px;">Personalization layer</div><p style="font-size:15.5px; line-height:1.55; font-weight:500; color:#A9B7D0; margin:0;">A lightweight per-patient head adapts the base model to your own rhythm over the first weeks of wear.</p></div>
       </div>
       <p style="font-size:14px; font-weight:500; color:#6E7E9C; text-align:center; margin:34px auto 0; max-width:680px; line-height:1.6;">Models are trained on de-identified, consented data and validated against clinician-rated motor state. Cadence supports clinical decisions, it does not make them.</p>
     </div>
   </div>
 
   <!-- WHAT'S NEW / TWO LAYERS -->
-  <div style="max-width:1100px; margin:0 auto; padding:90px 32px;">
-    <div style="text-align:center; margin-bottom:46px;">
+  <div class="scroll-reveal" style="max-width:1100px; margin:0 auto; padding:90px 32px;">
+    <div class="scroll-reveal" style="text-align:center; margin-bottom:46px;">
       <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:{{ accent }}; margin-bottom:14px;">HONESTLY, WHAT'S NEW</div>
       <h2 style="font-size:clamp(28px,5.2vw,42px); line-height:1.12; font-weight:800; letter-spacing:-1.1px; margin:0 0 18px;">Detection is established. Acting on the forecast is the part no one has shipped.</h2>
       <p style="font-size:19px; line-height:1.6; font-weight:500; color:#3A4A66; max-width:680px; margin:0 auto;">There are two layers in Cadence, and only the top one is new. We're specific about that on purpose.</p>
     </div>
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:stretch;" data-stack="1">
-      <div style="background:#fff; border:1px solid #ECF0F7; border-radius:28px; padding:36px 34px;">
+      <div class="scroll-reveal" style="background:#fff; border:1px solid #ECF0F7; border-radius:28px; padding:36px 34px;">
         <div style="font-size:13px; font-weight:800; letter-spacing:1.2px; color:#8A96B0; margin-bottom:14px;">BASE LAYER · DETECTION</div>
         <h3 style="font-size:23px; font-weight:800; letter-spacing:-0.4px; margin:0 0 12px;">scoring symptoms minute to minute</h3>
         <p style="font-size:16.5px; line-height:1.6; font-weight:500; color:#536084; margin:0;">calling the on/off state from sensor signals is established, well-trodden research. it's the foundation Cadence stands on, not the part we claim to have invented.</p>
       </div>
-      <div style="background:#16203A; border:1px solid #16203A; border-radius:28px; padding:36px 34px;">
+      <div class="scroll-reveal scroll-reveal-delay-1" style="background:#16203A; border:1px solid #16203A; border-radius:28px; padding:36px 34px;">
         <div style="font-size:13px; font-weight:800; letter-spacing:1.2px; color:#7CF0B7; margin-bottom:14px;">TOP LAYER · FORECASTING + ACTION</div>
         <h3 style="font-size:23px; font-weight:800; letter-spacing:-0.4px; margin:0 0 12px; color:#fff;">turning the forecast into a decision</h3>
         <p style="font-size: 16.5px; line-height: 1.6; font-weight: 700; color: #A9B7D0; margin: 0">predicting the next off window and the pre-freeze moment, then turning each into a just-in-time dose nudge and a preemptive cue, inside one screenless two-sensor product. that closed loop, to the patient, is the part no one has built. <i>*this technology requires time to learn your personal signals, our product will not predict accurately out of the box but will improve greatly with time. the training will be shown as a progress bar in the patient, clinician, as well as caretaker apps.&nbsp;</i></p>
@@ -412,16 +470,17 @@
     </div>
     <p style="font-size:15px; line-height:1.65; font-weight:500; color:#8A96B0; text-align:center; max-width:700px; margin:28px auto 0;">research has shown off episodes and freezes can be predicted to a degree, small studies have forecast wearing-off from wearable and autonomic signals, and pre-freeze prediction has reached the mid-eighties in sensitivity. cadence doesn't claim to invent prediction. our goal is to develop a personalized system that turns the forecast into an action, for the patient, instead of stopping at a report for the doctor.</p>
   </div>
-  </sc-if>
+  </div></sc-if>
 
   <!-- ============================================================ ROADMAP ============================================================ -->
   <sc-if value="{{ isRoadmap }}" hint-placeholder-val="{{ false }}">
-  <div style="max-width:1000px; margin:0 auto; padding:64px 32px 20px; text-align:center;">
+  <div class="page-enter">
+  <div class="scroll-reveal" style="max-width:1000px; margin:0 auto; padding:64px 32px 20px; text-align:center;">
     <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:{{ accent }}; margin-bottom:14px;">ROADMAP</div>
     <h1 style="font-size: clamp(32px,6vw,54px); line-height: 1.08; font-weight: 800; letter-spacing: -1.4px; margin: 0 0 18px; font-style: italic; font-family: newsreader serif">Where Cadence is headed.</h1>
     <p style="font-size:20px; line-height:1.55; font-weight:500; color:#3A4A66; max-width:600px; margin:0 auto;">We build in the open with our clinical partners and early users. Here's what's shipped, what's next, and where we're going.</p>
   </div>
-  <div style="max-width:860px; margin:0 auto; padding:54px 32px 90px;">
+  <div class="scroll-reveal scroll-reveal-delay-1" style="max-width:860px; margin:0 auto; padding:54px 32px 90px;">
     <!-- BLINKY PROGRESS METER -->
     <div style="background:#fff; border:1px solid #ECF0F7; border-radius:24px; padding:28px 32px 28px; margin-bottom:50px; box-shadow:0 14px 34px rgba(28,46,92,0.06);">
       <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:30px;">
@@ -429,15 +488,20 @@
           <span style="position:relative; width:12px; height:12px;"><span style="position:absolute; inset:0; border-radius:50%; background:#2F57E6; animation:cadPulse 2.4s ease-out infinite;"></span><span style="position:relative; display:block; width:12px; height:12px; border-radius:50%; background:#2F57E6; animation:cadBlink 1s steps(1,end) infinite;"></span></span>
           <span style="font-size:15px; font-weight:800; letter-spacing:1.2px; color:#16203A;">development progress</span>
         </div>
-        <span style="font-size:14px; font-weight:700; color:#536084;">phase 2 of 5 · model development, live</span>
+        <span style="font-size:14px; font-weight:700; color:#536084;">phase 3 of 6 · model development, live</span>
       </div>
       <div style="position:relative;">
         <div style="position:absolute; left:10%; right:10%; top:6px; height:6px; border-radius:6px; background:#EEF2F8;"></div>
-        <div style="position: absolute; left: 10%; top: 6px; height: 6px; width: 25%; border-radius: 6px; background: linear-gradient(90deg,#2F57E6,#6E8BEE,#2F57E6); background-size: 200% 100%; animation: cadShimmer 2.2s linear infinite"></div>
+        <div style="position: absolute; left: 10%; top: 6px; height: 6px; width: 32%; border-radius: 6px; background: linear-gradient(90deg,#2F57E6,#6E8BEE,#2F57E6); background-size: 200% 100%; animation: cadShimmer 2.2s linear infinite"></div>
         <div style="position:relative; display:flex;">
           <div style="flex:1; display:flex; flex-direction:column; align-items:center; text-align:center;">
             <span style="width:18px; height:18px; border-radius:50%; background:#2F57E6; border:3px solid #fff; box-shadow:0 0 0 1px #DCE3EF;"></span>
             <span style="font-size:12.5px; font-weight:800; color:#2F57E6; margin-top:14px;">conception</span>
+            <span style="font-size:11.5px; font-weight:600; color:#A9B4C9; margin-top:3px;">jun '26</span>
+          </div>
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; text-align:center;">
+            <span style="width:18px; height:18px; border-radius:50%; background:#2F57E6; border:3px solid #fff; box-shadow:0 0 0 1px #DCE3EF;"></span>
+            <span style="font-size:12.5px; font-weight:800; color:#2F57E6; margin-top:14px;">website live</span>
             <span style="font-size:11.5px; font-weight:600; color:#A9B4C9; margin-top:3px;">jun '26</span>
           </div>
           <div style="flex:1; display:flex; flex-direction:column; align-items:center; text-align:center;">
@@ -466,8 +530,8 @@
         </div>
       </div>
     </div>
-    <div style="display:flex; flex-direction:column; gap:0;">
-      <div style="display:grid; grid-template-columns:150px 1fr; gap:28px; align-items:start;" data-roadmap-row="1">
+    <div class="scroll-reveal" style="display:flex; flex-direction:column; gap:0;">
+      <div class="scroll-reveal" style="display:grid; grid-template-columns:150px 1fr; gap:28px; align-items:start;" data-roadmap-row="1">
         <div style="text-align:right; padding-top:2px;">
           <div style="font-size:13px; font-weight:800; letter-spacing:1px; color:#2F57E6;">NOW</div>
           <div style="font-size:15px; font-weight:700; color:#8A96B0; margin-top:3px;">q2 -&gt; q3 2026</div>
@@ -478,7 +542,7 @@
           <div style="font-size:16px; font-weight:500; color:#536084; line-height:1.55;">deliverables: the core models on movement data, the on/off state classifier and the wearing-off forecast, validated against clinical recordings, the backend databases for future deployment.&nbsp;</div>
         </div>
       </div>
-      <div style="display:grid; grid-template-columns:150px 1fr; gap:28px; align-items:start;" data-roadmap-row="1">
+      <div class="scroll-reveal scroll-reveal-delay-1" style="display:grid; grid-template-columns:150px 1fr; gap:28px; align-items:start;" data-roadmap-row="1">
         <div style="text-align:right; padding-top:2px;">
           <div style="font-size:13px; font-weight:800; letter-spacing:1px; color:#B9700F;">NEXT</div>
           <div style="font-size:15px; font-weight:700; color:#8A96B0; margin-top:3px;">q4 2026</div>
@@ -489,7 +553,7 @@
           <div style="font-size:16px; font-weight:500; color:#536084; line-height:1.55;">deliverables: the patient app, caretaker alerts, and the neurologist dashboard, turning the model into one clear next action for everyone in the care circle. deployment of the full cadence app suite ready to be integrated with hardware.</div>
         </div>
       </div>
-      <div style="display:grid; grid-template-columns:150px 1fr; gap:28px; align-items:start;" data-roadmap-row="1">
+      <div class="scroll-reveal scroll-reveal-delay-2" style="display:grid; grid-template-columns:150px 1fr; gap:28px; align-items:start;" data-roadmap-row="1">
         <div style="text-align:right; padding-top:2px;">
           <div style="font-size:13px; font-weight:800; letter-spacing:1px; color:#15724A;">THEN</div>
           <div style="font-size:15px; font-weight:700; color:#8A96B0; margin-top:3px;">q1 2027</div>
@@ -500,7 +564,7 @@
           <div style="font-size:16px; font-weight:500; color:#536084; line-height:1.55;">deliverables: engineering the wrist and ankle bands, comfortable all-day wear, reliable sensing, and the haptic cue, from prototype toward a manufacturable device that syncs seamlessly with our backend ml models to provide the highest quality data and predictions possible for you.</div>
         </div>
       </div>
-      <div style="display:grid; grid-template-columns:150px 1fr; gap:28px; align-items:start;" data-roadmap-row="1">
+      <div class="scroll-reveal scroll-reveal-delay-3" style="display:grid; grid-template-columns:150px 1fr; gap:28px; align-items:start;" data-roadmap-row="1">
         <div style="text-align:right; padding-top:2px;">
           <div style="font-size:13px; font-weight:800; letter-spacing:1px; color:#6E4FD8;">LATER</div>
           <div style="font-size:15px; font-weight:700; color:#8A96B0; margin-top:3px;">2027 → 2028</div>
@@ -513,99 +577,115 @@
       </div>
     </div>
   </div>
-  </sc-if>
+  </div></sc-if>
 
   <!-- ============================================================ OUR STORY ============================================================ -->
   <sc-if value="{{ isStory }}" hint-placeholder-val="{{ false }}">
-  <div style="max-width:840px; margin:0 auto; padding:70px 32px 10px; text-align:center;">
+  <div class="page-enter">
+  <div class="scroll-reveal" style="max-width:840px; margin:0 auto; padding:70px 32px 10px; text-align:center;">
     <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:{{ accent }}; margin-bottom:16px;">OUR STORY</div>
     <h1 style="font-size:clamp(32px,6.6vw,56px); line-height:1.06; font-weight:800; letter-spacing:-1.6px; margin:0 0 24px;">We started with a<br>simple <span style="font-style:italic; font-family:'Newsreader',serif; font-weight:600; color:{{ accent }};">purpose</span>.</h1><div><br></div><div><span style="background-color: initial; font-size: 25px;" data-dc-dragging="1">the inspiration behind cadence began during a trip to india, where a member of our team witnessed firsthand the daily toll parkinson's disease takes on a family. he watched his parnani, his maternal great-grandmother, and her caretakers lose precious time constantly stressing over medication schedules and struggling to keep her symptoms under control. seeing this endless cycle of guesswork sparked a mission: to build an intelligent, intuitive tool that handles the complex math of dosing, giving families back their peace of mind and time to focus on what truly matters. we built cadence to expand those vital windows of 'on-time,' empowering families to spend less energy managing symptoms and more time making beautiful memories during their best hours.</span></div><p></p>
     
   </div>
-  <div style="max-width:1100px; margin:0 auto; padding:64px 32px 30px;">
+  <div class="scroll-reveal scroll-reveal-delay-1" style="max-width:1100px; margin:0 auto; padding:64px 32px 30px;">
     <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;" data-stack="1">
-      <div style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:32px 28px;">
+      <div class="scroll-reveal" style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:32px 28px;">
         <div style="font-family:'Newsreader',serif; font-style:italic; font-size:26px; font-weight:600; color:{{ accent }}; margin-bottom:12px;">Clarity over data</div>
         <p style="font-size:16px; line-height:1.55; font-weight:500; color:#536084; margin:0;">A person in an off moment doesn't need a chart. They need one calm answer and one clear next step.</p>
       </div>
-      <div style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:32px 28px;">
+      <div class="scroll-reveal scroll-reveal-delay-1" style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:32px 28px;">
         <div style="font-family:'Newsreader',serif; font-style:italic; font-size:26px; font-weight:600; color:{{ accent }}; margin-bottom:12px;">Earned trust</div>
         <p style="font-size:16px; line-height:1.55; font-weight:500; color:#536084; margin:0;">We never change a prescription. We surface patterns and hand the decision to patients and their doctors.</p>
       </div>
-      <div style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:32px 28px;">
+      <div class="scroll-reveal scroll-reveal-delay-2" style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:32px 28px;">
         <div style="font-family:'Newsreader',serif; font-style:italic; font-size:26px; font-weight:600; color:{{ accent }}; margin-bottom:12px;">Built with, not for</div>
         <p style="font-size:16px; line-height:1.55; font-weight:500; color:#536084; margin:0;">Every screen is shaped by people living with Parkinson's, their caretakers, and the clinicians who treat them.</p>
       </div>
     </div>
   </div>
-  <div style="max-width:980px; margin:0 auto; padding:30px 32px 90px;">
+  <div class="scroll-reveal" style="max-width:980px; margin:0 auto; padding:30px 32px 90px;">
     <div style="background:#F4F7FC; border:1px solid #ECF0F7; border-radius:30px; padding:48px 52px; text-align:center;">
       <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:#8A96B0; margin-bottom:14px;">OUR ADVISORS</div>
       <p style="font-size:19px; line-height:1.6; font-weight:500; color:#3A4A66; margin:0 auto; max-width:680px;">Cadence is guided by movement-disorder neurologists, specialist nurses, and biomedical engineers, the same people who help us decide what's safe to ship. Meet them on the <span style="font-weight: 900; color: #16203A; font-family: newsreader serif; font-style: italic; font-size: 25px">Team</span> page.</p>
-      <button onClick="{{ goTeam }}" style="margin-top:24px; background:#16203A; border:none; cursor:pointer; font-family:inherit; font-size:16px; font-weight:700; color:#fff; padding:14px 26px; border-radius:14px;" style-hover="background:#222F4D">Meet the team</button>
+      <button onClick="{{ goTeam }}" style="margin-top:24px; background:#16203A; border:none; cursor:pointer; font-family:inherit; font-size:16px; font-weight:700; color:#fff; padding:14px 26px; border-radius:14px;" style-hover="background:#222F4D; box-shadow:0 10px 24px rgba(22,32,58,0.22)">Meet the team</button>
     </div>
   </div>
-  </sc-if>
+  </div></sc-if>
 
   <!-- ============================================================ TEAM ============================================================ -->
   <sc-if value="{{ isTeam }}" hint-placeholder-val="{{ false }}">
-  <div style="max-width:1000px; margin:0 auto; padding:64px 32px 20px; text-align:center;">
+  <div class="page-enter">
+  <div class="scroll-reveal" style="max-width:1000px; margin:0 auto; padding:64px 32px 20px; text-align:center;">
     <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:{{ accent }}; margin-bottom:14px;">TEAM</div>
     <h1 style="font-size: clamp(32px,6vw,54px); line-height: 1.08; font-weight: 800; letter-spacing: -1.4px; margin: 0 0 18px; font-family: newsreader serif; font-style: italic">The people behind Cadence.</h1>
     <p style="font-size:20px; line-height:1.55; font-weight:500; color:#3A4A66; max-width:600px; margin:0 auto;">A small team of engineers and clinicians who believe predictable days are possible.</p>
   </div>
-  <div style="max-width:1120px; margin:0 auto; padding:54px 32px 10px;">
+  <div class="scroll-reveal scroll-reveal-delay-1" style="max-width:1120px; margin:0 auto; padding:54px 32px 10px;">
     <div style="font-size:14px; font-weight:800; letter-spacing:1.2px; color:#8A96B0; margin-bottom:22px;">our team</div>
-    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:22px;">
-      
-      <div style="background:#fff; border:1px solid #ECF0F7; border-radius:24px; padding:26px 24px;">
-        <image-slot id="team-founder-1" style="display:block; width:64px; height:64px; margin-bottom:18px;" shape="rounded" radius="20" fit="cover" placeholder="Add photo"></image-slot>
-        <div style="font-size:19px; font-weight:800; letter-spacing:-0.2px;">krish dave</div><div style="font-size:14.5px; font-weight:700; color:#2F57E6; margin-top:3px;">ux &amp; machine learning</div><div style="font-size: 10px; font-weight: 700; color: #2F57E6; margin-top: 3px"></div>
-        
-        
-      </div><div style="background:#fff; border:1px solid #ECF0F7; border-radius:24px; padding:26px 24px;">
-        <image-slot id="team-founder-1" style="display:block; width:64px; height:64px; margin-bottom:18px;" shape="rounded" radius="20" fit="cover" placeholder="Add photo"></image-slot>
-        <div style="font-size:19px; font-weight:800; letter-spacing:-0.2px;">ayush parkkadan&nbsp;</div><div style="font-size:14.5px; font-weight:700; color:#2F57E6; margin-top:3px;">hardware engineering</div>
-        
-        
-      </div><div style="background:#fff; border:1px solid #ECF0F7; border-radius:24px; padding:26px 24px;">
-        <image-slot id="team-founder-1" style="display:block; width:64px; height:64px; margin-bottom:18px;" shape="rounded" radius="20" fit="cover" placeholder="Add photo"></image-slot>
-        <div style="font-size:19px; font-weight:800; letter-spacing:-0.2px;">arjun yalamati&nbsp;</div><div style="font-size:14.5px; font-weight:700; color:#2F57E6; margin-top:3px;"><div>Research Coordination</div></div>
-        
-        
-      </div>
-      
-      
-    </div>
-  </div>
-  <div style="max-width:1120px; margin:0 auto; padding:50px 32px 90px;">
-    <div style="font-size:14px; font-weight:800; letter-spacing:1.2px; color:#8A96B0; margin-bottom:22px;">CLINICAL ADVISORS</div>
     <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:22px;">
-      
-      
-      
+
+      <div class="scroll-reveal" style="background:#fff; border:1px solid #ECF0F7; border-radius:24px; padding:26px 24px;">
+        <image-slot id="team-founder-1" style="display:block; width:64px; height:64px; margin-bottom:18px;" shape="rounded" radius="20" fit="cover" placeholder="Add photo"></image-slot>
+        <div style="font-size:19px; font-weight:800; letter-spacing:-0.2px;">krish dave</div><div style="font-size:14.5px; font-weight:700; color:#2F57E6; margin-top:3px;">ux &amp; machine learning</div><p style="font-size:14px; line-height:1.5; font-weight:500; color:#536084; margin:10px 0 0;">leads product design and the ml pipeline, shaping how raw sensor data becomes a forecast a patient can trust.</p>
+      </div>
+      <div class="scroll-reveal scroll-reveal-delay-1" style="background:#fff; border:1px solid #ECF0F7; border-radius:24px; padding:26px 24px;">
+        <image-slot id="team-founder-2" style="display:block; width:64px; height:64px; margin-bottom:18px;" shape="rounded" radius="20" fit="cover" placeholder="Add photo"></image-slot>
+        <div style="font-size:19px; font-weight:800; letter-spacing:-0.2px;">ayush parkkadan</div><div style="font-size:14.5px; font-weight:700; color:#2F57E6; margin-top:3px;">hardware engineering</div><p style="font-size:14px; line-height:1.5; font-weight:500; color:#536084; margin:10px 0 0;">engineers the wrist and ankle bands from prototype to manufacturable device, with a focus on comfort and reliable sensing.</p>
+      </div>
+
     </div>
   </div>
-  </sc-if>
+  <div class="scroll-reveal" style="max-width:1120px; margin:0 auto; padding:50px 32px 10px;">
+    <div style="font-size:14px; font-weight:800; letter-spacing:1.2px; color:#8A96B0; margin-bottom:22px;">clinical advisors</div>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:22px;">
+      <div class="scroll-reveal" style="background:#fff; border:1px solid #ECF0F7; border-radius:24px; padding:26px 24px;">
+        <div style="width:64px; height:64px; border-radius:20px; background:#E5EBFD; display:flex; align-items:center; justify-content:center; margin-bottom:18px;"><svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6l7-3z" stroke="#2F57E6" stroke-width="2" stroke-linejoin="round"></path><path d="M9 12l2 2 4-4" stroke="#2F57E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+        <div style="font-size:19px; font-weight:800; letter-spacing:-0.2px;">movement-disorder neurologist</div><div style="font-size:14.5px; font-weight:700; color:#2F57E6; margin-top:3px;">clinical strategy &amp; safety</div><p style="font-size:14px; line-height:1.5; font-weight:500; color:#536084; margin:10px 0 0;">advises on dosing ethics, patient safety boundaries, and what clinicians actually need to see between visits.</p>
+      </div>
+      <div class="scroll-reveal scroll-reveal-delay-1" style="background:#fff; border:1px solid #ECF0F7; border-radius:24px; padding:26px 24px;">
+        <div style="width:64px; height:64px; border-radius:20px; background:#E7F4EC; display:flex; align-items:center; justify-content:center; margin-bottom:18px;"><svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.5-7-9.5A4.5 4.5 0 0 1 12 8a4.5 4.5 0 0 1 7 3.5C19 16.5 12 21 12 21z" stroke="#1F8A5B" stroke-width="2" stroke-linejoin="round"></path></svg></div>
+        <div style="font-size:19px; font-weight:800; letter-spacing:-0.2px;">specialist nurse</div><div style="font-size:14.5px; font-weight:700; color:#15724A; margin-top:3px;">patient experience &amp; care workflow</div><p style="font-size:14px; line-height:1.5; font-weight:500; color:#536084; margin:10px 0 0;">shapes how cadence fits into daily routines, from morning dosing to family communication and clinic handoffs.</p>
+      </div>
+      <div class="scroll-reveal scroll-reveal-delay-2" style="background:#fff; border:1px solid #ECF0F7; border-radius:24px; padding:26px 24px;">
+        <div style="width:64px; height:64px; border-radius:20px; background:#FBF1E1; display:flex; align-items:center; justify-content:center; margin-bottom:18px;"><svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M4 19V5h16v14M4 13h4l2 4 3-10 2 6h5" stroke="#B9700F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+        <div style="font-size:19px; font-weight:800; letter-spacing:-0.2px;">biomedical engineer</div><div style="font-size:14.5px; font-weight:700; color:#B9700F; margin-top:3px;">signal processing &amp; validation</div><p style="font-size:14px; line-height:1.5; font-weight:500; color:#536084; margin:10px 0 0;">validates model accuracy against ground-truth clinical recordings and ensures sensor pipelines are robust across patients.</p>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-reveal" style="max-width:980px; margin:0 auto; padding:40px 32px 90px;">
+    <div style="background:#F4F7FC; border:1px solid #ECF0F7; border-radius:30px; padding:44px 48px; text-align:center;">
+      <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:#8A96B0; margin-bottom:14px;">JOIN US</div>
+      <p style="font-size:19px; line-height:1.6; font-weight:500; color:#3A4A66; margin:0 auto; max-width:640px;">we're looking for people who care deeply about patient dignity and aren't afraid of hard technical problems. if you want to build something that actually matters, reach out.</p>
+      <button onClick="{{ goContact }}" style="margin-top:24px; background:#16203A; border:none; cursor:pointer; font-family:inherit; font-size:16px; font-weight:700; color:#fff; padding:14px 26px; border-radius:14px;" style-hover="background:#222F4D; box-shadow:0 10px 24px rgba(22,32,58,0.22)">get in touch</button>
+    </div>
+  </div>
+  </div></sc-if>
 
   <!-- ============================================================ CONTACT ============================================================ -->
   <sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
-  <div style="max-width:720px; margin:0 auto; padding:80px 32px 100px; text-align:center;">
+  <div class="page-enter">
+  <div class="scroll-reveal" style="max-width:720px; margin:0 auto; padding:80px 32px 100px; text-align:center;">
     <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:{{ accent }}; margin-bottom:14px;">Early Access</div>
     <h1 style="font-size: clamp(32px,6vw,54px); line-height: 1.06; font-weight: 900; letter-spacing: -1.4px; margin: 0 0 18px; font-style: italic; font-family: newsreader serif">Get ahead of the next off period.</h1>
     <p style="font-size:20px; line-height:1.55; font-weight:500; color:#3A4A66; max-width:520px; margin:0 auto 36px;">Join the early access list. We'll reach out as Cadence is ready for you.</p>
     <div style="display:flex; gap:12px; max-width:500px; margin:0 auto; flex-wrap:wrap; justify-content:center;">
       <input value="{{ email }}" onInput="{{ setEmail }}" placeholder="you@email.com" style="flex:1; min-width:220px; min-height:60px; padding:0 22px; font-family:inherit; font-size:18px; font-weight:500; color:#16203A; background:#fff; border:2px solid #DCE3EF; border-radius:18px; outline:none;">
-      <button onClick="{{ submit }}" style="min-height:60px; padding:0 30px; background:{{ accent }}; border:none; border-radius:18px; font-family:inherit; font-size:18px; font-weight:700; color:#fff; cursor:pointer; box-shadow:0 14px 30px rgba(47,87,230,0.30);" style-active="transform:scale(0.97)">{{ ctaLabel }}</button>
+      <button onClick="{{ submit }}" style="min-height:60px; padding:0 30px; background:{{ accent }}; border:none; border-radius:18px; font-family:inherit; font-size:18px; font-weight:700; color:#fff; cursor:pointer; box-shadow:0 14px 30px rgba(47,87,230,0.30);" style-hover="box-shadow:0 18px 38px rgba(47,87,230,0.38); background:#1E48C8">{{ ctaLabel }}</button>
     </div>
     <div style="font-size: 20px; font-weight: 500; color: #394a66; margin-top: 16px; font-family: Public Sans; font-style: normal">{{ ctaNote }}</div>
-    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:60px; text-align:left;" data-stack="1">
-      <div style="background:#F4F7FC; border-radius:20px; padding:24px;"><div style="font-size:14px; font-weight:800; color:#8A96B0; letter-spacing:0.6px;">PATIENTS</div><div style="font-size:17px; font-weight:700; margin-top:8px;">hello@cadence.health</div></div>
-      <div style="background:#F4F7FC; border-radius:20px; padding:24px;"><div style="font-size:14px; font-weight:800; color:#8A96B0; letter-spacing:0.6px;">CLINICIANS</div><div style="font-size:17px; font-weight:700; margin-top:8px;">clinics@cadence.health</div></div>
-      <div style="background:#F4F7FC; border-radius:20px; padding:24px;"><div style="font-size:14px; font-weight:800; color:#8A96B0; letter-spacing:0.6px;">PRESS</div><div style="font-size:17px; font-weight:700; margin-top:8px;">press@cadence.health</div></div>
+    <sc-if value="{{ waitlistCount !== null }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin-top:12px;">
+        <span style="position:relative; width:8px; height:8px;"><span style="position:absolute; inset:0; border-radius:50%; background:#2F57E6; animation:cadPulse 2.4s ease-out infinite;"></span><span style="position:relative; display:block; width:8px; height:8px; border-radius:50%; background:#2F57E6;"></span></span>
+        <span style="font-size:13.5px; font-weight:700; color:#8A96B0;">{{ waitlistLabel }}</span>
+      </div>
+    </sc-if>
+    <div class="scroll-reveal scroll-reveal-delay-2" style="display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:60px; text-align:left;" data-stack="1">
+      <div class="scroll-reveal" style="background:#F4F7FC; border-radius:20px; padding:24px;"><div style="font-size:14px; font-weight:800; color:#8A96B0; letter-spacing:0.6px;">PATIENTS</div><div style="font-size:17px; font-weight:700; margin-top:8px;">hello@cadence.health</div></div>
+      <div class="scroll-reveal scroll-reveal-delay-1" style="background:#F4F7FC; border-radius:20px; padding:24px;"><div style="font-size:14px; font-weight:800; color:#8A96B0; letter-spacing:0.6px;">CLINICIANS</div><div style="font-size:17px; font-weight:700; margin-top:8px;">clinics@cadence.health</div></div>
+      <div class="scroll-reveal scroll-reveal-delay-2" style="background:#F4F7FC; border-radius:20px; padding:24px;"><div style="font-size:14px; font-weight:800; color:#8A96B0; letter-spacing:0.6px;">PRESS</div><div style="font-size:17px; font-weight:700; margin-top:8px;">press@cadence.health</div></div>
     </div>
   </div>
-  </sc-if>
+  </div></sc-if>
 
   <!-- ===================== FOOTER ===================== -->
   <div style="background:#16203A;">
@@ -620,15 +700,15 @@
       <div style="display:flex; gap:54px; flex-wrap:wrap;">
         <div style="display:flex; flex-direction:column; gap:12px; align-items:flex-start;">
           <span style="font-size:13px; font-weight:700; letter-spacing:1px; color:#5E6E8C;">PRODUCT</span>
-          <button onClick="{{ goHow }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">How it works</button>
-          <button onClick="{{ goTech }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">Technology</button>
-          <button onClick="{{ goRoadmap }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">Roadmap</button>
+          <button onClick="{{ goHow }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;" style-hover="color:#fff">How it works</button>
+          <button onClick="{{ goTech }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;" style-hover="color:#fff">Technology</button>
+          <button onClick="{{ goRoadmap }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;" style-hover="color:#fff">Roadmap</button>
         </div>
         <div style="display:flex; flex-direction:column; gap:12px; align-items:flex-start;">
           <span style="font-size:13px; font-weight:700; letter-spacing:1px; color:#5E6E8C;">COMPANY</span>
-          <button onClick="{{ goStory }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">Our story</button>
-          <button onClick="{{ goTeam }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">Team</button>
-          <button onClick="{{ goContact }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">Contact</button>
+          <button onClick="{{ goStory }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;" style-hover="color:#fff">Our story</button>
+          <button onClick="{{ goTeam }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;" style-hover="color:#fff">Team</button>
+          <button onClick="{{ goContact }}" style="background:none; border:none; cursor:pointer; font-family:inherit; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;" style-hover="color:#fff">Contact</button>
         </div>
       </div>
     </div>
@@ -639,7 +719,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1200,&quot;height&quot;:900},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#2F57E6&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#2F57E6&quot;,&quot;#1F8A5B&quot;,&quot;#6E4FD8&quot;,&quot;#16203A&quot;]}}">
 class Component extends DCLogic {
-  state = { page: 'home', email: '', submitted: false, submitting: false, error: '', menuOpen: false };
+  state = { page: 'team', email: '', submitted: false, submitting: false, error: '', menuOpen: false, waitlistCount: null };
 
   // Replace with your real Formspree endpoint, e.g. https://formspree.io/f/abc12345
   FORMSPREE_ENDPOINT = 'https://formspree.io/f/mzdlgbkr';
@@ -656,14 +736,37 @@ class Component extends DCLogic {
       });
       if (!res.ok) throw new Error('Request failed');
       this.setState({ submitted: true, submitting: false });
+      this.incrementWaitlist();
     } catch (e) {
       this.setState({ submitting: false, error: 'Something went wrong. Please try again.' });
     }
   }
 
+  async fetchWaitlistCount() {
+    try {
+      const res = await fetch('/waitlist-count.json');
+      if (!res.ok) return;
+      const data = await res.json();
+      this.setState({ waitlistCount: data.count });
+    } catch (e) {}
+  }
+
+  async incrementWaitlist() {
+    try {
+      const res = await fetch('/waitlist-count.json', { method: 'POST' });
+      if (!res.ok) return;
+      const data = await res.json();
+      this.setState({ waitlistCount: data.count });
+    } catch (e) {}
+  }
+
   go(page) {
     this.setState({ page, menuOpen: false });
-    try { window.scrollTo(0, 0); } catch (e) {}
+    try {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (e) {
+      window.scrollTo(0, 0);
+    }
   }
 
   renderVals() {
@@ -690,6 +793,7 @@ class Component extends DCLogic {
       navLinks,
       menuOpenStr: this.state.menuOpen ? 'true' : 'false',
       toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
+      closeMenu: () => this.setState({ menuOpen: false }),
       isHome: page === 'home', isHow: page === 'how', isTech: page === 'tech',
       isStory: page === 'story', isRoadmap: page === 'roadmap', isTeam: page === 'team',
       isContact: page === 'contact',
@@ -702,9 +806,71 @@ class Component extends DCLogic {
       submit: () => this.submitEmail(),
       ctaLabel: submitted ? "You're on the list" : (this.state.submitting ? 'Sending...' : 'Request access'),
       ctaNote: this.state.error || (submitted ? "Thanks, we'll be in touch soon." : 'We respect your privacy. Health data stays yours.'),
+      waitlistCount: this.state.waitlistCount,
+      waitlistLabel: this.state.waitlistCount === 1 ? '1 person on the waitlist' : (this.state.waitlistCount !== null ? this.state.waitlistCount + ' people on the waitlist' : ''),
     };
   }
+
+  componentDidMount() {
+    this.fetchWaitlistCount();
+  }
+
+  componentDidUpdate() {
+    if (window.__revealObserver) {
+      setTimeout(window.__revealObserver, 50);
+      setTimeout(window.__revealObserver, 200);
+      setTimeout(window.__revealObserver, 500);
+    }
+  }
 }
+</script>
+<script>
+(function(){
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  function revealAll() {
+    var els = document.querySelectorAll('.scroll-reveal:not(.visible)');
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    els.forEach(function(el){
+      obs.observe(el);
+      var r = el.getBoundingClientRect();
+      if (r.top < vh && r.bottom > 0) {
+        el.classList.add('visible');
+        obs.unobserve(el);
+      }
+    });
+  }
+
+  function init() {
+    revealAll();
+    var mo = new MutationObserver(function(){
+      setTimeout(revealAll, 80);
+      setTimeout(revealAll, 250);
+      setTimeout(revealAll, 600);
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
+    var scrollTimer;
+    window.addEventListener('scroll', function(){
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(revealAll, 80);
+    }, { passive: true });
+    setInterval(revealAll, 1500);
+    window.__revealObserver = revealAll;
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
 </script>
 </body>
 </html>
