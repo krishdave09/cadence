@@ -5,7 +5,18 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import Stripe from "https://esm.sh/stripe@14.21.0?target=deno";
 import { corsHeaders, json } from "../_shared/cors.ts";
-import { isUsable } from "../validate-code/index.ts";
+
+// A 'pending' code (checkout started, not paid) frees up again after this many
+// minutes so an abandoned checkout doesn't permanently burn a code. Kept in
+// sync with validate-code (inlined here to keep this function self-contained).
+const PENDING_TTL_MIN = 30;
+function isUsable(row: { status: string; pending_since: string | null }): boolean {
+  if (row.status === "available") return true;
+  if (row.status === "pending" && row.pending_since) {
+    return (Date.now() - new Date(row.pending_since).getTime()) / 60000 > PENDING_TTL_MIN;
+  }
+  return false; // redeemed | disabled
+}
 
 const supabase = createClient(
   Deno.env.get("SUPABASE_URL")!,
