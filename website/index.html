@@ -4,234 +4,685 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cadence — stay ahead of every off period</title>
-<meta name="description" content="Cadence learns your rhythm, forecasts when Parkinson's medication is about to wear off, and times each dose to keep you moving. Join the waitlist.">
+<meta name="description" content="Cadence learns your rhythm, forecasts when Parkinson's medication is about to wear off, and times each dose to keep you moving.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800;900&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500;1,6..72,600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --navy:#16203A; --ink:#3A4A66; --muted:#536084; --faint:#8A96B0;
-    --bg:#FBFCFE; --card:#ffffff; --line:#DCE3EF;
-    --accent:#2F57E6; --accent-dk:#1E48C8;
-    --green:#1F8A5B; --green-dk:#15724A; --green-soft:#E7F4EC; --mint:#7CF0B7;
-    --amber:#B9700F;
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; font-family:'Public Sans',system-ui,sans-serif; color:#16203A; background:#FBFCFE; min-height:100vh; overflow-x:hidden; text-transform:lowercase; -webkit-font-smoothing:antialiased; }
+  @keyframes cadPulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.7); opacity: 0; } }
+  @keyframes cadFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+  @keyframes cadReveal { from { opacity: 0; transform: translateY(34px); } to { opacity: 1; transform: none; } }
+  @keyframes cadBlink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0.18; } }
+  @keyframes cadShimmer { 0% { background-position: 0% 0; } 100% { background-position: 200% 0; } }
+  @keyframes cadMeterPulse { 0% { box-shadow: 0 0 0 0 rgba(47,87,230,0.45); } 70%,100% { box-shadow: 0 0 0 13px rgba(47,87,230,0); } }
+  button, a { transition: transform 0.18s cubic-bezier(0.22,0.61,0.36,1), box-shadow 0.22s ease, background 0.22s ease, opacity 0.22s ease, border-color 0.22s ease, color 0.22s ease; font-family: inherit; }
+  button:hover, a:hover { transform: translateY(-2px); }
+  button:active, a:active { transform: scale(0.96) translateY(0); }
+  .page-enter { animation: cadReveal 0.55s cubic-bezier(0.22,0.61,0.36,1) both; }
+  .scroll-reveal { opacity: 0; transform: translateY(48px) scale(0.98); transition: opacity 0.9s cubic-bezier(0.22,0.61,0.36,1), transform 0.9s cubic-bezier(0.22,0.61,0.36,1); }
+  .scroll-reveal.visible { opacity: 1; transform: translateY(0) scale(1); animation:none; }
+  .scroll-reveal-delay-1 { transition-delay: 0.08s; } .scroll-reveal-delay-2 { transition-delay: 0.16s; }
+  .scroll-reveal-delay-3 { transition-delay: 0.24s; }
+  @keyframes srSafety { from { opacity:0; } to { opacity:1; } }
+  .scroll-reveal:not(.visible) { animation: srSafety 0.01s 4s forwards; }
+  @media (prefers-reduced-motion: reduce) { .scroll-reveal, [data-site-root] > div { opacity:1!important; transform:none!important; transition:none!important; animation:none!important; } }
+  [data-navtoggle] { display: none; }
+  @media (max-width: 980px) {
+    [data-stack] { grid-template-columns: 1fr !important; gap: 24px !important; }
+    [data-quad] { grid-template-columns: 1fr 1fr !important; }
   }
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{margin:0;font-family:'Public Sans',system-ui,sans-serif;color:var(--navy);
-    background:var(--bg);text-transform:lowercase;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-  .serif{font-family:'Newsreader',serif;font-style:italic;font-weight:600}
-  button,a{font-family:inherit;transition:transform .18s cubic-bezier(.22,.61,.36,1),box-shadow .22s ease,background .22s ease,border-color .22s ease,color .22s ease,opacity .22s}
-  button:hover{transform:translateY(-2px)} button:active{transform:scale(.97)}
-  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
-  @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.7);opacity:0}}
-  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-  @keyframes reveal{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
-  .reveal{animation:reveal .7s cubic-bezier(.22,.61,.36,1) both}
-  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
-
-  /* nav */
-  nav{position:sticky;top:0;z-index:50;padding:18px 0 0}
-  .nav-inner{display:flex;align-items:center;justify-content:space-between;
-    background:#fff;border-radius:22px;box-shadow:0 10px 30px rgba(28,46,92,.10);padding:14px 18px 14px 22px}
-  .logo{display:flex;align-items:center;gap:11px}
-  .logo-mark{width:36px;height:36px;border-radius:10px;background:var(--navy);display:flex;align-items:center;justify-content:center}
-  .logo-word{font-size:22px;font-weight:800;letter-spacing:-.5px}
-  .btn{border:none;cursor:pointer;border-radius:14px;font-weight:700}
-  .btn-primary{background:var(--accent);color:#fff;padding:13px 24px;font-size:16px;box-shadow:0 12px 28px rgba(47,87,230,.28)}
-  .btn-primary:hover{background:var(--accent-dk)}
-  .btn-dark{background:var(--navy);color:#fff;padding:13px 24px;font-size:16px}
-  .btn-dark:hover{background:#222F4D}
-  .btn-ghost{background:#fff;color:var(--navy);border:2px solid var(--line);padding:12px 22px;font-size:16px}
-  .btn-ghost:hover{border-color:#B0C0DC;background:#F8FAFF}
-
-  /* hero */
-  .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center;
-    padding:56px 0 40px;position:relative}
-  .blob{position:absolute;top:-40px;left:-180px;width:520px;height:520px;border-radius:50%;
-    background:radial-gradient(circle,rgba(47,87,230,.10),rgba(47,87,230,0) 68%);pointer-events:none}
-  .badge{display:inline-flex;align-items:center;gap:9px;background:var(--green-soft);
-    padding:8px 15px;border-radius:30px;margin-bottom:22px}
-  .dot{position:relative;width:9px;height:9px;display:inline-block}
-  .dot::before{content:"";position:absolute;inset:0;border-radius:50%;background:var(--green);animation:pulse 2.4s ease-out infinite}
-  .dot::after{content:"";position:relative;display:block;width:9px;height:9px;border-radius:50%;background:var(--green)}
-  .badge span{font-size:15px;font-weight:700;color:var(--green-dk);letter-spacing:.3px}
-  h1{font-size:clamp(34px,7vw,60px);line-height:1.04;font-weight:800;letter-spacing:-1.8px;margin:0 0 20px}
-  h1 .serif{color:var(--accent)}
-  .lede{font-size:20px;line-height:1.55;font-weight:500;color:var(--ink);max-width:480px;margin:0 0 28px}
-
-  /* waitlist form */
-  .wl{display:flex;gap:12px;flex-wrap:wrap;max-width:480px}
-  .wl input{flex:1;min-width:220px;min-height:56px;padding:0 20px;font-family:inherit;font-size:17px;
-    font-weight:500;color:var(--navy);background:#fff;border:2px solid var(--line);border-radius:16px;outline:none}
-  .wl input:focus{border-color:var(--accent)}
-  .wl button{min-height:56px;padding:0 26px;font-size:17px}
-  .note{font-size:13.5px;font-weight:600;color:var(--faint);margin-top:12px}
-  .note.ok{color:var(--green-dk)} .note.err{color:#C2410C}
-  .codelink{margin-top:18px;font-size:14px;font-weight:700;color:var(--accent);background:none;border:none;cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:3px}
-
-  /* product card */
-  .product{position:relative;display:flex;justify-content:center}
-  .product .frame{position:relative;width:100%;max-width:440px;border-radius:32px;overflow:hidden;
-    background:linear-gradient(160deg,#F2F5FB,#E6ECF7);box-shadow:0 40px 80px rgba(28,46,92,.22);
-    aspect-ratio:1/1;animation:float 7s ease-in-out infinite}
-  .product img{width:100%;height:100%;object-fit:contain;display:block;padding:6%}
-  .product .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--muted);text-align:center;padding:24px}
-  .product .ph .mk{width:64px;height:64px;border-radius:18px;background:var(--navy);display:flex;align-items:center;justify-content:center}
-
-  /* trust strip */
-  .trust{border-top:1px solid #ECF0F7;border-bottom:1px solid #ECF0F7;background:#F4F7FC}
-  .trust .wrap{padding:20px 24px;text-align:center}
-  .trust span{font-size:13.5px;font-weight:700;letter-spacing:1.6px;color:var(--faint)}
-
-  /* value row */
-  .vals{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;padding:56px 0}
-  .val{background:var(--card);border:1px solid #EDF1F8;border-radius:22px;padding:26px}
-  .val .ic{width:52px;height:52px;border-radius:14px;background:#E5EBFD;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
-  .val h3{font-size:19px;font-weight:800;margin:0 0 8px}
-  .val p{font-size:15px;line-height:1.5;color:var(--muted);margin:0;font-weight:500}
-
-  /* footer */
-  footer{background:var(--navy);color:#C2CFE4;margin-top:24px}
-  footer .wrap{padding:40px 24px 28px}
-  .foot-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
-  .foot-bot{border-top:1px solid #243355;margin-top:26px;padding-top:18px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:13px;color:#6E7E9C}
-
-  /* order modal */
-  .ov{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;
-    background:rgba(22,32,58,.45);backdrop-filter:blur(4px);padding:20px}
-  .ov.open{display:flex}
-  .modal{background:#fff;border-radius:26px;max-width:440px;width:100%;padding:32px;
-    box-shadow:0 40px 90px rgba(22,32,58,.35);animation:reveal .4s cubic-bezier(.22,.61,.36,1) both}
-  .modal h2{font-size:26px;font-weight:800;letter-spacing:-.6px;margin:0 0 6px}
-  .modal p.sub{font-size:15px;color:var(--muted);font-weight:500;margin:0 0 22px;line-height:1.5}
-  .modal input{width:100%;min-height:56px;padding:0 18px;font-family:inherit;font-size:18px;font-weight:700;
-    letter-spacing:1px;text-transform:uppercase;color:var(--navy);background:#F7F9FD;border:2px solid var(--line);
-    border-radius:14px;outline:none;text-align:center}
-  .modal input:focus{border-color:var(--accent);background:#fff}
-  .modal .full{width:100%;min-height:56px;font-size:17px;margin-top:14px}
-  .close{position:absolute;top:16px;right:16px;width:38px;height:38px;border:none;background:#F4F7FC;border-radius:11px;cursor:pointer;font-size:18px;color:var(--muted)}
-  .order-card{display:none}
-  .order-card.show{display:block}
-  .code-card.hide{display:none}
-  .price{font-size:40px;font-weight:800;letter-spacing:-1px;margin:4px 0 2px}
-  .price small{font-size:15px;font-weight:600;color:var(--muted);letter-spacing:0}
-  .kit{font-size:14px;color:var(--muted);font-weight:600;margin:0 0 20px}
-
-  /* banner */
-  .banner{display:none;padding:14px 18px;border-radius:16px;font-weight:700;font-size:15px;margin:18px 0 0}
+  @media (max-width: 760px) {
+    [data-navtoggle] { display: flex !important; }
+    [data-navlinks] { display:flex!important; position:absolute; top:calc(100% + 12px); left:0; right:0; flex-direction:column; align-items:stretch!important; background:#fff; border-radius:18px; box-shadow:0 20px 44px rgba(28,46,92,0.18); padding:12px; gap:4px; z-index:60; opacity:0; transform:translateY(-8px) scale(0.97); pointer-events:none; transition:opacity 0.32s cubic-bezier(0.22,0.61,0.36,1), transform 0.32s cubic-bezier(0.22,0.61,0.36,1); transform-origin:top center; }
+    [data-navlinks][data-open="true"] { opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
+    [data-navlinks] > button, [data-navlinks] > a { width:100%; text-align:left; padding:14px 18px!important; margin-left:0!important; border-radius:14px; }
+    .ham-line { transition: transform 0.28s cubic-bezier(0.22,0.61,0.36,1), opacity 0.18s ease; transform-origin:center; }
+    [data-menu-open="true"] .ham-line-top { transform: translateY(5px) rotate(45deg); }
+    [data-menu-open="true"] .ham-line-mid { opacity: 0; transform: scaleX(0); }
+    [data-menu-open="true"] .ham-line-btm { transform: translateY(-5px) rotate(-45deg); }
+    [data-navbackdrop] { position:fixed; inset:0; z-index:55; background:rgba(22,32,58,0.18); backdrop-filter:blur(3px); opacity:0; pointer-events:none; transition:opacity 0.32s cubic-bezier(0.22,0.61,0.36,1); }
+    [data-navbackdrop][data-open="true"] { opacity:1; pointer-events:auto; }
+    [data-quad] { grid-template-columns: 1fr !important; }
+    [data-roadmap-row] { grid-template-columns: 72px 1fr !important; gap: 16px !important; }
+    [data-pad] { padding-left: 22px !important; padding-right: 22px !important; }
+  }
+  [data-page] { display: none; }
+  [data-page].active { display: block; }
+  .banner{display:none;padding:14px 18px;border-radius:16px;font-weight:700;font-size:15px;margin:14px 24px 0;max-width:1180px;margin-left:auto;margin-right:auto}
   .banner.show{display:block}
-  .banner.success{background:var(--green-soft);color:var(--green-dk)}
+  .banner.success{background:#E7F4EC;color:#15724A}
   .banner.cancel{background:#FEF2E7;color:#C2410C}
-
-  @media (max-width:860px){
-    .hero{grid-template-columns:1fr;gap:30px}
-    .vals{grid-template-columns:1fr}
-    .product{order:-1}
-  }
+  .modal-input{width:100%;min-height:56px;padding:0 18px;font-family:inherit;font-size:18px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#16203A;background:#F7F9FD;border:2px solid #DCE3EF;border-radius:14px;outline:none;text-align:center}
+  .modal-input:focus{border-color:#2F57E6;background:#fff}
 </style>
 </head>
 <body>
 
-<nav><div class="wrap"><div class="nav-inner">
-  <div class="logo">
-    <span class="logo-mark"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M2 12h3.5l2-6 3.2 13 3-9 2.3 4.5H22" stroke="#7CF0B7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-    <span class="logo-word">cadence</span>
+<div data-site-root="1">
+  <!-- ===================== NAV ===================== -->
+  <div style="position:sticky; top:0; z-index:50; padding:18px 24px 0;">
+    <div style="max-width:1180px; margin:0 auto; background:#fff; border-radius:22px; box-shadow:0 10px 30px rgba(28,46,92,0.10); padding:14px 18px 14px 22px; display:flex; align-items:center; justify-content:space-between; position:relative;">
+      <button data-navtoggle id="navToggle" aria-label="Menu" style="align-items:center; justify-content:center; width:46px; height:46px; border:none; background:#F4F7FC; border-radius:13px; cursor:pointer;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path class="ham-line ham-line-top" d="M4 7h16" stroke="#16203A" stroke-width="2.2" stroke-linecap="round"/><path class="ham-line ham-line-mid" d="M4 12h16" stroke="#16203A" stroke-width="2.2" stroke-linecap="round"/><path class="ham-line ham-line-btm" d="M4 17h16" stroke="#16203A" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+      <button data-go="home" style="display:flex; align-items:center; gap:11px; background:none; border:none; cursor:pointer; padding:4px;">
+        <span style="width:36px; height:36px; border-radius:10px; background:#16203A; display:flex; align-items:center; justify-content:center;"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M2 12h3.5l2-6 3.2 13 3-9 2.3 4.5H22" stroke="#7CF0B7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+        <span style="font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">Cadence</span>
+      </button>
+      <div data-navlinks id="navLinks" style="display:flex; align-items:center; gap:8px;">
+        <button data-go="story" class="navlink" style="background:none; border:none; cursor:pointer; font-size:16px; font-weight:600; color:#3A4A66; padding:10px 16px; border-radius:12px;">our story</button>
+        <button data-go="how" class="navlink" style="background:none; border:none; cursor:pointer; font-size:16px; font-weight:600; color:#3A4A66; padding:10px 16px; border-radius:12px;">how it works</button>
+        <button data-go="tech" class="navlink" style="background:none; border:none; cursor:pointer; font-size:16px; font-weight:600; color:#3A4A66; padding:10px 16px; border-radius:12px;">technology</button>
+        <button data-go="roadmap" class="navlink" style="background:none; border:none; cursor:pointer; font-size:16px; font-weight:600; color:#3A4A66; padding:10px 16px; border-radius:12px;">roadmap</button>
+        <button data-go="team" class="navlink" style="background:none; border:none; cursor:pointer; font-size:16px; font-weight:600; color:#3A4A66; padding:10px 16px; border-radius:12px;">team</button>
+        <button data-go="contact" style="margin-left:6px; background:#16203A; border:none; cursor:pointer; font-size:16px; font-weight:700; color:#fff; padding:13px 24px; border-radius:14px;">join the waitlist</button>
+      </div>
+    </div>
+    <div data-navbackdrop id="navBackdrop"></div>
   </div>
-  <div style="display:flex;gap:10px;align-items:center">
-    <button class="btn btn-ghost" id="haveCodeNav" style="padding:11px 18px">have a code?</button>
-    <a href="#waitlist" class="btn btn-dark" style="text-decoration:none">join the waitlist</a>
-  </div>
-</div></div></nav>
 
-<main class="wrap">
   <div id="banner" class="banner"></div>
 
-  <section class="hero reveal" id="waitlist">
-    <div class="blob"></div>
-    <div>
-      <div class="badge"><span class="dot"></span><span>coming soon — for people living with parkinson's</span></div>
-      <h1>stay ahead of<br>every <span class="serif">off</span> period.</h1>
-      <p class="lede">cadence learns your rhythm, forecasts when your medication is about to wear off, and times each dose to keep you moving — instead of chasing the clock.</p>
-
-      <form class="wl" id="wlForm">
-        <input type="email" id="wlEmail" name="email" placeholder="you@email.com" required autocomplete="email">
-        <button type="submit" class="btn btn-primary" id="wlBtn">request access</button>
-      </form>
-      <div class="note" id="wlNote">we respect your privacy. health data stays yours.</div>
-      <button class="codelink" id="haveCode">have an access code? order your kit →</button>
+  <!-- ============================ HOME ============================ -->
+  <div data-page="home" class="active">
+  <div class="page-enter">
+  <div style="max-width:1200px; margin:0 auto; padding:60px 32px 56px; display:grid; grid-template-columns:1.05fr 0.95fr; gap:40px; align-items:center; position:relative;" data-stack data-pad>
+    <div style="position:absolute; top:-40px; left:-160px; width:520px; height:520px; border-radius:50%; background:radial-gradient(circle, rgba(47,87,230,0.10), rgba(47,87,230,0) 68%); pointer-events:none;"></div>
+    <div style="position:relative;">
+      <div style="display:inline-flex; align-items:center; gap:9px; background:#E7F4EC; padding:8px 15px; border-radius:30px; margin-bottom:24px;">
+        <span style="position:relative; width:9px; height:9px;"><span style="position:absolute; inset:0; border-radius:50%; background:#1F8A5B; animation:cadPulse 2.4s ease-out infinite;"></span><span style="position:relative; display:block; width:9px; height:9px; border-radius:50%; background:#1F8A5B;"></span></span>
+        <span style="font-size: 20px; font-weight: 700; color: #15724A">For people living with Parkinson's</span>
+      </div>
+      <h1 style="font-size:clamp(34px,7vw,62px); line-height:1.04; font-weight:800; letter-spacing:-1.8px; margin:0 0 22px;">Stay ahead of<br>every <span style="font-style:italic; font-family:'Newsreader',serif; font-weight:600; color:#2F57E6;">off</span> period.</h1>
+      <p style="font-size:21px; line-height:1.55; font-weight:500; color:#3A4A66; max-width:480px; margin:0 0 34px;">Cadence learns your rhythm, forecasts when your medication is about to wear off, and times each dose to keep you moving, instead of chasing the clock.</p>
+      <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+        <button data-go="contact" style="font-size:18px; font-weight:700; color:#fff; background:#2F57E6; border:none; cursor:pointer; padding:18px 32px; border-radius:18px; box-shadow:0 16px 34px rgba(47,87,230,0.30);">Get early access</button>
+        <button data-go="how" style="font-size:18px; font-weight:700; color:#16203A; background:#fff; cursor:pointer; padding:18px 26px; border-radius:18px; border:2px solid #DCE3EF;">See how it works</button>
+      </div>
+      <div id="waitlistCountRow" style="display:none; align-items:center; gap:8px; margin-top:14px;">
+        <span style="position:relative; width:8px; height:8px;"><span style="position:absolute; inset:0; border-radius:50%; background:#2F57E6; animation:cadPulse 2.4s ease-out infinite;"></span><span style="position:relative; display:block; width:8px; height:8px; border-radius:50%; background:#2F57E6;"></span></span>
+        <span id="waitlistCountLabel" style="font-size:13.5px; font-weight:700; color:#8A96B0;"></span>
+      </div>
+      <div style="display:flex; align-items:center; gap:22px; margin-top:36px;">
+        <div style="display:flex;">
+          <span style="width:40px; height:40px; border-radius:50%; background:#CBD8F4; border:3px solid #FBFCFE; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; color:#2F57E6;">R</span>
+          <span style="width:40px; height:40px; border-radius:50%; background:#D6EEE0; border:3px solid #FBFCFE; margin-left:-12px; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; color:#15724A;">M</span>
+          <span style="width:40px; height:40px; border-radius:50%; background:#F7E4C4; border:3px solid #FBFCFE; margin-left:-12px; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; color:#8A4B00;">J</span>
+        </div>
+        <span style="font-size:15px; font-weight:500; color:#536084; max-width:230px; line-height:1.4;">Built with neurologists, movement-disorder nurses, and the people who use it.</span>
+      </div>
     </div>
 
-    <div class="product">
-      <div class="frame">
-        <img id="productImg" alt="Cadence band kit" style="display:none">
-        <div class="ph" id="productPh">
-          <span class="mk"><svg width="30" height="30" viewBox="0 0 28 28" fill="none"><rect x="3.5" y="9" width="21" height="10" rx="5" transform="rotate(-45 14 14)" stroke="#7CF0B7" stroke-width="2.4"/><path d="M11 11 17 17" stroke="#7CF0B7" stroke-width="2.4" stroke-linecap="round"/></svg></span>
-          <div style="font-size:16px;font-weight:700;color:var(--navy)">the cadence bands</div>
-          <div style="font-size:13.5px;font-weight:600">product photo coming soon</div>
+    <div class="scroll-reveal scroll-reveal-delay-1" style="position:relative; display:flex; justify-content:center;">
+      <div style="position:absolute; top:60px; width:340px; height:560px; border-radius:48px; background:radial-gradient(120% 90% at 50% 0%, #DCE6FA, #C9D6F2); filter:blur(8px); opacity:0.7;"></div>
+      <div style="position:relative; width:312px; height:636px; background:#EEF3FB; border-radius:46px; box-shadow:0 40px 80px rgba(28,46,92,0.34), 0 0 0 10px #11182B, 0 0 0 12px #2A3450; overflow:hidden; animation:cadFloat 7s ease-in-out infinite;">
+        <div style="height:44px; display:flex; align-items:center; justify-content:space-between; padding:16px 26px 0;">
+          <span style="font-size:14px; font-weight:700;">9:41</span>
+          <span style="font-size:12px; font-weight:700; color:#536084;">Cadence</span>
+        </div>
+        <div style="padding:14px 20px 0;">
+          <div style="font-size:14px; font-weight:600; color:#536084;">Good morning,</div>
+          <div style="font-size:24px; font-weight:600; font-style:italic; font-family:'Newsreader',serif; letter-spacing:-0.2px; margin-bottom:14px;">jane.</div>
+          <div style="background:linear-gradient(160deg,#E6F5EC,#DCF1E6); border-radius:24px; padding:18px 18px 20px; margin-bottom:13px;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:9px;">
+              <span style="position:relative; width:11px; height:11px;"><span style="position:absolute; inset:0; border-radius:50%; background:#1F8A5B; animation:cadPulse 2.4s ease-out infinite;"></span><span style="position:relative; display:block; width:11px; height:11px; border-radius:50%; background:#1F8A5B;"></span></span>
+              <span style="font-size:11px; font-weight:700; letter-spacing:1.2px; color:#15724A;">CURRENT STATE</span>
+            </div>
+            <div style="font-size:33px; font-weight:600; font-family:'Newsreader',serif; font-style:italic; letter-spacing:-0.4px;">You're on</div>
+            <div style="font-size:15px; font-weight:500; color:#3A4A66; margin-top:5px;">Steady movement for <span style="font-weight:700; color:#16203A;">2h 40m</span></div>
+          </div>
+          <div style="background:#fff; border-radius:24px; padding:16px 18px; display:flex; align-items:center; gap:15px; box-shadow:0 10px 26px rgba(28,46,92,0.07);">
+            <div style="position:relative; width:74px; height:74px; flex:none;">
+              <svg width="74" height="74" viewBox="0 0 74 74">
+                <circle cx="37" cy="37" r="30" fill="none" stroke="#EAEFF8" stroke-width="8"></circle>
+                <circle cx="37" cy="37" r="30" fill="none" stroke="#1F8A5B" stroke-width="8" stroke-linecap="round" stroke-dasharray="120 188" transform="rotate(-90 37 37)"></circle>
+                <circle cx="37" cy="37" r="30" fill="none" stroke="#B9700F" stroke-width="8" stroke-linecap="round" stroke-dasharray="34 188" stroke-dashoffset="-120" transform="rotate(-90 37 37)"></circle>
+              </svg>
+              <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;"><span style="font-size:20px; font-weight:800; line-height:1; color:#8A4B00;">25</span><span style="font-size:9px; font-weight:700; color:#8A4B00;">min left</span></div>
+            </div>
+            <div style="flex:1;">
+              <div style="font-size:14px; font-weight:700;">Off window likely</div>
+              <div style="font-size:13px; font-weight:600; color:#8A4B00;">11:40 – 12:10</div>
+              <div style="font-size:12px; font-weight:500; color:#536084; margin-top:3px;">Noon dose moved earlier to stay ahead.</div>
+            </div>
+          </div>
+        </div>
+        <div style="position:absolute; left:20px; right:20px; bottom:20px; background:#2F57E6; border-radius:20px; padding:15px 18px; display:flex; align-items:center; gap:13px; box-shadow:0 14px 28px rgba(47,87,230,0.34);">
+          <span style="width:40px; height:40px; flex:none; border-radius:12px; background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center;"><svg width="22" height="22" viewBox="0 0 28 28" fill="none"><rect x="3.5" y="9" width="21" height="10" rx="5" transform="rotate(-45 14 14)" stroke="#fff" stroke-width="2.4"></rect><path d="M11 11 17 17" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path></svg></span>
+          <div style="flex:1;"><div style="font-size:17px; font-weight:800; color:#fff;">Take dose at 11:45</div><div style="font-size:13px; font-weight:500; color:rgba(255,255,255,0.9);">Levodopa / Carbidopa 25/100</div></div>
         </div>
       </div>
     </div>
-  </section>
-</main>
-
-<div class="trust"><div class="wrap"><span>grounded in movement-disorder care</span></div></div>
-
-<main class="wrap">
-  <section class="vals">
-    <div class="val reveal">
-      <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3 12h3l2-7 4 14 3-9 2 2h4" stroke="#2F57E6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <h3>learns your rhythm</h3>
-      <p>two lightweight bands read your movement and build a personal model of your on and off windows.</p>
-    </div>
-    <div class="val reveal">
-      <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="#2F57E6" stroke-width="2.2"/><path d="M12 8v4l3 2" stroke="#2F57E6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <h3>forecasts off periods</h3>
-      <p>cadence sees an off window coming and times your next dose to keep you steady and moving.</p>
-    </div>
-    <div class="val reveal">
-      <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.4-7-9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 7 4.5C19 16.6 12 21 12 21z" stroke="#2F57E6" stroke-width="2.2" stroke-linejoin="round"/></svg></div>
-      <h3>keeps your circle close</h3>
-      <p>share what matters with caregivers and your neurologist — on your terms, never your location.</p>
-    </div>
-  </section>
-</main>
-
-<footer><div class="wrap">
-  <div class="foot-top">
-    <div class="logo">
-      <span class="logo-mark"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M2 12h3.5l2-6 3.2 13 3-9 2.3 4.5H22" stroke="#7CF0B7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="logo-word" style="color:#fff">cadence</span>
-    </div>
-    <a href="#waitlist" class="btn btn-primary" style="text-decoration:none">join the waitlist</a>
   </div>
-  <div class="foot-bot">
-    <span>© 2026 cadence health, inc.</span>
-    <span>*not a medical device. cadence does not provide medical advice, nor does it change prescriptions beyond what neurologists allow.</span>
+
+  <div class="scroll-reveal" style="border-top:1px solid #ECF0F7; border-bottom:1px solid #ECF0F7; background:#F4F7FC;">
+    <div style="max-width:1200px; margin:0 auto; padding:22px 32px; text-align:center;">
+      <span style="font-size:14px; font-weight:700; letter-spacing:1.6px; color:#8A96B0;">GROUNDED IN MOVEMENT-DISORDER CARE</span>
+    </div>
   </div>
-</div></footer>
 
-<!-- ORDER MODAL -->
-<div class="ov" id="ov">
-  <div class="modal" style="position:relative">
-    <button class="close" id="ovClose" aria-label="close">✕</button>
+  <div class="scroll-reveal" style="max-width:1000px; margin:0 auto; padding:96px 32px 30px; text-align:center;">
+    <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:#2F57E6; margin-bottom:16px;">THE PROBLEM</div>
+    <h2 style="font-size:clamp(28px,5.6vw,46px); line-height:1.12; font-weight:800; letter-spacing:-1.2px; margin:0 0 22px;">Parkinson's doesn't keep a schedule,<br>So why does the pill bottle?</h2>
+    <p style="font-size:20px; line-height:1.6; font-weight:500; color:#3A4A66; max-width:680px; margin:0 auto;">Medication works until it doesn't. As the day goes on, <span style="font-weight:700; color:#16203A;">on</span> time gets shorter and <span style="font-weight:700; color:#8A4B00;">off</span> periods, stiffness, slowness, tremor, arrive earlier than the clock predicts. Fixed dosing times can't keep up with a body that shifts hour to hour.</p>
+  </div>
+  <div class="scroll-reveal scroll-reveal-delay-1" style="max-width:880px; margin:0 auto 90px; padding:0 32px;">
+    <div style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:30px 30px 24px; box-shadow:0 18px 40px rgba(28,46,92,0.06);">
+      <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:700; color:#8A96B0; margin-bottom:10px;"><span>8 AM</span><span>12 PM</span><span>4 PM</span><span>8 PM</span></div>
+      <div style="display:flex; height:46px; border-radius:13px; overflow:hidden;">
+        <div style="width:30%; background:#1F8A5B;"></div>
+        <div style="width:7%; background:repeating-linear-gradient(45deg,#E8A23D,#E8A23D 6px,#F3CE92 6px,#F3CE92 12px);"></div>
+        <div style="width:22%; background:#1F8A5B;"></div>
+        <div style="width:9%; background:repeating-linear-gradient(45deg,#E8A23D,#E8A23D 6px,#F3CE92 6px,#F3CE92 12px);"></div>
+        <div style="width:18%; background:#1F8A5B;"></div>
+        <div style="width:14%; background:repeating-linear-gradient(45deg,#E8A23D,#E8A23D 6px,#F3CE92 6px,#F3CE92 12px);"></div>
+      </div>
+      <div style="display:flex; align-items:center; gap:26px; margin-top:16px; flex-wrap:wrap;">
+        <div style="display:flex; align-items:center; gap:8px;"><span style="width:13px; height:13px; border-radius:4px; background:#1F8A5B;"></span><span style="font-size:14px; font-weight:600; color:#3A4A66;">On, moving freely</span></div>
+        <div style="display:flex; align-items:center; gap:8px;"><span style="width:13px; height:13px; border-radius:4px; background:#E8A23D;"></span><span style="font-size:14px; font-weight:600; color:#3A4A66;">Off, symptoms return</span></div>
+        <span style="font-size:14px; font-weight:500; color:#8A96B0; margin-left:auto;">Off windows creep earlier through the day.</span>
+      </div>
+    </div>
+  </div>
 
-    <div class="code-card" id="codeCard">
-      <h2>enter your access code</h2>
-      <p class="sub">early access is invite-only. enter the code we sent you to reserve your cadence band kit.</p>
-      <input id="codeInput" placeholder="CAD-XXXX-XXXX" maxlength="13" autocomplete="off" spellcheck="false">
-      <div class="note" id="codeNote" style="text-align:center;min-height:18px;margin-top:12px"></div>
-      <button class="btn btn-primary full" id="codeBtn">unlock my order</button>
+  <div class="scroll-reveal" style="max-width:1100px; margin:0 auto 30px; padding:0 32px;">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;" data-stack>
+      <div class="scroll-reveal" style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:34px 32px; box-shadow:0 14px 34px rgba(28,46,92,0.05);">
+        <div style="font-size:13px; font-weight:800; letter-spacing:1.4px; color:#B9700F; margin-bottom:14px;">SYMPTOM ONE · TIMING</div>
+        <h3 style="font-size:26px; font-weight:800; letter-spacing:-0.5px; margin:0 0 12px;">off episodes</h3>
+        <p style="font-size:17px; line-height:1.6; font-weight:500; color:#536084; margin:0;">the dose wears off before the next one is due and symptoms return, stiffness, slowness, tremor. absorption shifts with meals and gut speed, so the same pill at the same time lands differently from one day to the next. most people only find out they're off once they're already in it, and the next dose can take up to an hour to work.</p>
+      </div>
+      <div class="scroll-reveal scroll-reveal-delay-1" style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:34px 32px; box-shadow:0 14px 34px rgba(28,46,92,0.05);">
+        <div style="font-size:13px; font-weight:800; letter-spacing:1.4px; color:#2F57E6; margin-bottom:14px;">SYMPTOM TWO · MOVEMENT</div>
+        <h3 style="font-size:26px; font-weight:800; letter-spacing:-0.5px; margin:0 0 12px;">freezing of gait</h3>
+        <p style="font-size:17px; line-height:1.6; font-weight:500; color:#536084; margin:0;">the feet suddenly feel glued to the floor while the body keeps leaning forward. it strikes in doorways, on turns, and while crossing the street, a leading cause of falls and a big reason people stop leaving the house. today's cueing tools only switch on after the freeze has already started.</p>
+      </div>
+    </div>
+    <p style="font-size:19px; line-height:1.6; font-weight:600; color:#16203A; text-align:center; max-width:640px; margin:34px auto 0;">both problems take the same thing away: the ability to trust your own body in public.</p>
+  </div>
+
+  <div class="scroll-reveal" style="max-width:980px; margin:0 auto; padding:78px 32px 30px; text-align:center;">
+    <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:#2F57E6; margin-bottom:16px;">WHO IT'S FOR</div>
+    <h2 style="font-size:clamp(28px,5.4vw,44px); line-height:1.12; font-weight:800; letter-spacing:-1.2px; margin:0 0 22px;">Built for the middle of the journey.</h2>
+    <p style="font-size:20px; line-height:1.6; font-weight:500; color:#3A4A66; max-width:680px; margin:0 auto;">Cadence is made for people in the mid-to-later stages of Parkinson's, on levodopa, living with motor fluctuations, many of them older adults. they want to keep going out, keep their independence, and stop bracing for a fall, and they're tired of dosing blind. the people around them carry that worry too, and the neurologist who sets the schedule sees them for about fifteen minutes every few months.</p>
+  </div>
+
+  <div class="scroll-reveal" style="background:#F4F7FC; border-top:1px solid #ECF0F7; border-bottom:1px solid #ECF0F7;">
+    <div style="max-width:1200px; margin:0 auto; padding:80px 32px;">
+      <div class="scroll-reveal" style="text-align:center; margin-bottom:48px;">
+        <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:#2F57E6; margin-bottom:14px;">THE CARE CIRCLE</div>
+        <h2 style="font-size:clamp(28px,5.4vw,44px); line-height:1.1; font-weight:800; letter-spacing:-1.2px; margin:0;">You're not managing this alone.</h2>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;" data-stack>
+        <div class="scroll-reveal" style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:30px 28px;">
+          <div style="width:52px; height:52px; border-radius:15px; background:#E5EBFD; display:flex; align-items:center; justify-content:center; margin-bottom:18px;"><svg width="27" height="27" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#2F57E6" stroke-width="2"></circle><path d="M4 20c0-4 4-6 8-6s8 2 8 6" stroke="#2F57E6" stroke-width="2" stroke-linecap="round"></path></svg></div>
+          <h3 style="font-size:22px; font-weight:800; margin:0 0 9px;">For you</h3>
+          <p style="font-size:16px; line-height:1.55; font-weight:500; color:#536084; margin:0;">A calm home screen that answers one question: am I on, and what do I do next?</p>
+        </div>
+        <div class="scroll-reveal scroll-reveal-delay-1" style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:30px 28px;">
+          <div style="width:52px; height:52px; border-radius:15px; background:#E7F4EC; display:flex; align-items:center; justify-content:center; margin-bottom:18px;"><svg width="27" height="27" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.5-7-9.5A4.5 4.5 0 0 1 12 8a4.5 4.5 0 0 1 7 3.5C19 16.5 12 21 12 21z" stroke="#1F8A5B" stroke-width="2" stroke-linejoin="round"></path></svg></div>
+          <h3 style="font-size:22px; font-weight:800; margin:0 0 9px;">for your caretaker(s)</h3>
+          <p style="font-size:16px; line-height:1.55; font-weight:500; color:#536084; margin:0;">A gentle heads-up before an off window, so help arrives at the right time.</p>
+        </div>
+        <div class="scroll-reveal scroll-reveal-delay-2" style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:30px 28px;">
+          <div style="width:52px; height:52px; border-radius:15px; background:#EDE7FB; display:flex; align-items:center; justify-content:center; margin-bottom:18px;"><svg width="27" height="27" viewBox="0 0 24 24" fill="none"><path d="M4 19V5h16v14M4 13h4l2 4 3-10 2 6h5" stroke="#6E4FD8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+          <h3 style="font-size:22px; font-weight:800; margin:0 0 9px;">For your neurologist</h3>
+          <p style="font-size:16px; line-height:1.55; font-weight:500; color:#536084; margin:0;">weeks of real on/off data, not a recalled diary, to fine-tune the plan, and a way to adjust your dosing schedule straight to the app between visits, no appointment required*</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+
+  <!-- ============================ HOW IT WORKS ============================ -->
+  <div data-page="how">
+  <div class="page-enter">
+  <div class="scroll-reveal" style="max-width:1200px; margin:0 auto; padding:64px 32px 30px; text-align:center;">
+    <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:#2F57E6; margin-bottom:14px;">HOW IT WORKS</div>
+    <h1 style="font-size: clamp(32px,6vw,54px); line-height: 1.08; font-weight: 800; letter-spacing: -1.4px; margin: 0 0 18px; font-family: 'Newsreader',serif; font-style: italic">Three steps, all day long.</h1>
+    <p style="font-size:20px; line-height:1.55; font-weight:500; color:#3A4A66; max-width:620px; margin:0 auto;">Cadence turns continuous movement data into one clear next action, without a diary, a spreadsheet, or guesswork.</p>
+  </div>
+  <div class="scroll-reveal scroll-reveal-delay-1" style="max-width:1200px; margin:0 auto; padding:40px 32px;">
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:26px;" data-stack>
+      <div class="scroll-reveal" style="background:#fff; border:1px solid #ECF0F7; border-radius:28px; padding:34px 30px; box-shadow:0 14px 34px rgba(28,46,92,0.06);">
+        <div style="width:60px; height:60px; border-radius:18px; background:#E7F4EC; display:flex; align-items:center; justify-content:center; margin-bottom:22px;"><svg width="30" height="30" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="#1F8A5B" stroke-width="2"></circle><circle cx="12" cy="12" r="2.6" fill="#1F8A5B"></circle></svg></div>
+        <div style="font-size:14px; font-weight:800; color:#A9B4C9; margin-bottom:8px;">01</div>
+        <h3 style="font-size:25px; font-weight:800; letter-spacing:-0.4px; margin:0 0 10px;">Wear the sensor</h3>
+        <p style="font-size:17px; line-height:1.55; font-weight:500; color:#536084; margin:0;">A discreet wrist and ankle band read your movement state continuously, no buttons, no logging. They just know when you're on and when you're slipping.</p>
+      </div>
+      <div class="scroll-reveal scroll-reveal-delay-1" style="background:#fff; border:1px solid #ECF0F7; border-radius:28px; padding:34px 30px; box-shadow:0 14px 34px rgba(28,46,92,0.06);">
+        <div style="width:60px; height:60px; border-radius:18px; background:#FBF1E1; display:flex; align-items:center; justify-content:center; margin-bottom:22px;"><svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M3 14l5-6 4 4 5-7 4 5" stroke="#B9700F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+        <div style="font-size:14px; font-weight:800; color:#A9B4C9; margin-bottom:8px;">02</div>
+        <h3 style="font-size:25px; font-weight:800; letter-spacing:-0.4px; margin:0 0 10px;">See your forecast</h3>
+        <p style="font-size:17px; line-height:1.55; font-weight:500; color:#536084; margin:0;">Cadence predicts when an off window is likely, usually before you feel it, so wearing-off becomes something you see coming, not a surprise.</p>
+      </div>
+      <div class="scroll-reveal scroll-reveal-delay-2" style="background:#fff; border:1px solid #ECF0F7; border-radius:28px; padding:34px 30px; box-shadow:0 14px 34px rgba(28,46,92,0.06);">
+        <div style="width:60px; height:60px; border-radius:18px; background:#E5EBFD; display:flex; align-items:center; justify-content:center; margin-bottom:22px;"><svg width="30" height="30" viewBox="0 0 28 28" fill="none"><rect x="3.5" y="9" width="21" height="10" rx="5" transform="rotate(-45 14 14)" stroke="#2F57E6" stroke-width="2.4"></rect><path d="M11 11 17 17" stroke="#2F57E6" stroke-width="2.4" stroke-linecap="round"></path></svg></div>
+        <div style="font-size:14px; font-weight:800; color:#A9B4C9; margin-bottom:8px;">03</div>
+        <h3 style="font-size:25px; font-weight:800; letter-spacing:-0.4px; margin:0 0 10px;">Dose ahead of it</h3>
+        <p style="font-size:17px; line-height:1.55; font-weight:500; color:#536084; margin:0;">Get a nudge to take your next dose at the right moment, within your doctor's plan, to stay ahead of the dip instead of catching up after it.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-reveal" style="background:#F4F7FC; border-top:1px solid #ECF0F7; border-bottom:1px solid #ECF0F7; margin-top:50px;">
+    <div class="scroll-reveal" style="max-width:1200px; margin:0 auto; padding:90px 32px; display:grid; grid-template-columns:0.9fr 1.1fr; gap:60px; align-items:center;" data-stack data-pad>
+      <div style="display:flex; justify-content:center;">
+        <div style="position:relative; width:300px; height:300px; background:#fff; border-radius:36px; box-shadow:0 26px 60px rgba(28,46,92,0.12); display:flex; align-items:center; justify-content:center;">
+          <svg width="232" height="232" viewBox="0 0 232 232">
+            <circle cx="116" cy="116" r="92" fill="none" stroke="#EAEFF8" stroke-width="20"></circle>
+            <circle cx="116" cy="116" r="92" fill="none" stroke="#1F8A5B" stroke-width="20" stroke-linecap="round" stroke-dasharray="360 578" transform="rotate(-90 116 116)"></circle>
+            <circle cx="116" cy="116" r="92" fill="none" stroke="#F2CF96" stroke-width="20" stroke-linecap="round" stroke-dasharray="92 578" stroke-dashoffset="-360" transform="rotate(-90 116 116)"></circle>
+            <circle cx="116" cy="116" r="92" fill="none" stroke="#B9700F" stroke-width="20" stroke-linecap="round" stroke-dasharray="64 578" stroke-dashoffset="-452" transform="rotate(-90 116 116)"></circle>
+          </svg>
+          <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+            <span style="font-size:17px; font-weight:600; color:#536084;">about</span>
+            <span style="font-size:54px; font-weight:800; line-height:1; letter-spacing:-1.5px; color:#8A4B00;">25</span>
+            <span style="font-size:18px; font-weight:700; color:#8A4B00;">min left on</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:#B9700F; margin-bottom:16px;">THE FORECAST RING</div>
+        <h2 style="font-size:clamp(28px,5.4vw,44px); line-height:1.1; font-weight:800; letter-spacing:-1.1px; margin:0 0 20px;">One glance tells you how much on you have left.</h2>
+        <p style="font-size:20px; line-height:1.58; font-weight:500; color:#3A4A66; margin:0 0 26px; max-width:520px;">The green ring is the on period you're in right now. As it fills toward amber, you're approaching the moment your medication is likely to wear off, with a plain-language window, never a false-precise time.</p>
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div style="display:flex; align-items:flex-start; gap:13px;"><span style="width:24px; height:24px; flex:none; border-radius:8px; background:#E7F4EC; display:flex; align-items:center; justify-content:center; margin-top:2px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke="#1F8A5B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span style="font-size:17px; font-weight:500; color:#3A4A66;"><span style="font-weight:700; color:#16203A;">Estimates, not alarms.</span> "Off likely 11:40–12:10", a range you can plan around.</span></div>
+          <div style="display:flex; align-items:flex-start; gap:13px;"><span style="width:24px; height:24px; flex:none; border-radius:8px; background:#E7F4EC; display:flex; align-items:center; justify-content:center; margin-top:2px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke="#1F8A5B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span style="font-size:17px; font-weight:500; color:#3A4A66;"><span style="font-weight:700; color:#16203A;">Learns your pattern.</span> The more you wear it, the sharper your personal forecast gets.</span></div>
+          <div style="display:flex; align-items:flex-start; gap:13px;"><span style="width:24px; height:24px; flex:none; border-radius:8px; background:#E7F4EC; display:flex; align-items:center; justify-content:center; margin-top:2px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke="#1F8A5B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><span style="font-size:17px; font-weight:500; color:#3A4A66;"><span style="font-weight:700; color:#16203A;">Tied to your dose.</span> Each forecast is matched to the dose that gets you ahead of it.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-reveal" style="max-width:760px; margin:0 auto; padding:90px 32px; text-align:center;">
+    <span style="display:inline-flex; width:54px; height:54px; border-radius:16px; background:#E7F4EC; align-items:center; justify-content:center; margin-bottom:20px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6l7-3z" stroke="#1F8A5B" stroke-width="2" stroke-linejoin="round"></path><path d="M9 12l2 2 4-4" stroke="#1F8A5B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+    <h2 style="font-size:32px; font-weight:800; letter-spacing:-0.6px; margin:0 0 14px;">your doctor sets the plan. cadence helps you personalize and follow it.</h2>
+    <p style="font-size:18px; line-height:1.6; font-weight:500; color:#536084; margin:0;">Cadence never changes your prescription. Every dose nudge stays inside the timing range your neurologist approved. It's a guide for your routine, not medical advice, and you can adjust or ignore it any time.</p>
+  </div>
+  </div>
+  </div>
+
+  <!-- ============================ TECHNOLOGY ============================ -->
+  <div data-page="tech">
+  <div class="page-enter">
+  <div class="scroll-reveal" style="max-width:1200px; margin:0 auto; padding:64px 32px 20px; display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:center;" data-stack data-pad>
+    <div>
+      <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:#2F57E6; margin-bottom:14px;">TECHNOLOGY</div>
+      <h1 style="font-size: clamp(32px,6vw,54px); line-height: 1.06; font-weight: 800; letter-spacing: -1.4px; margin: 0 0 20px; font-family: 'Newsreader',serif; font-style: italic">A quiet band.<br>A careful model.</h1>
+      <p style="font-size:20px; line-height:1.55; font-weight:500; color:#3A4A66; margin:0 0 26px; max-width:500px;">A screenless band with a magnetic clasp, worn on the wrist and ankle. Nothing to read, nothing to tap, it reads movement many times a second and lets on-device processing turn raw motion into your on/off state and forecast.</p>
+      <div style="display:flex; gap:30px; flex-wrap:wrap;">
+        <div><div style="font-size: 34px; font-weight: 600; letter-spacing: -1px; font-family: 'Newsreader',serif; font-style: italic">200 Hz</div><div style="font-size:14px; font-weight:600; color:#8A96B0; margin-top:2px;">motion sampling</div></div>
+        <div><div style="font-size: 34px; font-weight: 600; letter-spacing: -1px; font-family: 'Newsreader',serif; font-style: italic">screenless</div><div style="font-size:14px; font-weight:600; color:#8A96B0; margin-top:2px;">magnetic clasp</div></div>
+        <div><div style="font-size: 34px; font-weight: 600; letter-spacing: -1px; font-family: 'Newsreader',serif; font-style: italic">on-device</div><div style="font-size:14px; font-weight:600; color:#8A96B0; margin-top:2px;">first-pass inference</div></div>
+      </div>
+    </div>
+    <div style="display:flex; justify-content:center; align-items:center; min-height:440px;">
+      <div style="position:relative; width:440px; max-width:100%; aspect-ratio:1/1; border-radius:32px; background:radial-gradient(120% 90% at 50% 18%, #FFFFFF 0%, #F1F4FA 55%, #E6EBF4 100%); box-shadow:0 30px 70px rgba(28,46,92,0.10); overflow:hidden;">
+        <div style="position:absolute; left:50%; bottom:13%; transform:translateX(-50%); width:62%; height:8%; border-radius:50%; background:radial-gradient(ellipse at center, rgba(11,17,34,0.22), rgba(11,17,34,0) 70%); filter:blur(4px);"></div>
+        <img src="assets/product.jpg" alt="Cadence wrist and ankle bands with charging dock" style="position:absolute; inset:10%; width:80%; height:80%; object-fit:contain; border-radius:18px;">
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-reveal scroll-reveal-delay-1" style="max-width:1200px; margin:0 auto; padding:30px 32px 20px;">
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:20px;" data-quad>
+      <div class="scroll-reveal" style="background:#fff; border:1px solid #ECF0F7; border-radius:22px; padding:24px;"><div style="font-size:13px; font-weight:800; color:#2F57E6; letter-spacing:0.6px;">IMU</div><div style="font-size:19px; font-weight:800; margin:8px 0 6px;">6-axis motion</div><p style="font-size:14.5px; line-height:1.5; font-weight:500; color:#536084; margin:0;">Accelerometer + gyroscope capture tremor, bradykinesia, and gait at 200 Hz.</p></div>
+      <div class="scroll-reveal scroll-reveal-delay-1" style="background:#fff; border:1px solid #ECF0F7; border-radius:22px; padding:24px;"><div style="font-size:13px; font-weight:800; color:#2F57E6; letter-spacing:0.6px;">EDA</div><div style="font-size:19px; font-weight:800; margin:8px 0 6px;">Skin response</div><p style="font-size:14.5px; line-height:1.5; font-weight:500; color:#536084; margin:0;">A secondary channel that helps separate genuine off periods from rest.</p></div>
+      <div class="scroll-reveal scroll-reveal-delay-2" style="background:#fff; border:1px solid #ECF0F7; border-radius:22px; padding:24px;"><div style="font-size:13px; font-weight:800; color:#2F57E6; letter-spacing:0.6px;">TEMP</div><div style="font-size:19px; font-weight:800; margin:8px 0 6px;">Skin temperature</div><p style="font-size:14.5px; line-height:1.5; font-weight:500; color:#536084; margin:0;">Slow-moving context the model uses to normalize across the day.</p></div>
+      <div class="scroll-reveal scroll-reveal-delay-3" style="background:#fff; border:1px solid #ECF0F7; border-radius:22px; padding:24px;"><div style="font-size:13px; font-weight:800; color:#2F57E6; letter-spacing:0.6px;">HAPTIC</div><div style="font-size:19px; font-weight:800; margin:8px 0 6px;">Ankle freeze cue</div><p style="font-size:14.5px; line-height:1.5; font-weight:500; color:#536084; margin:0;">A rhythmic pulse on the ankle band to help restart movement during a freeze.</p></div>
+    </div>
+  </div>
+
+  <div class="scroll-reveal" style="max-width:1200px; margin:0 auto; padding:74px 32px 10px;">
+    <div class="scroll-reveal" style="text-align:center; margin-bottom:46px;">
+      <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:#2F57E6; margin-bottom:14px;">TWO BANDS, ONE FORECAST</div>
+      <h2 style="font-size:clamp(28px,5.2vw,42px); line-height:1.12; font-weight:800; letter-spacing:-1.1px; margin:0 0 18px;">Two rhythms the body keeps, read at once.</h2>
+      <p style="font-size:19px; line-height:1.6; font-weight:500; color:#3A4A66; max-width:680px; margin:0 auto;">Parkinson's plays out on two clocks at the same time, a chemical one and a mechanical one. Cadence puts a sensor on each and feeds both into a single model that forecasts your motor state through the day.</p>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;" data-stack>
+      <div class="scroll-reveal" style="background:#fff; border:1px solid #ECF0F7; border-radius:28px; padding:36px 34px; box-shadow:0 16px 38px rgba(28,46,92,0.06);">
+        <div style="display:flex; align-items:center; gap:13px; margin-bottom:18px;">
+          <span style="width:50px; height:50px; border-radius:15px; background:#E5EBFD; display:flex; align-items:center; justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.5-7-9.5A4.5 4.5 0 0 1 12 8a4.5 4.5 0 0 1 7 3.5C19 16.5 12 21 12 21z" stroke="#2F57E6" stroke-width="2" stroke-linejoin="round"></path></svg></span>
+          <span style="font-size:13px; font-weight:800; letter-spacing:1.2px; color:#2F57E6;">WRIST BAND · CHEMICAL RHYTHM</span>
+        </div>
+        <h3 style="font-size:23px; font-weight:800; letter-spacing:-0.4px; margin:0 0 12px;">how your body answers the last dose</h3>
+        <p style="font-size:16.5px; line-height:1.6; font-weight:500; color:#536084; margin:0 0 18px;">the wrist reads motor state plus the autonomic signals, heart rate, heart-rate variability, skin response and temperature, that shift before a person consciously feels an off period starting.</p>
+        <div style="display:inline-flex; align-items:center; gap:9px; background:#EEF3FE; padding:10px 16px; border-radius:13px;"><svg width="18" height="18" viewBox="0 0 28 28" fill="none"><rect x="3.5" y="9" width="21" height="10" rx="5" transform="rotate(-45 14 14)" stroke="#2F57E6" stroke-width="2.4"></rect><path d="M11 11 17 17" stroke="#2F57E6" stroke-width="2.4" stroke-linecap="round"></path></svg><span style="font-size:14.5px; font-weight:700; color:#2F57E6;">buzzes the dose nudge</span></div>
+      </div>
+      <div class="scroll-reveal scroll-reveal-delay-1" style="background:#fff; border:1px solid #ECF0F7; border-radius:28px; padding:36px 34px; box-shadow:0 16px 38px rgba(28,46,92,0.06);">
+        <div style="display:flex; align-items:center; gap:13px; margin-bottom:18px;">
+          <span style="width:50px; height:50px; border-radius:15px; background:#E7F4EC; display:flex; align-items:center; justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3 16l4-5 3 3 4-6 4 5 3-2" stroke="#1F8A5B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+          <span style="font-size:13px; font-weight:800; letter-spacing:1.2px; color:#15724A;">ANKLE BAND · MECHANICAL RHYTHM</span>
+        </div>
+        <h3 style="font-size:23px; font-weight:800; letter-spacing:-0.4px; margin:0 0 12px;">the gait that breaks down before a freeze</h3>
+        <p style="font-size:16.5px; line-height:1.6; font-weight:500; color:#536084; margin:0 0 18px;">the ankle reads the gait pattern and the small breakdown in stride that shows up in the seconds before the feet freeze, the signal a wrist alone is too far away to catch.</p>
+        <div style="display:inline-flex; align-items:center; gap:9px; background:#E7F4EC; padding:10px 16px; border-radius:13px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3v4M12 17v4M3 12h4M17 12h4" stroke="#1F8A5B" stroke-width="2.4" stroke-linecap="round"></path><circle cx="12" cy="12" r="3" stroke="#1F8A5B" stroke-width="2.4"></circle></svg><span style="font-size:14.5px; font-weight:700; color:#15724A;">pulses the freeze cue, before it lands</span></div>
+      </div>
+    </div>
+    <p style="font-size:15px; line-height:1.6; font-weight:500; color:#8A96B0; text-align:center; max-width:660px; margin:26px auto 0;">the bands are screenless on purpose, tremor and slowness make a small touchscreen hard to use. a magnetic clasp and one shared charging dock mean nothing fiddly for a shaky hand, and everything to read moves to the phone, where the text can be large.</p>
+  </div>
+
+  <div class="scroll-reveal" style="background:#16203A; margin-top:60px;">
+    <div style="max-width:1200px; margin:0 auto; padding:84px 32px;">
+      <div class="scroll-reveal" style="text-align:center; margin-bottom:18px;">
+        <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:#7CF0B7; margin-bottom:14px;">THE MODELS</div>
+        <h2 style="font-size: clamp(28px,5.2vw,42px); line-height: 1.12; font-weight: 900; letter-spacing: -1.1px; margin: 0; color: #fff; font-family: 'Newsreader',serif; font-style: italic">From raw motion to a forecast you can act on.</h2>
+      </div>
+      <div style="display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; margin:40px 0 50px;">
+        <span style="background:#243355; color:#C2CFE4; font-size:14px; font-weight:700; padding:12px 18px; border-radius:13px;">Raw signal · 200 Hz</span>
+        <svg width="26" height="16" viewBox="0 0 26 16" fill="none"><path d="M2 8h20m0 0-5-5m5 5-5 5" stroke="#5E6E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <span style="background:#243355; color:#C2CFE4; font-size:14px; font-weight:700; padding:12px 18px; border-radius:13px;">Feature windows</span>
+        <svg width="26" height="16" viewBox="0 0 26 16" fill="none"><path d="M2 8h20m0 0-5-5m5 5-5 5" stroke="#5E6E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <span style="background:#2F57E6; color:#fff; font-size:14px; font-weight:700; padding:12px 18px; border-radius:13px;">State + forecast models</span>
+        <svg width="26" height="16" viewBox="0 0 26 16" fill="none"><path d="M2 8h20m0 0-5-5m5 5-5 5" stroke="#5E6E8C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <span style="background:#1F8A5B; color:#fff; font-size:14px; font-weight:700; padding:12px 18px; border-radius:13px;">On / off + dose nudge</span>
+      </div>
+      <div class="scroll-reveal scroll-reveal-delay-1" style="display:grid; grid-template-columns:repeat(3,1fr); gap:22px;" data-stack>
+        <div class="scroll-reveal" style="background:#1E2942; border:1px solid #2C3954; border-radius:24px; padding:30px 28px;"><div style="font-size:20px; font-weight:800; color:#fff; margin-bottom:10px;">State classifier</div><p style="font-size:15.5px; line-height:1.55; font-weight:500; color:#A9B7D0; margin:0;">A temporal model labels each minute as on, off, or uncertain from movement features, the engine behind the live state.</p></div>
+        <div class="scroll-reveal scroll-reveal-delay-1" style="background:#1E2942; border:1px solid #2C3954; border-radius:24px; padding:30px 28px;"><div style="font-size:20px; font-weight:800; color:#fff; margin-bottom:10px;">Wearing-off forecaster</div><p style="font-size:15.5px; line-height:1.55; font-weight:500; color:#A9B7D0; margin:0;">A sequence model projects your levodopa response forward to estimate the next likely off window as a calibrated range.</p></div>
+        <div class="scroll-reveal scroll-reveal-delay-2" style="background:#1E2942; border:1px solid #2C3954; border-radius:24px; padding:30px 28px;"><div style="font-size:20px; font-weight:800; color:#fff; margin-bottom:10px;">Personalization layer</div><p style="font-size:15.5px; line-height:1.55; font-weight:500; color:#A9B7D0; margin:0;">A lightweight per-patient head adapts the base model to your own rhythm over the first weeks of wear.</p></div>
+      </div>
+      <p style="font-size:14px; font-weight:500; color:#6E7E9C; text-align:center; margin:34px auto 0; max-width:680px; line-height:1.6;">Models are trained on de-identified, consented data and validated against clinician-rated motor state. Cadence supports clinical decisions, it does not make them.</p>
+    </div>
+  </div>
+
+  <div class="scroll-reveal" style="max-width:1100px; margin:0 auto; padding:90px 32px;">
+    <div class="scroll-reveal" style="text-align:center; margin-bottom:46px;">
+      <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:#2F57E6; margin-bottom:14px;">HONESTLY, WHAT'S NEW</div>
+      <h2 style="font-size:clamp(28px,5.2vw,42px); line-height:1.12; font-weight:800; letter-spacing:-1.1px; margin:0 0 18px;">Detection is established. Acting on the forecast is the part no one has shipped.</h2>
+      <p style="font-size:19px; line-height:1.6; font-weight:500; color:#3A4A66; max-width:680px; margin:0 auto;">There are two layers in Cadence, and only the top one is new. We're specific about that on purpose.</p>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:stretch;" data-stack>
+      <div class="scroll-reveal" style="background:#fff; border:1px solid #ECF0F7; border-radius:28px; padding:36px 34px;">
+        <div style="font-size:13px; font-weight:800; letter-spacing:1.2px; color:#8A96B0; margin-bottom:14px;">BASE LAYER · DETECTION</div>
+        <h3 style="font-size:23px; font-weight:800; letter-spacing:-0.4px; margin:0 0 12px;">scoring symptoms minute to minute</h3>
+        <p style="font-size:16.5px; line-height:1.6; font-weight:500; color:#536084; margin:0;">calling the on/off state from sensor signals is established, well-trodden research. it's the foundation Cadence stands on, not the part we claim to have invented.</p>
+      </div>
+      <div class="scroll-reveal scroll-reveal-delay-1" style="background:#16203A; border:1px solid #16203A; border-radius:28px; padding:36px 34px;">
+        <div style="font-size:13px; font-weight:800; letter-spacing:1.2px; color:#7CF0B7; margin-bottom:14px;">TOP LAYER · FORECASTING + ACTION</div>
+        <h3 style="font-size:23px; font-weight:800; letter-spacing:-0.4px; margin:0 0 12px; color:#fff;">turning the forecast into a decision</h3>
+        <p style="font-size: 16.5px; line-height: 1.6; font-weight: 700; color: #A9B7D0; margin: 0">predicting the next off window and the pre-freeze moment, then turning each into a just-in-time dose nudge and a preemptive cue, inside one screenless two-sensor product. that closed loop, to the patient, is the part no one has built. <i>*this technology requires time to learn your personal signals, our product will not predict accurately out of the box but will improve greatly with time. the training will be shown as a progress bar in the patient, clinician, as well as caretaker apps.&nbsp;</i></p>
+      </div>
+    </div>
+    <p style="font-size:15px; line-height:1.65; font-weight:500; color:#8A96B0; text-align:center; max-width:700px; margin:28px auto 0;">research has shown off episodes and freezes can be predicted to a degree, small studies have forecast wearing-off from wearable and autonomic signals, and pre-freeze prediction has reached the mid-eighties in sensitivity. cadence doesn't claim to invent prediction. our goal is to develop a personalized system that turns the forecast into an action, for the patient, instead of stopping at a report for the doctor.</p>
+  </div>
+  </div>
+  </div>
+
+  <!-- ============================ ROADMAP ============================ -->
+  <div data-page="roadmap">
+  <div class="page-enter">
+  <div class="scroll-reveal" style="max-width:1000px; margin:0 auto; padding:64px 32px 20px; text-align:center;">
+    <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:#2F57E6; margin-bottom:14px;">ROADMAP</div>
+    <h1 style="font-size: clamp(32px,6vw,54px); line-height: 1.08; font-weight: 800; letter-spacing: -1.4px; margin: 0 0 18px; font-style: italic; font-family: 'Newsreader',serif">Where Cadence is headed.</h1>
+    <p style="font-size:20px; line-height:1.55; font-weight:500; color:#3A4A66; max-width:600px; margin:0 auto;">We build in the open with our clinical partners and early users. Here's what's shipped, what's next, and where we're going.</p>
+  </div>
+  <div class="scroll-reveal scroll-reveal-delay-1" style="max-width:860px; margin:0 auto; padding:54px 32px 90px;">
+    <div style="background:#fff; border:1px solid #ECF0F7; border-radius:24px; padding:28px 32px 28px; margin-bottom:50px; box-shadow:0 14px 34px rgba(28,46,92,0.06);">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:30px;">
+        <div style="display:flex; align-items:center; gap:11px;">
+          <span style="position:relative; width:12px; height:12px;"><span style="position:absolute; inset:0; border-radius:50%; background:#2F57E6; animation:cadPulse 2.4s ease-out infinite;"></span><span style="position:relative; display:block; width:12px; height:12px; border-radius:50%; background:#2F57E6; animation:cadBlink 1s steps(1,end) infinite;"></span></span>
+          <span style="font-size:15px; font-weight:800; letter-spacing:1.2px; color:#16203A;">development progress</span>
+        </div>
+        <span style="font-size:14px; font-weight:700; color:#536084;">phase 3 of 6 · model development, live</span>
+      </div>
+      <div style="position:relative;">
+        <div style="position:absolute; left:10%; right:10%; top:6px; height:6px; border-radius:6px; background:#EEF2F8;"></div>
+        <div style="position: absolute; left: 10%; top: 6px; height: 6px; width: 32%; border-radius: 6px; background: linear-gradient(90deg,#2F57E6,#6E8BEE,#2F57E6); background-size: 200% 100%; animation: cadShimmer 2.2s linear infinite"></div>
+        <div style="position:relative; display:flex;">
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; text-align:center;">
+            <span style="width:18px; height:18px; border-radius:50%; background:#2F57E6; border:3px solid #fff; box-shadow:0 0 0 1px #DCE3EF;"></span>
+            <span style="font-size:12.5px; font-weight:800; color:#2F57E6; margin-top:14px;">conception</span>
+            <span style="font-size:11.5px; font-weight:600; color:#A9B4C9; margin-top:3px;">jun '26</span>
+          </div>
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; text-align:center;">
+            <span style="width:18px; height:18px; border-radius:50%; background:#2F57E6; border:3px solid #fff; box-shadow:0 0 0 1px #DCE3EF;"></span>
+            <span style="font-size:12.5px; font-weight:800; color:#2F57E6; margin-top:14px;">website live</span>
+            <span style="font-size:11.5px; font-weight:600; color:#A9B4C9; margin-top:3px;">jun '26</span>
+          </div>
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; text-align:center;">
+            <span style="position:relative; display:block; width:18px; height:18px;">
+              <span style="position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 22px; height: 22px; border-radius: 50%; background: #fff; border: 3px solid #2F57E6; animation: cadMeterPulse 1.8s ease-out infinite"></span>
+              <span style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:9px; height:9px; border-radius:50%; background:#2F57E6; animation:cadBlink 1s steps(1,end) infinite;"></span>
+            </span>
+            <span style="font-size:12.5px; font-weight:800; color:#2F57E6; margin-top:14px;">model dev</span>
+            <span style="font-size:11.5px; font-weight:700; color:#2F57E6; margin-top:3px;">now</span>
+          </div>
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; text-align:center;">
+            <span style="width:18px; height:18px; border-radius:50%; background:#fff; border:3px solid #D7DEEA;"></span>
+            <span style="font-size:12.5px; font-weight:700; color:#A9B4C9; margin-top:14px;">app &amp; tools</span>
+            <span style="font-size:11.5px; font-weight:600; color:#A9B4C9; margin-top:3px;">q4 '26</span>
+          </div>
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; text-align:center;">
+            <span style="width:18px; height:18px; border-radius:50%; background:#fff; border:3px solid #D7DEEA;"></span>
+            <span style="font-size:12.5px; font-weight:700; color:#A9B4C9; margin-top:14px;">hardware</span>
+            <span style="font-size:11.5px; font-weight:600; color:#A9B4C9; margin-top:3px;">q1 '27</span>
+          </div>
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; text-align:center;">
+            <span style="width:18px; height:18px; border-radius:50%; background:#fff; border:3px solid #D7DEEA;"></span>
+            <span style="font-size:12.5px; font-weight:700; color:#A9B4C9; margin-top:14px;">testing</span>
+            <span style="font-size:11.5px; font-weight:600; color:#A9B4C9; margin-top:3px;">'27 → '28</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-reveal" style="display:flex; flex-direction:column; gap:0;">
+      <div class="scroll-reveal" style="display:grid; grid-template-columns:150px 1fr; gap:28px; align-items:start;" data-roadmap-row>
+        <div style="text-align:right; padding-top:2px;">
+          <div style="font-size:13px; font-weight:800; letter-spacing:1px; color:#2F57E6;">NOW</div>
+          <div style="font-size:15px; font-weight:700; color:#8A96B0; margin-top:3px;">q2 -&gt; q3 2026</div>
+        </div>
+        <div style="position:relative; padding:0 0 38px 32px; border-left:2px solid #E2E8F2;">
+          <span style="position:absolute; left:-9px; top:2px; width:16px; height:16px; border-radius:50%; background:#2F57E6; border:3px solid #FBFCFE;"></span>
+          <div style="font-size:21px; font-weight:800; letter-spacing:-0.3px; margin-bottom:8px;">Model development</div>
+          <div style="font-size:16px; font-weight:500; color:#536084; line-height:1.55;">deliverables: the core models on movement data, the on/off state classifier and the wearing-off forecast, validated against clinical recordings, the backend databases for future deployment.&nbsp;</div>
+        </div>
+      </div>
+      <div class="scroll-reveal scroll-reveal-delay-1" style="display:grid; grid-template-columns:150px 1fr; gap:28px; align-items:start;" data-roadmap-row>
+        <div style="text-align:right; padding-top:2px;">
+          <div style="font-size:13px; font-weight:800; letter-spacing:1px; color:#B9700F;">NEXT</div>
+          <div style="font-size:15px; font-weight:700; color:#8A96B0; margin-top:3px;">q4 2026</div>
+        </div>
+        <div style="position:relative; padding:0 0 38px 32px; border-left:2px solid #E2E8F2;">
+          <span style="position:absolute; left:-9px; top:2px; width:16px; height:16px; border-radius:50%; background:#EBAB4C; border:3px solid #FBFCFE;"></span>
+          <div style="font-size:21px; font-weight:800; letter-spacing:-0.3px; margin-bottom:8px;">App &amp; clinician tools</div>
+          <div style="font-size:16px; font-weight:500; color:#536084; line-height:1.55;">deliverables: the patient app, caretaker alerts, and the neurologist dashboard, turning the model into one clear next action for everyone in the care circle. deployment of the full cadence app suite ready to be integrated with hardware.</div>
+        </div>
+      </div>
+      <div class="scroll-reveal scroll-reveal-delay-2" style="display:grid; grid-template-columns:150px 1fr; gap:28px; align-items:start;" data-roadmap-row>
+        <div style="text-align:right; padding-top:2px;">
+          <div style="font-size:13px; font-weight:800; letter-spacing:1px; color:#15724A;">THEN</div>
+          <div style="font-size:15px; font-weight:700; color:#8A96B0; margin-top:3px;">q1 2027</div>
+        </div>
+        <div style="position:relative; padding:0 0 38px 32px; border-left:2px solid #E2E8F2;">
+          <span style="position:absolute; left:-9px; top:2px; width:16px; height:16px; border-radius:50%; background:#1F8A5B; border:3px solid #FBFCFE;"></span>
+          <div style="font-size:21px; font-weight:800; letter-spacing:-0.3px; margin-bottom:8px;">Hardware development</div>
+          <div style="font-size:16px; font-weight:500; color:#536084; line-height:1.55;">deliverables: engineering the wrist and ankle bands, comfortable all-day wear, reliable sensing, and the haptic cue, from prototype toward a manufacturable device that syncs seamlessly with our backend ml models to provide the highest quality data and predictions possible for you.</div>
+        </div>
+      </div>
+      <div class="scroll-reveal scroll-reveal-delay-3" style="display:grid; grid-template-columns:150px 1fr; gap:28px; align-items:start;" data-roadmap-row>
+        <div style="text-align:right; padding-top:2px;">
+          <div style="font-size:13px; font-weight:800; letter-spacing:1px; color:#6E4FD8;">LATER</div>
+          <div style="font-size:15px; font-weight:700; color:#8A96B0; margin-top:3px;">2027 → 2028</div>
+        </div>
+        <div style="position:relative; padding:0 0 38px 32px; border-left:2px solid #E2E8F2;">
+          <span style="position:absolute; left:-9px; top:2px; width:16px; height:16px; border-radius:50%; background:#A48BEA; border:3px solid #FBFCFE;"></span>
+          <div style="font-size:21px; font-weight:800; letter-spacing:-0.3px; margin-bottom:8px;">Testing &amp; clinical mentorship</div>
+          <div style="font-size:16px; font-weight:500; color:#536084; line-height:1.55;">deliverables: pilots with movement-disorder clinics and mentorship from our clinical advisors, refining accuracy in real homes ahead of broader rollout, working on model personalization based on hardware data, validating the functionality of our app suite, and low risk trials on real people.&nbsp;</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+
+  <!-- ============================ OUR STORY ============================ -->
+  <div data-page="story">
+  <div class="page-enter">
+  <div class="scroll-reveal" style="max-width:840px; margin:0 auto; padding:70px 32px 10px; text-align:center;">
+    <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:#2F57E6; margin-bottom:16px;">OUR STORY</div>
+    <h1 style="font-size:clamp(32px,6.6vw,56px); line-height:1.06; font-weight:800; letter-spacing:-1.6px; margin:0 0 24px;">We started with a<br>simple <span style="font-style:italic; font-family:'Newsreader',serif; font-weight:600; color:#2F57E6;">purpose</span>.</h1>
+    <div><br></div>
+    <div><span style="background-color: initial; font-size: 25px;">the inspiration behind cadence began during a trip to india, where a member of our team witnessed firsthand the daily toll parkinson's disease takes on a family. he watched his parnani, his maternal great-grandmother, and her caretakers lose precious time constantly stressing over medication schedules and struggling to keep her symptoms under control. seeing this endless cycle of guesswork sparked a mission: to build an intelligent, intuitive tool that handles the complex math of dosing, giving families back their peace of mind and time to focus on what truly matters. we built cadence to expand those vital windows of 'on-time,' empowering families to spend less energy managing symptoms and more time making beautiful memories during their best hours.</span></div>
+  </div>
+  <div class="scroll-reveal scroll-reveal-delay-1" style="max-width:1100px; margin:0 auto; padding:64px 32px 30px;">
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;" data-stack>
+      <div class="scroll-reveal" style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:32px 28px;">
+        <div style="font-family:'Newsreader',serif; font-style:italic; font-size:26px; font-weight:600; color:#2F57E6; margin-bottom:12px;">Clarity over data</div>
+        <p style="font-size:16px; line-height:1.55; font-weight:500; color:#536084; margin:0;">A person in an off moment doesn't need a chart. They need one calm answer and one clear next step.</p>
+      </div>
+      <div class="scroll-reveal scroll-reveal-delay-1" style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:32px 28px;">
+        <div style="font-family:'Newsreader',serif; font-style:italic; font-size:26px; font-weight:600; color:#2F57E6; margin-bottom:12px;">Earned trust</div>
+        <p style="font-size:16px; line-height:1.55; font-weight:500; color:#536084; margin:0;">We never change a prescription. We surface patterns and hand the decision to patients and their doctors.</p>
+      </div>
+      <div class="scroll-reveal scroll-reveal-delay-2" style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:32px 28px;">
+        <div style="font-family:'Newsreader',serif; font-style:italic; font-size:26px; font-weight:600; color:#2F57E6; margin-bottom:12px;">Built with, not for</div>
+        <p style="font-size:16px; line-height:1.55; font-weight:500; color:#536084; margin:0;">Every screen is shaped by people living with Parkinson's, their caretakers, and the clinicians who treat them.</p>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-reveal" style="max-width:980px; margin:0 auto; padding:30px 32px 90px;">
+    <div style="background:#F4F7FC; border:1px solid #ECF0F7; border-radius:30px; padding:48px 52px; text-align:center;">
+      <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:#8A96B0; margin-bottom:14px;">OUR ADVISORS</div>
+      <p style="font-size:19px; line-height:1.6; font-weight:500; color:#3A4A66; margin:0 auto; max-width:680px;">Cadence is guided by movement-disorder neurologists, specialist nurses, and biomedical engineers, the same people who help us decide what's safe to ship. Meet them on the <span style="font-weight: 900; color: #16203A; font-family: 'Newsreader',serif; font-style: italic; font-size: 25px">Team</span> page.</p>
+      <button data-go="team" style="margin-top:24px; background:#16203A; border:none; cursor:pointer; font-size:16px; font-weight:700; color:#fff; padding:14px 26px; border-radius:14px;">Meet the team</button>
+    </div>
+  </div>
+  </div>
+  </div>
+
+  <!-- ============================ TEAM ============================ -->
+  <div data-page="team">
+  <div class="page-enter">
+  <div class="scroll-reveal" style="max-width:1000px; margin:0 auto; padding:64px 32px 20px; text-align:center;">
+    <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:#2F57E6; margin-bottom:14px;">TEAM</div>
+    <h1 style="font-size: clamp(32px,6vw,54px); line-height: 1.08; font-weight: 800; letter-spacing: -1.4px; margin: 0 0 18px; font-family: 'Newsreader',serif; font-style: italic">The people behind Cadence.</h1>
+    <p style="font-size:20px; line-height:1.55; font-weight:500; color:#3A4A66; max-width:600px; margin:0 auto;">A small team of engineers and clinicians who believe predictable days are possible.</p>
+  </div>
+  <div class="scroll-reveal scroll-reveal-delay-1" style="max-width:1120px; margin:0 auto; padding:54px 32px 10px;">
+    <div style="font-size:14px; font-weight:800; letter-spacing:1.2px; color:#8A96B0; margin-bottom:22px;">our team</div>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:22px;">
+      <div class="scroll-reveal" style="background:#fff; border:1px solid #ECF0F7; border-radius:24px; padding:26px 24px;">
+        <div style="display:flex; align-items:center; justify-content:center; width:64px; height:64px; margin-bottom:18px; border-radius:20px; background:#E5EBFD; font-size:21px; font-weight:800; color:#2F57E6;">KD</div>
+        <div style="font-size:19px; font-weight:800; letter-spacing:-0.2px;">krish dave</div><div style="font-size:14.5px; font-weight:700; color:#2F57E6; margin-top:3px;">ux &amp; machine learning</div><p style="font-size:14px; line-height:1.5; font-weight:500; color:#536084; margin:10px 0 0;">leads product design and the ml pipeline, shaping how raw sensor data becomes a forecast a patient can trust.</p>
+      </div>
+      <div class="scroll-reveal scroll-reveal-delay-1" style="background:#fff; border:1px solid #ECF0F7; border-radius:24px; padding:26px 24px;">
+        <div style="display:flex; align-items:center; justify-content:center; width:64px; height:64px; margin-bottom:18px; border-radius:20px; background:#E7F4EC; font-size:21px; font-weight:800; color:#15724A;">AP</div>
+        <div style="font-size:19px; font-weight:800; letter-spacing:-0.2px;">ayush parkkadan</div><div style="font-size:14.5px; font-weight:700; color:#2F57E6; margin-top:3px;">hardware engineering</div><p style="font-size:14px; line-height:1.5; font-weight:500; color:#536084; margin:10px 0 0;">engineers the wrist and ankle bands from prototype to manufacturable device, with a focus on comfort and reliable sensing.</p>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-reveal" style="max-width:1120px; margin:0 auto; padding:50px 32px 10px;">
+    <div style="font-size:14px; font-weight:800; letter-spacing:1.2px; color:#8A96B0; margin-bottom:22px;">clinical advisors</div>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:22px;">
+      <div class="scroll-reveal" style="background:#fff; border:1px solid #ECF0F7; border-radius:24px; padding:26px 24px;">
+        <div style="width:64px; height:64px; border-radius:20px; background:#E5EBFD; display:flex; align-items:center; justify-content:center; margin-bottom:18px;"><svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6l7-3z" stroke="#2F57E6" stroke-width="2" stroke-linejoin="round"></path><path d="M9 12l2 2 4-4" stroke="#2F57E6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+        <div style="font-size:19px; font-weight:800; letter-spacing:-0.2px;">movement-disorder neurologist</div><div style="font-size:14.5px; font-weight:700; color:#2F57E6; margin-top:3px;">clinical strategy &amp; safety</div><p style="font-size:14px; line-height:1.5; font-weight:500; color:#536084; margin:10px 0 0;">advises on dosing ethics, patient safety boundaries, and what clinicians actually need to see between visits.</p>
+      </div>
+      <div class="scroll-reveal scroll-reveal-delay-1" style="background:#fff; border:1px solid #ECF0F7; border-radius:24px; padding:26px 24px;">
+        <div style="width:64px; height:64px; border-radius:20px; background:#E7F4EC; display:flex; align-items:center; justify-content:center; margin-bottom:18px;"><svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.5-7-9.5A4.5 4.5 0 0 1 12 8a4.5 4.5 0 0 1 7 3.5C19 16.5 12 21 12 21z" stroke="#1F8A5B" stroke-width="2" stroke-linejoin="round"></path></svg></div>
+        <div style="font-size:19px; font-weight:800; letter-spacing:-0.2px;">specialist nurse</div><div style="font-size:14.5px; font-weight:700; color:#15724A; margin-top:3px;">patient experience &amp; care workflow</div><p style="font-size:14px; line-height:1.5; font-weight:500; color:#536084; margin:10px 0 0;">shapes how cadence fits into daily routines, from morning dosing to family communication and clinic handoffs.</p>
+      </div>
+      <div class="scroll-reveal scroll-reveal-delay-2" style="background:#fff; border:1px solid #ECF0F7; border-radius:24px; padding:26px 24px;">
+        <div style="width:64px; height:64px; border-radius:20px; background:#FBF1E1; display:flex; align-items:center; justify-content:center; margin-bottom:18px;"><svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M4 19V5h16v14M4 13h4l2 4 3-10 2 6h5" stroke="#B9700F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+        <div style="font-size:19px; font-weight:800; letter-spacing:-0.2px;">biomedical engineer</div><div style="font-size:14.5px; font-weight:700; color:#B9700F; margin-top:3px;">signal processing &amp; validation</div><p style="font-size:14px; line-height:1.5; font-weight:500; color:#536084; margin:10px 0 0;">validates model accuracy against ground-truth clinical recordings and ensures sensor pipelines are robust across patients.</p>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-reveal" style="max-width:980px; margin:0 auto; padding:40px 32px 90px;">
+    <div style="background:#F4F7FC; border:1px solid #ECF0F7; border-radius:30px; padding:44px 48px; text-align:center;">
+      <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:#8A96B0; margin-bottom:14px;">JOIN US</div>
+      <p style="font-size:19px; line-height:1.6; font-weight:500; color:#3A4A66; margin:0 auto; max-width:640px;">we're looking for people who care deeply about patient dignity and aren't afraid of hard technical problems. if you want to build something that actually matters, reach out.</p>
+      <button data-go="contact" style="margin-top:24px; background:#16203A; border:none; cursor:pointer; font-size:16px; font-weight:700; color:#fff; padding:14px 26px; border-radius:14px;">get in touch</button>
+    </div>
+  </div>
+  </div>
+  </div>
+
+  <!-- ============================ CONTACT ============================ -->
+  <div data-page="contact">
+  <div class="page-enter">
+  <div class="scroll-reveal" style="max-width:720px; margin:0 auto; padding:80px 32px 100px; text-align:center;">
+    <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:#2F57E6; margin-bottom:14px;">Early Access</div>
+    <h1 style="font-size: clamp(32px,6vw,54px); line-height: 1.06; font-weight: 900; letter-spacing: -1.4px; margin: 0 0 18px; font-style: italic; font-family: 'Newsreader',serif">Get ahead of the next off period.</h1>
+    <p style="font-size:20px; line-height:1.55; font-weight:500; color:#3A4A66; max-width:520px; margin:0 auto 36px;">Join the early access list. We'll reach out as Cadence is ready for you.</p>
+    <div style="display:flex; gap:12px; max-width:500px; margin:0 auto; flex-wrap:wrap; justify-content:center;">
+      <input id="wlEmail" placeholder="you@email.com" style="flex:1; min-width:220px; min-height:60px; padding:0 22px; font-family:inherit; font-size:18px; font-weight:500; color:#16203A; background:#fff; border:2px solid #DCE3EF; border-radius:18px; outline:none;">
+      <button id="wlBtn" style="min-height:60px; padding:0 30px; background:#2F57E6; border:none; border-radius:18px; font-size:18px; font-weight:700; color:#fff; cursor:pointer; box-shadow:0 14px 30px rgba(47,87,230,0.30);">Request access</button>
+    </div>
+    <div id="wlNote" style="font-size: 20px; font-weight: 500; color: #394a66; margin-top: 16px; font-family: 'Public Sans'; font-style: normal">We respect your privacy. Health data stays yours.</div>
+    <div id="waitlistCountRow2" style="display:none; align-items:center; justify-content:center; gap:8px; margin-top:12px;">
+      <span style="position:relative; width:8px; height:8px;"><span style="position:absolute; inset:0; border-radius:50%; background:#2F57E6; animation:cadPulse 2.4s ease-out infinite;"></span><span style="position:relative; display:block; width:8px; height:8px; border-radius:50%; background:#2F57E6;"></span></span>
+      <span id="waitlistCountLabel2" style="font-size:13.5px; font-weight:700; color:#8A96B0;"></span>
+    </div>
+    <div class="scroll-reveal scroll-reveal-delay-2" style="display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:60px; text-align:left;" data-stack>
+      <div class="scroll-reveal" style="background:#F4F7FC; border-radius:20px; padding:24px;"><div style="font-size:14px; font-weight:800; color:#8A96B0; letter-spacing:0.6px;">PATIENTS</div><div style="font-size:17px; font-weight:700; margin-top:8px;">hello@cadence.health</div></div>
+      <div class="scroll-reveal scroll-reveal-delay-1" style="background:#F4F7FC; border-radius:20px; padding:24px;"><div style="font-size:14px; font-weight:800; color:#8A96B0; letter-spacing:0.6px;">CLINICIANS</div><div style="font-size:17px; font-weight:700; margin-top:8px;">clinics@cadence.health</div></div>
+      <div class="scroll-reveal scroll-reveal-delay-2" style="background:#F4F7FC; border-radius:20px; padding:24px;"><div style="font-size:14px; font-weight:800; color:#8A96B0; letter-spacing:0.6px;">PRESS</div><div style="font-size:17px; font-weight:700; margin-top:8px;">press@cadence.health</div></div>
+    </div>
+  </div>
+  </div>
+  </div>
+
+  <!-- ============================ ORDER (access-code gated) — ADDED ============================ -->
+  <div data-page="order">
+  <div class="page-enter">
+  <div class="scroll-reveal" style="max-width:520px; margin:0 auto; padding:80px 32px 110px; text-align:center;">
+    <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:#2F57E6; margin-bottom:14px;">EARLY ACCESS ORDER</div>
+    <h1 style="font-size: clamp(30px,5.6vw,46px); line-height: 1.08; font-weight: 800; letter-spacing: -1.2px; margin: 0 0 16px; font-family: 'Newsreader',serif; font-style: italic">Reserve your kit.</h1>
+    <p style="font-size:18px; line-height:1.55; font-weight:500; color:#3A4A66; max-width:440px; margin:0 auto 30px;">Early access is invite-only. Enter the code we sent you to unlock your order.</p>
+
+    <div id="codeCard">
+      <input id="codeInput" class="modal-input" placeholder="CAD-XXXX-XXXX" maxlength="13" autocomplete="off" spellcheck="false">
+      <div id="codeNote" style="font-size:14px; font-weight:600; color:#C2410C; min-height:18px; margin-top:12px;"></div>
+      <button id="codeBtn" style="width:100%; min-height:58px; margin-top:14px; background:#2F57E6; border:none; border-radius:16px; font-size:17px; font-weight:700; color:#fff; cursor:pointer; box-shadow:0 14px 30px rgba(47,87,230,0.28);">Unlock my order</button>
     </div>
 
-    <div class="order-card" id="orderCard">
-      <h2>reserve your kit</h2>
-      <p class="sub">your code is valid. complete your one-time order below — you'll be redirected to secure checkout.</p>
-      <div class="price" id="priceLabel">$299 <small>one-time</small></div>
-      <p class="kit">cadence band kit — wrist + ankle bands, early-access batch.</p>
-      <button class="btn btn-primary full" id="orderBtn">continue to secure checkout →</button>
-      <div class="note" id="orderNote" style="text-align:center;min-height:18px;margin-top:12px"></div>
+    <div id="orderCard" style="display:none;">
+      <div style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:30px 28px; box-shadow:0 18px 40px rgba(28,46,92,0.07); text-align:left;">
+        <div style="font-size:40px; font-weight:800; letter-spacing:-1px; margin:4px 0 2px;" id="priceLabel">$299 <small style="font-size:15px; font-weight:600; color:#536084;">one-time</small></div>
+        <p style="font-size:14px; color:#536084; font-weight:600; margin:0 0 20px;">cadence band kit — wrist + ankle bands, early-access batch.</p>
+        <button id="orderBtn" style="width:100%; min-height:58px; background:#2F57E6; border:none; border-radius:16px; font-size:17px; font-weight:700; color:#fff; cursor:pointer; box-shadow:0 14px 30px rgba(47,87,230,0.28);">Continue to secure checkout →</button>
+        <div id="orderNote" style="font-size:14px; font-weight:600; color:#C2410C; min-height:18px; margin-top:12px; text-align:center;"></div>
+      </div>
     </div>
+  </div>
+  </div>
+  </div>
+
+  <!-- ===================== FOOTER ===================== -->
+  <div style="background:#16203A;">
+    <div style="max-width:1200px; margin:0 auto; padding:48px 32px; display:flex; align-items:flex-start; justify-content:space-between; gap:30px; flex-wrap:wrap;">
+      <div>
+        <div style="display:flex; align-items:center; gap:11px; margin-bottom:14px;">
+          <span style="width:34px; height:34px; border-radius:10px; background:#243355; display:flex; align-items:center; justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M2 12h3.5l2-6 3.2 13 3-9 2.3 4.5H22" stroke="#7CF0B7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+          <span style="font-size:20px; font-weight:800; color:#fff;">Cadence</span>
+        </div>
+        <div style="font-size:15px; font-weight:500; color:#8597B5; max-width:300px; line-height:1.5;">Movement-aware medication timing for people living with Parkinson's.</div>
+      </div>
+      <div style="display:flex; gap:54px; flex-wrap:wrap;">
+        <div style="display:flex; flex-direction:column; gap:12px; align-items:flex-start;">
+          <span style="font-size:13px; font-weight:700; letter-spacing:1px; color:#5E6E8C;">PRODUCT</span>
+          <button data-go="how" style="background:none; border:none; cursor:pointer; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">How it works</button>
+          <button data-go="tech" style="background:none; border:none; cursor:pointer; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">Technology</button>
+          <button data-go="roadmap" style="background:none; border:none; cursor:pointer; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">Roadmap</button>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:12px; align-items:flex-start;">
+          <span style="font-size:13px; font-weight:700; letter-spacing:1px; color:#5E6E8C;">COMPANY</span>
+          <button data-go="story" style="background:none; border:none; cursor:pointer; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">Our story</button>
+          <button data-go="team" style="background:none; border:none; cursor:pointer; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">Team</button>
+          <button data-go="contact" style="background:none; border:none; cursor:pointer; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">Contact</button>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:12px; align-items:flex-start;">
+          <span style="font-size:13px; font-weight:700; letter-spacing:1px; color:#5E6E8C;">ORDER</span>
+          <button data-go="order" style="background:none; border:none; cursor:pointer; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">Have an access code?</button>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid #243355;"><div style="max-width:1200px; margin:0 auto; padding:22px 32px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;"><span style="font-size:14px; color:#6E7E9C;">© 2026 Cadence Health, Inc.</span><span style="font-size:14px; color:#6E7E9C;">*not a medical device. cadence does not provide medical advice, nor does it change perscriptions beyond what neurologists allow.</span></div></div>
   </div>
 </div>
 
@@ -239,92 +690,153 @@
 <script>
 (function(){
   var CFG = window.CADENCE_CONFIG || {};
-  // ---- Formspree waitlist ----
-  var FORMSPREE = "https://formspree.io/f/mzdlgbkr";
-  var wlForm = document.getElementById('wlForm');
-  var wlNote = document.getElementById('wlNote');
-  var wlBtn  = document.getElementById('wlBtn');
-  wlForm.addEventListener('submit', function(e){
-    e.preventDefault();
-    var email = document.getElementById('wlEmail').value.trim();
-    if(!email) return;
-    wlBtn.textContent = 'sending...'; wlBtn.disabled = true;
-    fetch(FORMSPREE, {method:'POST', headers:{'Accept':'application/json','Content-Type':'application/json'}, body:JSON.stringify({email:email})})
-      .then(function(r){ if(!r.ok) throw 0; return r; })
-      .then(function(){ wlNote.textContent = "you're on the list — we'll be in touch soon."; wlNote.className='note ok'; wlBtn.textContent="you're on the list"; })
-      .catch(function(){ wlNote.textContent = 'something went wrong. please try again.'; wlNote.className='note err'; wlBtn.textContent='request access'; wlBtn.disabled=false; });
+  var FORMSPREE = 'https://formspree.io/f/mzdlgbkr';
+
+  // ---------------- page routing ----------------
+  var PAGES = ['home','how','tech','roadmap','story','team','contact','order'];
+  var NAV_PAGES = ['story','how','tech','roadmap','team'];
+
+  function setActiveNav(page) {
+    document.querySelectorAll('.navlink').forEach(function(btn){
+      var on = btn.getAttribute('data-go') === page;
+      btn.style.color = on ? '#16203A' : '#3A4A66';
+      btn.style.fontWeight = on ? '700' : '600';
+    });
+  }
+
+  function go(page) {
+    if (PAGES.indexOf(page) === -1) page = 'home';
+    document.querySelectorAll('[data-page]').forEach(function(el){
+      el.classList.toggle('active', el.getAttribute('data-page') === page);
+    });
+    setActiveNav(page);
+    closeMenu();
+    try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) { window.scrollTo(0,0); }
+    setTimeout(revealAll, 50); setTimeout(revealAll, 200); setTimeout(revealAll, 500);
+  }
+  document.addEventListener('click', function(e){
+    var t = e.target.closest('[data-go]');
+    if (t) { e.preventDefault(); go(t.getAttribute('data-go')); }
   });
 
-  // ---- product image (easy swap) ----
-  if (CFG.PRODUCT_IMAGE){
-    var img = document.getElementById('productImg');
-    img.onload = function(){ img.style.display='block'; document.getElementById('productPh').style.display='none'; };
-    img.onerror = function(){ /* keep placeholder */ };
-    img.src = CFG.PRODUCT_IMAGE;
+  // ---------------- mobile nav ----------------
+  var navToggle = document.getElementById('navToggle');
+  var navLinks = document.getElementById('navLinks');
+  var navBackdrop = document.getElementById('navBackdrop');
+  var menuOpen = false;
+  function setMenu(open) {
+    menuOpen = open;
+    navToggle.setAttribute('data-menu-open', open ? 'true' : 'false');
+    navLinks.setAttribute('data-open', open ? 'true' : 'false');
+    navBackdrop.setAttribute('data-open', open ? 'true' : 'false');
   }
-  if (CFG.PRICE_DISPLAY){
-    document.getElementById('priceLabel').innerHTML = CFG.PRICE_DISPLAY + ' <small>one-time</small>';
-  }
+  function closeMenu() { setMenu(false); }
+  navToggle.addEventListener('click', function(){ setMenu(!menuOpen); });
+  navBackdrop.addEventListener('click', closeMenu);
 
-  // ---- order modal + code gate ----
-  var ov = document.getElementById('ov');
+  // ---------------- waitlist (Formspree) ----------------
+  function wireWaitlist(emailId, btnId, noteId) {
+    var emailEl = document.getElementById(emailId);
+    var btnEl = document.getElementById(btnId);
+    var noteEl = document.getElementById(noteId);
+    if (!emailEl || !btnEl) return;
+    btnEl.addEventListener('click', function(){
+      var email = emailEl.value.trim();
+      if (!email) return;
+      btnEl.textContent = 'Sending...'; btnEl.disabled = true;
+      fetch(FORMSPREE, { method:'POST', headers:{'Accept':'application/json','Content-Type':'application/json'}, body: JSON.stringify({ email: email }) })
+        .then(function(r){ if(!r.ok) throw 0; return r; })
+        .then(function(){
+          if (noteEl) { noteEl.textContent = "Thanks, we'll be in touch soon."; }
+          btnEl.textContent = "You're on the list";
+        })
+        .catch(function(){
+          if (noteEl) { noteEl.textContent = 'Something went wrong. Please try again.'; }
+          btnEl.textContent = 'Request access'; btnEl.disabled = false;
+        });
+    });
+  }
+  wireWaitlist('wlEmail', 'wlBtn', 'wlNote');
+
+  // ---------------- order / access-code gate ----------------
+  if (CFG.PRICE_DISPLAY) {
+    var pl = document.getElementById('priceLabel');
+    if (pl) pl.innerHTML = CFG.PRICE_DISPLAY + ' <small style="font-size:15px;font-weight:600;color:#536084;">one-time</small>';
+  }
+  function fnHeaders(){ return {'Content-Type':'application/json','Authorization':'Bearer '+(CFG.SUPABASE_ANON_KEY||''),'apikey':(CFG.SUPABASE_ANON_KEY||'')}; }
+  function notConfigured(){ return !CFG.FUNCTIONS_URL || CFG.FUNCTIONS_URL.indexOf('YOUR-PROJECT-REF')>-1; }
+
+  var validatedCode = null;
+  var codeInput = document.getElementById('codeInput');
+  var codeBtn = document.getElementById('codeBtn');
+  var codeNote = document.getElementById('codeNote');
   var codeCard = document.getElementById('codeCard');
   var orderCard = document.getElementById('orderCard');
-  var codeNote = document.getElementById('codeNote');
-  var orderNote = document.getElementById('orderNote');
-  var codeInput = document.getElementById('codeInput');
-  var validatedCode = null;
-
-  function openOv(){ ov.classList.add('open'); codeCard.classList.remove('hide'); orderCard.classList.remove('show'); codeNote.textContent=''; setTimeout(function(){codeInput.focus();},80); }
-  function closeOv(){ ov.classList.remove('open'); }
-  document.getElementById('haveCode').addEventListener('click', openOv);
-  document.getElementById('haveCodeNav').addEventListener('click', openOv);
-  document.getElementById('ovClose').addEventListener('click', closeOv);
-  ov.addEventListener('click', function(e){ if(e.target===ov) closeOv(); });
-
-  function fnHeaders(){
-    return {'Content-Type':'application/json','Authorization':'Bearer '+(CFG.SUPABASE_ANON_KEY||''),'apikey':(CFG.SUPABASE_ANON_KEY||'')};
-  }
-  function notConfigured(){
-    return !CFG.FUNCTIONS_URL || CFG.FUNCTIONS_URL.indexOf('YOUR-PROJECT-REF')>-1;
-  }
-
-  var codeBtn = document.getElementById('codeBtn');
-  codeBtn.addEventListener('click', function(){
-    var code = codeInput.value.trim().toUpperCase();
-    if(!code){ codeNote.textContent='please enter your code.'; codeNote.className='note err'; return; }
-    if(notConfigured()){ codeNote.textContent='ordering not configured yet — set FUNCTIONS_URL in config.js.'; codeNote.className='note err'; return; }
-    codeBtn.textContent='checking...'; codeBtn.disabled=true; codeNote.textContent='';
-    fetch(CFG.FUNCTIONS_URL+'/validate-code', {method:'POST', headers:fnHeaders(), body:JSON.stringify({code:code})})
-      .then(function(r){return r.json();})
-      .then(function(d){
-        codeBtn.textContent='unlock my order'; codeBtn.disabled=false;
-        if(d.valid){ validatedCode=code; codeCard.classList.add('hide'); orderCard.classList.add('show'); }
-        else if(d.reason==='already_used'){ codeNote.textContent='this code has already been used.'; codeNote.className='note err'; }
-        else { codeNote.textContent='that code is not valid. check it and try again.'; codeNote.className='note err'; }
-      })
-      .catch(function(){ codeBtn.textContent='unlock my order'; codeBtn.disabled=false; codeNote.textContent='something went wrong. please try again.'; codeNote.className='note err'; });
-  });
-  codeInput.addEventListener('keydown', function(e){ if(e.key==='Enter') codeBtn.click(); });
-
   var orderBtn = document.getElementById('orderBtn');
-  orderBtn.addEventListener('click', function(){
-    if(!validatedCode) return;
-    orderBtn.textContent='redirecting...'; orderBtn.disabled=true; orderNote.textContent='';
-    fetch(CFG.FUNCTIONS_URL+'/create-checkout', {method:'POST', headers:fnHeaders(), body:JSON.stringify({code:validatedCode})})
-      .then(function(r){return r.json();})
-      .then(function(d){
-        if(d.url){ window.location.href = d.url; }
-        else { orderBtn.textContent='continue to secure checkout →'; orderBtn.disabled=false; orderNote.textContent = d.error==='already_used' ? 'this code has already been used.' : 'could not start checkout. please try again.'; orderNote.className='note err'; }
-      })
-      .catch(function(){ orderBtn.textContent='continue to secure checkout →'; orderBtn.disabled=false; orderNote.textContent='something went wrong. please try again.'; orderNote.className='note err'; });
-  });
+  var orderNote = document.getElementById('orderNote');
 
-  // ---- return-from-checkout banners ----
+  if (codeBtn) {
+    codeBtn.addEventListener('click', function(){
+      var code = codeInput.value.trim().toUpperCase();
+      if (!code) { codeNote.textContent = 'Please enter your code.'; return; }
+      if (notConfigured()) { codeNote.textContent = 'Ordering not configured yet.'; return; }
+      codeBtn.textContent = 'Checking...'; codeBtn.disabled = true; codeNote.textContent = '';
+      fetch(CFG.FUNCTIONS_URL+'/validate-code', { method:'POST', headers:fnHeaders(), body: JSON.stringify({ code: code }) })
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          codeBtn.textContent = 'Unlock my order'; codeBtn.disabled = false;
+          if (d.valid) { validatedCode = code; codeCard.style.display = 'none'; orderCard.style.display = 'block'; }
+          else if (d.reason === 'already_used') { codeNote.textContent = 'This code has already been used.'; }
+          else { codeNote.textContent = 'That code is not valid. Check it and try again.'; }
+        })
+        .catch(function(){ codeBtn.textContent = 'Unlock my order'; codeBtn.disabled = false; codeNote.textContent = 'Something went wrong. Please try again.'; });
+    });
+    codeInput.addEventListener('keydown', function(e){ if (e.key === 'Enter') codeBtn.click(); });
+  }
+  if (orderBtn) {
+    orderBtn.addEventListener('click', function(){
+      if (!validatedCode) return;
+      orderBtn.textContent = 'Redirecting...'; orderBtn.disabled = true; orderNote.textContent = '';
+      fetch(CFG.FUNCTIONS_URL+'/create-checkout', { method:'POST', headers:fnHeaders(), body: JSON.stringify({ code: validatedCode }) })
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          if (d.url) { window.location.href = d.url; }
+          else {
+            orderBtn.textContent = 'Continue to secure checkout →'; orderBtn.disabled = false;
+            orderNote.textContent = d.error === 'already_used' ? 'This code has already been used.' : 'Could not start checkout. Please try again.';
+          }
+        })
+        .catch(function(){ orderBtn.textContent = 'Continue to secure checkout →'; orderBtn.disabled = false; orderNote.textContent = 'Something went wrong. Please try again.'; });
+    });
+  }
+
+  // ---------------- success / cancel banner ----------------
   var params = new URLSearchParams(location.search);
   var banner = document.getElementById('banner');
-  if(params.get('order')==='success'){ banner.textContent='✓ thank you — your order is confirmed. we\'ll email you with next steps.'; banner.className='banner success show'; }
-  else if(params.get('order')==='cancelled'){ banner.textContent='your checkout was cancelled — your code is still valid if you\'d like to try again.'; banner.className='banner cancel show'; }
+  if (params.get('order') === 'success') { banner.textContent = '✓ Thank you — your order is confirmed. We\'ll email you with next steps.'; banner.className = 'banner success show'; }
+  else if (params.get('order') === 'cancelled') { banner.textContent = 'Your checkout was cancelled — your code is still valid if you\'d like to try again.'; banner.className = 'banner cancel show'; }
+
+  // ---------------- scroll reveal ----------------
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting) { entry.target.classList.add('visible'); obs.unobserve(entry.target); }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  function revealAll() {
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    document.querySelectorAll('.scroll-reveal:not(.visible)').forEach(function(el){
+      if (el.closest('[data-page]') && !el.closest('[data-page].active')) return;
+      obs.observe(el);
+      var r = el.getBoundingClientRect();
+      if (r.top < vh && r.bottom > 0) { el.classList.add('visible'); obs.unobserve(el); }
+    });
+  }
+  window.addEventListener('scroll', function(){ revealAll(); }, { passive: true });
+  setInterval(revealAll, 1500);
+
+  // ---------------- init ----------------
+  go('home');
 })();
 </script>
 </body>
