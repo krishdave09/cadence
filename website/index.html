@@ -967,11 +967,17 @@
       .catch(function(){ clearSession(); renderLogin(); });
   }
 
-  // ---------------- success / cancel banner + post-payment account ----------------
+  // ---------------- routing: query params + clean paths + post-payment ----------------
+  // Works with both /?order=success&session_id=... and clean paths like
+  // /success, /cancelled, /account, /policies (needs a Render rewrite of
+  // /* -> /index.html so the host serves this SPA for every path).
   var params = new URLSearchParams(location.search);
+  var path = location.pathname.replace(/\/+$/, '').toLowerCase();
   var banner = document.getElementById('banner');
   var startPage = 'home';
-  if (params.get('order') === 'success') {
+  var isSuccess = params.get('order') === 'success' || path === '/success';
+  var isCancelled = params.get('order') === 'cancelled' || path === '/cancelled';
+  if (isSuccess) {
     banner.textContent = '✓ Payment confirmed — finish setting up your account below.'; banner.className = 'banner success show';
     startPage = 'account'; nextAccountMode = 'create';
     var sid = params.get('session_id');
@@ -982,8 +988,14 @@
         .then(function(d){ if(d){ pendingOrder.email=d.email||''; pendingOrder.stripe_customer_id=d.stripe_customer_id||null; var ef=document.getElementById('acEmail'); if(ef && !ef.value && pendingOrder.email) ef.value=pendingOrder.email; } })
         .catch(function(){});
     }
-  } else if (params.get('order') === 'cancelled') {
+  } else if (isCancelled) {
     banner.textContent = 'Your checkout was cancelled — your code is still valid if you\'d like to try again.'; banner.className = 'banner cancel show';
+  } else if (path === '/account') {
+    startPage = 'account';
+  } else if (path === '/policies') {
+    startPage = 'policies';
+  } else if (path === '/order') {
+    startPage = 'order';
   }
 
   // ---------------- scroll reveal ----------------

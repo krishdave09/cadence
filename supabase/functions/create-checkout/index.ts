@@ -75,8 +75,8 @@ Deno.serve(async (req) => {
       customer_creation: "always",
       // Carry the code through to the webhook so we can redeem on payment.
       metadata: { access_code: norm },
-      success_url: `${SITE_URL}/?order=success&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${SITE_URL}/?order=cancelled`,
+      success_url: `${SITE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${SITE_URL}/cancelled`,
     });
   } catch (_e) {
     return json({ error: "stripe_error" }, 502);
