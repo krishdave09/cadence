@@ -22,13 +22,14 @@
   button:hover, a:hover { transform: translateY(-2px); }
   button:active, a:active { transform: scale(0.96) translateY(0); }
   .page-enter { animation: cadReveal 0.55s cubic-bezier(0.22,0.61,0.36,1) both; }
+  .acct-anim { animation: cadReveal 0.32s cubic-bezier(0.22,0.61,0.36,1) both; }
   .scroll-reveal { opacity: 0; transform: translateY(48px) scale(0.98); transition: opacity 0.9s cubic-bezier(0.22,0.61,0.36,1), transform 0.9s cubic-bezier(0.22,0.61,0.36,1); }
   .scroll-reveal.visible { opacity: 1; transform: translateY(0) scale(1); animation:none; }
   .scroll-reveal-delay-1 { transition-delay: 0.08s; } .scroll-reveal-delay-2 { transition-delay: 0.16s; }
   .scroll-reveal-delay-3 { transition-delay: 0.24s; }
   @keyframes srSafety { from { opacity:0; } to { opacity:1; } }
   .scroll-reveal:not(.visible) { animation: srSafety 0.01s 4s forwards; }
-  @media (prefers-reduced-motion: reduce) { .scroll-reveal, [data-site-root] > div { opacity:1!important; transform:none!important; transition:none!important; animation:none!important; } }
+  @media (prefers-reduced-motion: reduce) { .scroll-reveal, .acct-anim, [data-site-root] > div { opacity:1!important; transform:none!important; transition:none!important; animation:none!important; } }
   [data-navtoggle] { display: none; }
   @media (max-width: 980px) {
     [data-stack] { grid-template-columns: 1fr !important; gap: 24px !important; }
@@ -753,7 +754,7 @@
           <span style="font-size:13px; font-weight:700; letter-spacing:1px; color:#5E6E8C;">COMPANY</span>
           <button data-go="story" style="background:none; border:none; cursor:pointer; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">Our story</button>
           <button data-go="team" style="background:none; border:none; cursor:pointer; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">Team</button>
-          <button data-go="contact" style="background:none; border:none; cursor:pointer; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">Contact</button>
+          <button data-go="support" style="background:none; border:none; cursor:pointer; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">Contact</button>
         </div>
         <div style="display:flex; flex-direction:column; gap:12px; align-items:flex-start;">
           <span style="font-size:13px; font-weight:700; letter-spacing:1px; color:#5E6E8C;">ACCOUNT</span>
@@ -763,7 +764,6 @@
         <div style="display:flex; flex-direction:column; gap:12px; align-items:flex-start;">
           <span style="font-size:13px; font-weight:700; letter-spacing:1px; color:#5E6E8C;">LEGAL</span>
           <button data-go="policies" style="background:none; border:none; cursor:pointer; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">Policies &amp; returns</button>
-          <button data-go="support" style="background:none; border:none; cursor:pointer; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">Contact us</button>
         </div>
       </div>
     </div>
@@ -931,7 +931,7 @@
   function renderAccount(mode){
     if (!accountView) return;
     if (!apiReady()){
-      accountView.innerHTML = '<div style="'+CARD+'"><h1 style="'+H+'">Accounts coming soon</h1><p style="font-size:16px; color:#3A4A66; line-height:1.55; margin:0;">The account system isn\'t connected yet. Please check back shortly.</p></div>';
+      accountView.innerHTML = '<div class="acct-anim" style="'+CARD+'"><h1 style="'+H+'">Accounts coming soon</h1><p style="font-size:16px; color:#3A4A66; line-height:1.55; margin:0;">The account system isn\'t connected yet. Please check back shortly.</p></div>';
       return;
     }
     if (mode === 'create') return renderCreate(!!pendingOrder, 'patient');
@@ -948,7 +948,8 @@
     var html = banner+'<h1 style="'+H+' text-align:center;">Create your account</h1>'+
       '<p style="text-align:center; font-size:16px; color:#3A4A66; line-height:1.55; margin:0 0 22px;">'+intro+'</p>'+
       '<div style="'+CARD+'">'+
-        '<label style="'+LABEL+'">I am a…</label><select id="acRole" style="'+SELECT+'">'+roleOpts(!isPayment, role)+'</select>';
+        '<label style="'+LABEL+'">I am a…</label><select id="acRole" style="'+SELECT+'">'+roleOpts(!isPayment, role)+'</select>'+
+        '<div class="acct-anim">';
 
     if (role === 'clinician') {
       html +=
@@ -968,10 +969,11 @@
         '<label style="'+LABEL+'">Password</label><input id="acPass" type="password" style="'+INPUT+'" placeholder="At least 8 characters" autocomplete="new-password">'+
         '<button id="acSubmit" style="'+BTN+'">Create account</button>'+ noteEl();
     }
+    html += '</div>'; // close .acct-anim
     if (!isPayment) {
       html += '<p style="text-align:center; font-size:15px; font-weight:600; color:#536084; margin:16px 0 0;">Already have an account? <a href="#" id="acGoLogin" style="color:#2F57E6; font-weight:700;">Sign in</a></p>';
     }
-    html += '</div>';
+    html += '</div>'; // close CARD
     accountView.innerHTML = html;
 
     document.getElementById('acRole').addEventListener('change', function(e){ renderCreate(isPayment, e.target.value); });
@@ -1014,16 +1016,16 @@
       .catch(function(){ btn.textContent='Submit application'; btn.disabled=false; setNote('Something went wrong. Please try again.'); });
   }
   function renderApplied(){
-    accountView.innerHTML='<div style="'+CARD+' text-align:center;"><div style="font-size:46px; margin-bottom:6px;">✓</div><h1 style="'+H+'">Application received</h1><p style="font-size:16px; color:#3A4A66; line-height:1.6; margin:0 0 8px;">Thanks — our team reviews every clinician application by hand. We\'ll follow up at the email you provided once it\'s approved.</p><button data-go="home" style="'+BTN+'">Back to home</button></div>';
+    accountView.innerHTML='<div class="acct-anim" style="'+CARD+' text-align:center;"><div style="font-size:46px; margin-bottom:6px;">✓</div><h1 style="'+H+'">Application received</h1><p style="font-size:16px; color:#3A4A66; line-height:1.6; margin:0 0 8px;">Thanks — our team reviews every clinician application by hand. We\'ll follow up at the email you provided once it\'s approved.</p><button data-go="home" style="'+BTN+'">Back to home</button></div>';
   }
   function renderDone(){
-    accountView.innerHTML='<div style="'+CARD+' text-align:center;"><div style="font-size:46px; margin-bottom:6px;">🎉</div><h1 style="'+H+'">You\'re all set</h1><p style="font-size:16px; color:#3A4A66; line-height:1.6; margin:0 0 8px;">Your Cadence account is ready. Use the same email and password to sign in to the Cadence app when your kit arrives.</p><button data-go="home" style="'+BTN+'">Back to home</button></div>';
+    accountView.innerHTML='<div class="acct-anim" style="'+CARD+' text-align:center;"><div style="font-size:46px; margin-bottom:6px;">🎉</div><h1 style="'+H+'">You\'re all set</h1><p style="font-size:16px; color:#3A4A66; line-height:1.6; margin:0 0 8px;">Your Cadence account is ready. Use the same email and password to sign in to the Cadence app when your kit arrives.</p><button data-go="home" style="'+BTN+'">Back to home</button></div>';
   }
   function renderLogin(){
     accountView.innerHTML=
       '<h1 style="'+H+' text-align:center;">Sign in</h1>'+
       '<p style="text-align:center; font-size:16px; color:#3A4A66; line-height:1.55; margin:0 0 22px;">Access your Cadence account.</p>'+
-      '<div style="'+CARD+'">'+
+      '<div class="acct-anim" style="'+CARD+'">'+
         '<label style="'+LABEL+'">I am a…</label><select id="acRole" style="'+SELECT+'">'+roleOpts(true)+'</select>'+
         '<label style="'+LABEL+'">Email</label><input id="acEmail" type="email" style="'+INPUT+'" placeholder="you@email.com" autocomplete="email">'+
         '<label style="'+LABEL+'">Password</label><input id="acPass" type="password" style="'+INPUT+'" placeholder="Your password" autocomplete="current-password">'+
@@ -1045,7 +1047,7 @@
 
   // ---- profile: role-aware linking UI (caregiver<->patient) ----
   function renderProfile(){
-    accountView.innerHTML='<div style="'+CARD+'"><p style="font-size:16px; color:#536084; margin:0;">Loading your account…</p></div>';
+    accountView.innerHTML='<div class="acct-anim" style="'+CARD+'"><p style="font-size:16px; color:#536084; margin:0;">Loading your account…</p></div>';
     var token = localStorage.getItem('cadence_token');
     Promise.all([
       fetch(API+'/v1/auth/me',{ headers:{'Authorization':'Bearer '+token} }).then(function(r){ if(!r.ok) throw 0; return r.json(); }),
@@ -1053,7 +1055,7 @@
     ]).then(function(res){
       var u=res[0], links=res[1];
       var rl={patient:'Patient',caregiver:'Caregiver',clinician:'Clinician'}[u.user_type]||u.user_type;
-      var html='<h1 style="'+H+'">Your account</h1><div style="'+CARD+'">'+row('Name',esc(u.name))+row('Email',esc(u.email))+row('Role',esc(rl))+(u.stripe_customer_id?row('Billing','Linked — ready for future purchases'):'');
+      var html='<h1 style="'+H+'">Your account</h1><div class="acct-anim" style="'+CARD+'">'+row('Name',esc(u.name))+row('Email',esc(u.email))+row('Role',esc(rl))+(u.stripe_customer_id?row('Billing','Linked — ready for future purchases'):'');
 
       if (links && u.user_type === 'patient') {
         html += '<div style="margin-top:18px; padding-top:18px; border-top:1px solid #F0F3F8;">';
