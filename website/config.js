@@ -12,8 +12,7 @@ window.CADENCE_CONFIG = {
   FUNCTIONS_URL: "https://nomgiftvoegzoelhrzqz.supabase.co/functions/v1",
   // FastAPI backend base URL (your Render service). Used for account
   // creation/login that syncs with the patient/caregiver/clinician apps.
-  // e.g. "https://cadence-api.onrender.com" — FILL THIS IN after the API deploys.
-  API_URL: "",
+  API_URL: "https://cadence-platform-wxr4.onrender.com",
   // Supabase publishable (anon) key — public, safe in the browser. RLS keeps
   // the access_codes table unreadable from here.
   SUPABASE_ANON_KEY: "sb_publishable_BfVKpBmH9l3SQOUEXXuBSQ_uknDBYZ5",
