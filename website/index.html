@@ -662,6 +662,38 @@
   </div>
   </div>
 
+  <!-- ===================== CONTACT US ===================== -->
+  <div data-page="support">
+  <div class="page-enter">
+  <div class="scroll-reveal" style="max-width:680px; margin:0 auto; padding:72px 32px 110px;">
+    <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:#2F57E6; margin-bottom:14px;">GET IN TOUCH</div>
+    <h1 style="font-size: clamp(30px,5.6vw,46px); line-height:1.08; font-weight:800; letter-spacing:-1.2px; margin:0 0 12px; font-family:'Newsreader',serif; font-style:italic;">Contact us</h1>
+    <p style="font-size:15px; font-weight:600; color:#B45309; background:#FEF3E2; border:1px solid #F6DEB5; border-radius:12px; padding:12px 16px; margin:0 0 30px;">Placeholder contact details — replace with real phone/address before launch.</p>
+
+    <div style="display:flex; flex-direction:column; gap:14px; margin-bottom:34px;">
+      <div style="background:#F4F7FC; border-radius:20px; padding:22px 24px; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;">
+        <div><div style="font-size:14px; font-weight:800; color:#8A96B0; letter-spacing:0.6px;">PATIENTS &amp; FAMILIES</div><div style="font-size:18px; font-weight:700; margin-top:4px;">hello@cadence.health</div></div>
+      </div>
+      <div style="background:#F4F7FC; border-radius:20px; padding:22px 24px; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;">
+        <div><div style="font-size:14px; font-weight:800; color:#8A96B0; letter-spacing:0.6px;">CLINICIANS</div><div style="font-size:18px; font-weight:700; margin-top:4px;">clinics@cadence.health</div></div>
+      </div>
+      <div style="background:#F4F7FC; border-radius:20px; padding:22px 24px; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;">
+        <div><div style="font-size:14px; font-weight:800; color:#8A96B0; letter-spacing:0.6px;">PRESS &amp; PARTNERSHIPS</div><div style="font-size:18px; font-weight:700; margin-top:4px;">press@cadence.health</div></div>
+      </div>
+      <div style="background:#F4F7FC; border-radius:20px; padding:22px 24px; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;">
+        <div><div style="font-size:14px; font-weight:800; color:#8A96B0; letter-spacing:0.6px;">PHONE</div><div style="font-size:18px; font-weight:700; margin-top:4px; color:#8A96B0;">(placeholder — add real number)</div></div>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid #ECF0F7; padding-top:26px;">
+      <div style="font-size:14px; font-weight:800; color:#8A96B0; letter-spacing:0.6px; margin-bottom:10px;">COMPANY</div>
+      <p style="font-size:16px; line-height:1.6; color:#3A4A66; margin:0;">Cadence Health, Inc.<br><span style="color:#8A96B0;">(placeholder mailing address — add real address)</span></p>
+      <p style="font-size:15px; font-weight:600; color:#536084; margin:14px 0 0;">Hours: (placeholder — e.g. Mon–Fri, 9am–6pm ET)</p>
+    </div>
+  </div>
+  </div>
+  </div>
+
   <!-- ===================== POLICIES ===================== -->
   <div data-page="policies">
   <div class="page-enter">
@@ -731,6 +763,7 @@
         <div style="display:flex; flex-direction:column; gap:12px; align-items:flex-start;">
           <span style="font-size:13px; font-weight:700; letter-spacing:1px; color:#5E6E8C;">LEGAL</span>
           <button data-go="policies" style="background:none; border:none; cursor:pointer; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">Policies &amp; returns</button>
+          <button data-go="support" style="background:none; border:none; cursor:pointer; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">Contact us</button>
         </div>
       </div>
     </div>
@@ -745,7 +778,7 @@
   var FORMSPREE = 'https://formspree.io/f/mzdlgbkr';
 
   // ---------------- page routing ----------------
-  var PAGES = ['home','how','tech','roadmap','story','team','contact','order','account','policies'];
+  var PAGES = ['home','how','tech','roadmap','story','team','contact','order','account','policies','support'];
   var NAV_PAGES = ['story','how','tech','roadmap','team'];
 
   function setActiveNav(page) {
@@ -885,9 +918,15 @@
   var LABEL='display:block; font-size:13px; font-weight:700; letter-spacing:0.4px; color:#536084; margin:14px 0 6px;';
   var INPUT='width:100%; min-height:52px; border:2px solid #DCE3EF; border-radius:14px; padding:0 16px; font-family:inherit; font-size:16px; font-weight:500; color:#16203A; background:#fff; box-sizing:border-box;';
   var SELECT='width:100%; min-height:52px; border:2px solid #DCE3EF; border-radius:14px; padding:0 14px; font-family:inherit; font-size:16px; font-weight:600; color:#16203A; background:#fff;';
-  function noteEl(){ return '<div id="acctNote" style="font-size:14px; font-weight:600; color:#C2410C; min-height:18px; margin-top:12px;"></div>'; }
-  function roleOpts(withClin){ var o='<option value="patient">Patient (person with Parkinson\'s)</option><option value="caregiver">Caregiver / family</option>'; if(withClin) o+='<option value="clinician">Clinician</option>'; return o; }
+  function noteEl(id){ return '<div id="'+(id||'acctNote')+'" style="font-size:14px; font-weight:600; color:#C2410C; min-height:18px; margin-top:12px;"></div>'; }
+  function roleOpts(withClin, sel){ sel = sel || 'patient';
+    var o='<option value="patient"'+(sel==='patient'?' selected':'')+'>Patient (person with Parkinson\'s)</option>'+
+          '<option value="caregiver"'+(sel==='caregiver'?' selected':'')+'>Caregiver / family</option>';
+    if(withClin) o+='<option value="clinician"'+(sel==='clinician'?' selected':'')+'>Clinician</option>';
+    return o;
+  }
   function row(k,v){ return '<div style="display:flex; justify-content:space-between; gap:16px; padding:12px 0; border-bottom:1px solid #F0F3F8;"><span style="font-size:14px; font-weight:700; color:#536084;">'+k+'</span><span style="font-size:15px; font-weight:600; color:#16203A; text-align:right;">'+v+'</span></div>'; }
+  function linkBadge(label){ return '<span style="display:inline-flex; align-items:center; gap:6px; background:#D6EEE0; color:#15724A; font-size:13px; font-weight:700; padding:5px 12px; border-radius:999px;">✓ '+esc(label)+'</span>'; }
 
   function renderAccount(mode){
     if (!accountView) return;
@@ -895,33 +934,60 @@
       accountView.innerHTML = '<div style="'+CARD+'"><h1 style="'+H+'">Accounts coming soon</h1><p style="font-size:16px; color:#3A4A66; line-height:1.55; margin:0;">The account system isn\'t connected yet. Please check back shortly.</p></div>';
       return;
     }
-    if (mode === 'create') return renderCreate();
+    if (mode === 'create') return renderCreate(!!pendingOrder, 'patient');
     if (localStorage.getItem('cadence_token')) return renderProfile();
     return renderLogin();
   }
 
-  function renderCreate(){
+  // ---- create account: role-aware (clinician swaps to an application form) ----
+  function renderCreate(isPayment, role){
+    role = role || 'patient';
     var email = pendingOrder && pendingOrder.email ? pendingOrder.email : '';
-    accountView.innerHTML =
-      '<div style="text-align:center; margin-bottom:8px; font-size:15px; font-weight:800; letter-spacing:1.6px; color:#1F8A5B;">✓ PAYMENT CONFIRMED</div>'+
-      '<h1 style="'+H+' text-align:center;">Create your account</h1>'+
-      '<p style="text-align:center; font-size:16px; color:#3A4A66; line-height:1.55; margin:0 0 22px;">One account works across all your Cadence apps. Set it up to get started.</p>'+
+    var banner = isPayment ? '<div style="text-align:center; margin-bottom:8px; font-size:15px; font-weight:800; letter-spacing:1.6px; color:#1F8A5B;">✓ PAYMENT CONFIRMED</div>' : '';
+    var intro = isPayment ? 'One account works across all your Cadence apps. Set it up to get started.' : 'One account works across the Cadence patient, caregiver, and clinician apps.';
+    var html = banner+'<h1 style="'+H+' text-align:center;">Create your account</h1>'+
+      '<p style="text-align:center; font-size:16px; color:#3A4A66; line-height:1.55; margin:0 0 22px;">'+intro+'</p>'+
       '<div style="'+CARD+'">'+
-        '<label style="'+LABEL+'">I am a…</label><select id="acRole" style="'+SELECT+'">'+roleOpts(false)+'</select>'+
+        '<label style="'+LABEL+'">I am a…</label><select id="acRole" style="'+SELECT+'">'+roleOpts(!isPayment, role)+'</select>';
+
+    if (role === 'clinician') {
+      html +=
+        '<p style="font-size:14px; color:#536084; font-weight:600; line-height:1.5; margin:14px 0 0;">Clinician accounts reach patient clinical data, so they\'re reviewed by our team before activation. Submit your details below — we\'ll follow up by email.</p>'+
+        '<label style="'+LABEL+'">Full name</label><input id="apName" style="'+INPUT+'" placeholder="Dr. Jane Smith" autocomplete="name">'+
+        '<label style="'+LABEL+'">Email</label><input id="apEmail" type="email" style="'+INPUT+'" placeholder="you@hospital.org" autocomplete="email">'+
+        '<label style="'+LABEL+'">Phone</label><input id="apPhone" style="'+INPUT+'" placeholder="(xxx) xxx-xxxx" autocomplete="tel">'+
+        '<label style="'+LABEL+'">Institution</label><input id="apInst" style="'+INPUT+'" placeholder="Hospital / clinic name">'+
+        '<label style="'+LABEL+'">Credentials</label><input id="apCred" style="'+INPUT+'" placeholder="e.g. MD, Neurology">'+
+        '<label style="'+LABEL+'">License number</label><input id="apLic" style="'+INPUT+'" placeholder="State license #">'+
+        '<button id="acSubmit" style="'+BTN+'">Submit application</button>'+ noteEl();
+    } else {
+      html +=
         '<label style="'+LABEL+'">Full name</label><input id="acName" style="'+INPUT+'" placeholder="Your name" autocomplete="name">'+
         '<label style="'+LABEL+'">Email</label><input id="acEmail" type="email" style="'+INPUT+'" value="'+esc(email)+'" placeholder="you@email.com" autocomplete="email">'+
+        '<label style="'+LABEL+'">Phone</label><input id="acPhone" style="'+INPUT+'" placeholder="(xxx) xxx-xxxx" autocomplete="tel">'+
         '<label style="'+LABEL+'">Password</label><input id="acPass" type="password" style="'+INPUT+'" placeholder="At least 8 characters" autocomplete="new-password">'+
-        '<button id="acSubmit" style="'+BTN+'">Create account</button>'+ noteEl() +
-      '</div>';
-    document.getElementById('acSubmit').addEventListener('click', doCreate);
+        '<button id="acSubmit" style="'+BTN+'">Create account</button>'+ noteEl();
+    }
+    if (!isPayment) {
+      html += '<p style="text-align:center; font-size:15px; font-weight:600; color:#536084; margin:16px 0 0;">Already have an account? <a href="#" id="acGoLogin" style="color:#2F57E6; font-weight:700;">Sign in</a></p>';
+    }
+    html += '</div>';
+    accountView.innerHTML = html;
+
+    document.getElementById('acRole').addEventListener('change', function(e){ renderCreate(isPayment, e.target.value); });
+    if (role === 'clinician') document.getElementById('acSubmit').addEventListener('click', doApply);
+    else document.getElementById('acSubmit').addEventListener('click', function(){ doCreate(role); });
+    var goLogin = document.getElementById('acGoLogin');
+    if (goLogin) goLogin.addEventListener('click', function(e){ e.preventDefault(); renderLogin(); });
   }
-  function doCreate(){
-    var role=document.getElementById('acRole').value, name=document.getElementById('acName').value.trim(),
-        email=document.getElementById('acEmail').value.trim(), pass=document.getElementById('acPass').value;
+  function doCreate(role){
+    var name=document.getElementById('acName').value.trim(), email=document.getElementById('acEmail').value.trim(),
+        phone=document.getElementById('acPhone').value.trim(), pass=document.getElementById('acPass').value;
     if(!name||!email){ setNote('Please enter your name and email.'); return; }
     if(pass.length<8){ setNote('Password must be at least 8 characters.'); return; }
     var btn=document.getElementById('acSubmit'); btn.textContent='Creating...'; btn.disabled=true; setNote('');
     var body={ email:email, password:pass, name:name };
+    if(phone) body.phone=phone;
     if(pendingOrder){ body.stripe_customer_id=pendingOrder.stripe_customer_id; body.order_session_id=pendingOrder.session_id; }
     fetch(API+'/v1/auth/'+role+'/signup',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) })
       .then(function(r){ return r.json().then(function(d){ return {ok:r.ok,status:r.status,d:d}; }); })
@@ -930,6 +996,25 @@
         else { btn.textContent='Create account'; btn.disabled=false; setNote(res.status===409?'An account with this email already exists — try signing in.':'Could not create your account. Check your details and try again.'); }
       })
       .catch(function(){ btn.textContent='Create account'; btn.disabled=false; setNote('Something went wrong. Please try again.'); });
+  }
+  function doApply(){
+    var name=document.getElementById('apName').value.trim(), email=document.getElementById('apEmail').value.trim(),
+        phone=document.getElementById('apPhone').value.trim(), inst=document.getElementById('apInst').value.trim(),
+        cred=document.getElementById('apCred').value.trim(), lic=document.getElementById('apLic').value.trim();
+    if(!name||!email){ setNote('Please enter your name and email.'); return; }
+    var btn=document.getElementById('acSubmit'); btn.textContent='Submitting...'; btn.disabled=true; setNote('');
+    fetch(API+'/v1/auth/clinician/apply',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({
+      name:name, email:email, phone:phone||null, institution:inst||null, credentials:cred||null, license_number:lic||null
+    }) })
+      .then(function(r){ return r.json().then(function(d){ return {ok:r.ok,d:d}; }); })
+      .then(function(res){
+        if(res.ok) renderApplied();
+        else { btn.textContent='Submit application'; btn.disabled=false; setNote('Could not submit your application. Check your details and try again.'); }
+      })
+      .catch(function(){ btn.textContent='Submit application'; btn.disabled=false; setNote('Something went wrong. Please try again.'); });
+  }
+  function renderApplied(){
+    accountView.innerHTML='<div style="'+CARD+' text-align:center;"><div style="font-size:46px; margin-bottom:6px;">✓</div><h1 style="'+H+'">Application received</h1><p style="font-size:16px; color:#3A4A66; line-height:1.6; margin:0 0 8px;">Thanks — our team reviews every clinician application by hand. We\'ll follow up at the email you provided once it\'s approved.</p><button data-go="home" style="'+BTN+'">Back to home</button></div>';
   }
   function renderDone(){
     accountView.innerHTML='<div style="'+CARD+' text-align:center;"><div style="font-size:46px; margin-bottom:6px;">🎉</div><h1 style="'+H+'">You\'re all set</h1><p style="font-size:16px; color:#3A4A66; line-height:1.6; margin:0 0 8px;">Your Cadence account is ready. Use the same email and password to sign in to the Cadence app when your kit arrives.</p><button data-go="home" style="'+BTN+'">Back to home</button></div>';
@@ -943,8 +1028,10 @@
         '<label style="'+LABEL+'">Email</label><input id="acEmail" type="email" style="'+INPUT+'" placeholder="you@email.com" autocomplete="email">'+
         '<label style="'+LABEL+'">Password</label><input id="acPass" type="password" style="'+INPUT+'" placeholder="Your password" autocomplete="current-password">'+
         '<button id="acSubmit" style="'+BTN+'">Sign in</button>'+ noteEl() +
+        '<button id="acGoCreate" style="'+BTN+' background:#fff; color:#2F57E6; border:2px solid #DCE3EF; box-shadow:none;">Create account</button>'+
       '</div>';
     document.getElementById('acSubmit').addEventListener('click', doLogin);
+    document.getElementById('acGoCreate').addEventListener('click', function(){ renderCreate(false, 'patient'); });
   }
   function doLogin(){
     var role=document.getElementById('acRole').value, email=document.getElementById('acEmail').value.trim(), pass=document.getElementById('acPass').value;
@@ -955,16 +1042,65 @@
       .then(function(res){ if(res.ok){ saveSession(res.d); renderProfile(); } else { btn.textContent='Sign in'; btn.disabled=false; setNote('Invalid email or password.'); } })
       .catch(function(){ btn.textContent='Sign in'; btn.disabled=false; setNote('Something went wrong. Please try again.'); });
   }
+
+  // ---- profile: role-aware linking UI (caregiver<->patient) ----
   function renderProfile(){
     accountView.innerHTML='<div style="'+CARD+'"><p style="font-size:16px; color:#536084; margin:0;">Loading your account…</p></div>';
-    fetch(API+'/v1/auth/me',{ headers:{'Authorization':'Bearer '+localStorage.getItem('cadence_token')} })
-      .then(function(r){ if(!r.ok) throw 0; return r.json(); })
-      .then(function(u){
-        var rl={patient:'Patient',caregiver:'Caregiver',clinician:'Clinician'}[u.user_type]||u.user_type;
-        accountView.innerHTML='<h1 style="'+H+'">Your account</h1><div style="'+CARD+'">'+row('Name',esc(u.name))+row('Email',esc(u.email))+row('Role',esc(rl))+(u.stripe_customer_id?row('Billing','Linked — ready for future purchases'):'')+'<button id="acLogout" style="'+BTN+' background:#16203A; box-shadow:none;">Sign out</button></div>';
-        document.getElementById('acLogout').addEventListener('click', function(){ clearSession(); renderLogin(); });
+    var token = localStorage.getItem('cadence_token');
+    Promise.all([
+      fetch(API+'/v1/auth/me',{ headers:{'Authorization':'Bearer '+token} }).then(function(r){ if(!r.ok) throw 0; return r.json(); }),
+      fetch(API+'/v1/auth/links',{ headers:{'Authorization':'Bearer '+token} }).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; })
+    ]).then(function(res){
+      var u=res[0], links=res[1];
+      var rl={patient:'Patient',caregiver:'Caregiver',clinician:'Clinician'}[u.user_type]||u.user_type;
+      var html='<h1 style="'+H+'">Your account</h1><div style="'+CARD+'">'+row('Name',esc(u.name))+row('Email',esc(u.email))+row('Role',esc(rl))+(u.stripe_customer_id?row('Billing','Linked — ready for future purchases'):'');
+
+      if (links && u.user_type === 'patient') {
+        html += '<div style="margin-top:18px; padding-top:18px; border-top:1px solid #F0F3F8;">';
+        html += '<div style="font-size:14px; font-weight:700; color:#536084; margin-bottom:10px;">LINKED CAREGIVERS</div>';
+        if (links.caregivers && links.caregivers.length) {
+          html += '<div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;">'+links.caregivers.map(function(c){ return linkBadge(c.name); }).join('')+'</div>';
+        } else {
+          html += '<p style="font-size:15px; color:#8A96B0; margin:0 0 14px;">No caregivers linked yet.</p>';
+        }
+        html += '<div style="font-size:14px; font-weight:700; color:#536084; margin-bottom:8px;">YOUR LINK CODE</div>';
+        html += '<p style="font-size:14px; color:#536084; line-height:1.5; margin:0 0 10px;">Share this with a caregiver so their account links to yours.</p>';
+        html += '<div style="font-size:24px; font-weight:800; letter-spacing:2px; color:#16203A; background:#F4F7FC; border-radius:14px; padding:14px; text-align:center;">'+esc(links.link_code||'—')+'</div>';
+        html += '</div>';
+      }
+      if (links && u.user_type === 'caregiver') {
+        html += '<div style="margin-top:18px; padding-top:18px; border-top:1px solid #F0F3F8;">';
+        html += '<div style="font-size:14px; font-weight:700; color:#536084; margin-bottom:10px;">LINKED PATIENTS</div>';
+        if (links.patients && links.patients.length) {
+          html += '<div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;">'+links.patients.map(function(p){ return linkBadge(p.name); }).join('')+'</div>';
+        } else {
+          html += '<p style="font-size:15px; color:#8A96B0; margin:0 0 16px;">Not linked to a patient yet.</p>';
+        }
+        html += '<label style="'+LABEL+'">Patient\'s link code</label><input id="lkCode" style="'+INPUT+'" placeholder="e.g. CM9GJCJB" autocomplete="off">';
+        html += '<button id="lkSubmit" style="'+BTN+'">Link patient account</button>'+ noteEl('lkNote');
+        html += '</div>';
+      }
+
+      html += '<button id="acLogout" style="'+BTN+' background:#16203A; box-shadow:none; margin-top:18px;">Sign out</button></div>';
+      accountView.innerHTML = html;
+      document.getElementById('acLogout').addEventListener('click', function(){ clearSession(); renderLogin(); });
+      var lkSubmit = document.getElementById('lkSubmit');
+      if (lkSubmit) lkSubmit.addEventListener('click', function(){ doLinkPatient(token); });
+    })
+    .catch(function(){ clearSession(); renderLogin(); });
+  }
+  function doLinkPatient(token){
+    var input = document.getElementById('lkCode'), note = document.getElementById('lkNote');
+    var code = input.value.trim();
+    if (!code) { note.textContent = 'Enter the code your patient shared with you.'; return; }
+    var btn = document.getElementById('lkSubmit'); btn.textContent='Linking...'; btn.disabled=true; note.textContent='';
+    fetch(API+'/v1/auth/caregiver/link',{ method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token}, body:JSON.stringify({ code:code }) })
+      .then(function(r){ return r.json().then(function(d){ return {ok:r.ok,d:d}; }); })
+      .then(function(res){
+        if (res.ok) renderProfile();
+        else { btn.textContent='Link patient account'; btn.disabled=false; note.textContent = res.d && res.d.detail ? res.d.detail : 'Could not link that code. Check it and try again.'; }
       })
-      .catch(function(){ clearSession(); renderLogin(); });
+      .catch(function(){ btn.textContent='Link patient account'; btn.disabled=false; note.textContent='Something went wrong. Please try again.'; });
   }
 
   // ---------------- routing: query params + clean paths + post-payment ----------------
@@ -996,6 +1132,8 @@
     startPage = 'policies';
   } else if (path === '/order') {
     startPage = 'order';
+  } else if (path === '/support' || path === '/contact-us') {
+    startPage = 'support';
   }
 
   // ---------------- scroll reveal ----------------
