@@ -3,383 +3,119 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Order Confirmed | Cadence</title>
-  
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800;900&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500;1,6..72,600&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800;900&amp;family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500;1,6..72,600&amp;display=swap" rel="stylesheet">
+  <script src="./image-slot.js"></script>
   <style>
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    body { 
-      margin: 0; 
-      font-family: 'Public Sans', -apple-system, sans-serif; 
-      background-color: #ffffff; 
-      color: #0c111d;
-    }
+    body { margin: 0; }
+    @keyframes cadPulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.7); opacity: 0; } }
+    @keyframes cadReveal { from { opacity: 0; transform: translateY(34px); } to { opacity: 1; transform: none; } }
     
-    /* Global Navigation Header */
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 24px 32px;
-    }
-    .logo-container {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
-    .logo-text {
-      font-size: 21px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      color: #001833;
-    }
-    .nav-links {
-      display: flex;
-      gap: 32px;
-    }
-    .nav-links a {
-      text-decoration: none;
-      color: #475467;
-      font-weight: 500;
-      font-size: 15px;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover {
-      color: #0c111d;
-    }
-
-    /* Success Hero Block */
-    .success-hero {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 80px 32px 120px 32px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-    .badge {
-      background-color: #ecfdf3;
-      color: #027a48;
-      padding: 6px 14px;
-      border-radius: 100px;
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 24px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .success-hero h1 {
-      font-family: 'Newsreader', serif;
-      font-size: 52px;
-      font-weight: 500;
-      font-style: italic;
-      letter-spacing: -1px;
-      color: #001833;
-      margin: 0 0 16px 0;
-    }
-    .success-hero p {
-      font-size: 18px;
-      color: #475467;
-      max-width: 580px;
-      line-height: 1.6;
-      margin: 0 0 40px 0;
-    }
-
-    /* Onboarding Component Workspace */
-    .account-card {
-      background: #f8f9fc;
-      border: 1px solid #eaecf0;
-      border-radius: 20px;
-      padding: 40px;
-      width: 100%;
-      max-width: 540px;
-      box-shadow: 0 4px 24px rgba(0, 24, 51, 0.02);
-      text-align: left;
-    }
-    .account-card h2 {
-      font-size: 22px;
-      font-weight: 700;
-      color: #001833;
-      margin: 0 0 8px 0;
-      letter-spacing: -0.3px;
-    }
-    .account-card p {
-      font-size: 15px;
-      color: #667085;
-      margin: 0 0 24px 0;
-      line-height: 1.5;
-    }
+    button, a { transition: transform 0.18s cubic-bezier(0.22,0.61,0.36,1), box-shadow 0.22s ease, background 0.22s ease, opacity 0.22s ease, border-color 0.22s ease, color 0.22s ease; text-decoration: none; }
+    button:hover, a:hover { transform: translateY(-2px); }
+    button:active, a:active { transform: scale(0.96) translateY(0); }
+    .page-enter { animation: cadReveal 0.55s cubic-bezier(0.22,0.61,0.36,1) both; }
     
-    .hidden {
-      display: none !important;
-    }
-    .form-group {
-      margin-bottom: 20px;
-    }
-    .form-group label {
-      display: block;
-      font-size: 14px;
-      font-weight: 600;
-      color: #344054;
-      margin-bottom: 6px;
-    }
-    .form-group input {
+    .hidden { display: none !important; }
+    
+    /* Onboarding Card styling matching your layout patterns */
+    .onboard-input {
       width: 100%;
-      padding: 12px 16px;
-      border: 1px solid #d0d5dd;
-      border-radius: 8px;
-      font-size: 16px;
+      padding: 14px 18px;
+      border: 2px solid #DCE3EF;
+      border-radius: 14px;
       font-family: inherit;
-      color: #0c111d;
+      font-size: 16px;
+      color: #16203A;
       outline: none;
+      margin-top: 8px;
+      margin-bottom: 20px;
       transition: border-color 0.2s;
     }
-    .form-group input:focus {
-      border-color: #002e66;
-    }
-    .btn-submit {
-      width: 100%;
-      background: #002e66;
-      color: #ffffff;
-      border: none;
-      border-radius: 8px;
-      padding: 14px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-      text-align: center;
-      display: block;
-      text-decoration: none;
-    }
-    .btn-submit:hover {
-      background: #001833;
-    }
-    .btn-stripe {
-      background: #635bff;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    .btn-stripe:hover {
-      background: #4b42db;
-    }
-    .alt-actions {
-      margin-top: 32px;
-    }
-    .btn-secondary {
-      text-decoration: none;
-      color: #475467;
-      font-weight: 600;
-      font-size: 15px;
-      padding: 10px 18px;
-      border-radius: 8px;
-      transition: background 0.2s;
-    }
-    .btn-secondary:hover {
-      background: #f2f4f7;
-    }
-
-    /* Brand Footer Canvas */
-    footer {
-      background-color: #001833;
-      padding: 80px 32px 60px 32px;
-      color: #ffffff;
-    }
-    .footer-inner {
-      max-width: 1120px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 60px;
-    }
-    .footer-top {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 40px;
-    }
-    .footer-brand h3 {
-      font-size: 21px;
-      font-weight: 800;
-      margin: 0 0 12px 0;
-      letter-spacing: -0.5px;
-    }
-    .footer-brand p {
-      color: #94a3b8;
-      font-size: 14px;
-      max-width: 280px;
-      line-height: 1.5;
-      margin: 0;
-    }
-    .footer-nav {
-      display: flex;
-      gap: 64px;
-    }
-    .footer-col h4 {
-      font-size: 13px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #64748b;
-      margin: 0 0 16px 0;
-    }
-    .footer-col ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .footer-col a {
-      color: #94a3b8;
-      text-decoration: none;
-      font-size: 14px;
-    }
-    .footer-col a:hover {
-      color: #ffffff;
-    }
-    .footer-bottom {
-      border-top: 1px solid #1e293b;
-      padding-top: 32px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 20px;
-      font-size: 14px;
-      color: #64748b;
-    }
-    .footer-disclaimer {
-      font-size: 12px;
-      max-width: 600px;
-      line-height: 1.5;
-    }
-
-    @media(max-width: 768px) {
-      header { padding: 24px; }
-      .nav-links { display: none; }
-      .success-hero { padding: 40px 24px 80px 24px; }
-      .success-hero h1 { font-size: 38px; }
+    .onboard-input:focus {
+      border-color: #2F57E6;
     }
   </style>
-</head>
-<body>
+</helmet>
 
-  <header>
-    <a href="/" class="logo-container">
-      <span class="logo-text">cadence</span>
-    </a>
-    <nav class="nav-links">
-      <a href="/#story">our story</a>
-      <a href="/#how-it-works">how it works</a>
-      <a href="/#technology">technology</a>
-      <a href="/#roadmap">roadmap</a>
-      <a href="/#team">team</a>
-    </nav>
-  </header>
+<div data-site-root="1" style="font-family: 'Public Sans',system-ui,sans-serif; color: #16203A; background: #FBFCFE; min-height: 100vh; overflow-x: hidden; text-transform: lowercase">
 
-  <main class="success-hero">
-    <div class="badge">
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10 3L4.5 8.5L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      Early Access Secured
+  <div style="position:sticky; top:0; z-index:50; padding:18px 24px 0;">
+    <div style="max-width:1180px; margin:0 auto; background:#fff; border-radius:22px; box-shadow:0 10px 30px rgba(28,46,92,0.10); padding:14px 18px 14px 22px; display:flex; align-items:center; justify-content:space-between; position:relative;">
+      <a href="/" style="display:flex; align-items:center; gap:11px; background:none; border:none; cursor:pointer; font-family:inherit; padding:4px;">
+        <span style="width:36px; height:36px; border-radius:10px; background:#16203A; display:flex; align-items:center; justify-content:center;">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M2 12h3.5l2-6 3.2 13 3-9 2.3 4.5H22" stroke="#7CF0B7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </span>
+        <span style="font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: #16203A; text-transform: lowercase">Cadence</span>
+      </a>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <a href="/#how-it-works" style="color: #536084; font-size: 16px; font-weight: 500; padding: 10px 16px;">how it works</a>
+        <a href="/#technology" style="color: #536084; font-size: 16px; font-weight: 500; padding: 10px 16px;">technology</a>
+        <a href="/" style="margin-left: 6px; background: #16203A; border: none; cursor: pointer; font-family: inherit; font-size: 16px; font-weight: 700; color: #fff; padding: 13px 24px; border-radius: 14px;">back to home</a>
+      </div>
     </div>
-    
-    <h1>reserve your kit.</h1>
-    <p>Thank you for placing your order. Your early access slot has been confirmed. Follow the simple setup steps below to finalize your profile setup.</p>
+  </div>
 
-    <div class="account-card">
+  <div class="page-enter">
+    <div style="max-width:1200px; margin:0 auto; padding:80px 32px; display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:start;" data-stack="1" data-pad="1">
       
-      <div id="step-1-container">
-        <h2>Create your account</h2>
-        <p>Set a secure password below to configure your login credentials.</p>
-        <form id="signup-form">
-          <div class="form-group">
-            <label for="password">Create Password</label>
-            <input type="password" id="password" required placeholder="••••••••" minlength="8">
-          </div>
-          <button type="submit" class="btn-submit">Next: Connect Billing</button>
-        </form>
+      <div>
+        <div style="display:inline-flex; align-items:center; gap:9px; background:#E7F4EC; padding:8px 15px; border-radius:30px; margin-bottom:24px;">
+          <span style="position:relative; width:9px; height:9px;"><span style="position:absolute; inset:0; border-radius:50%; background:#1F8A5B; animation:cadPulse 2.4s ease-out infinite;"></span><span style="position:relative; display:block; width:9px; height:9px; border-radius:50%; background:#1F8A5B;"></span></span>
+          <span style="font-size: 20px; font-weight: 700; color: #15724A">early access secured</span>
+        </div>
+        <h1 style="font-size:clamp(34px,6vw,54px); line-height:1.06; font-weight:800; letter-spacing:-1.6px; margin:0 0 22px;">kit reserved.<br>now let's finish your <span style="font-style:italic; font-family:'Newsreader',serif; font-weight:600; color:#2F57E6;">profile.</span></h1>
+        <p style="font-size:20px; line-height:1.55; font-weight:500; color:#3A4A66; max-width:480px; margin:0;">thank you for choosing cadence. complete your unified profile credentials here so we can ship out your rhythm sensors.</p>
       </div>
 
-      <div id="step-2-container" class="hidden">
-        <h2>Connect with Stripe</h2>
-        <p>Securely connect your Stripe account to sync your subscription status, view purchase tokens, and manage delivery billing metrics.</p>
+      <div style="background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:40px; box-shadow:0 18px 40px rgba(28,46,92,0.06);">
         
-        <a href="https://connect.stripe.com/oauth/authorize" id="stripe-connect-btn" class="btn-submit btn-stripe">
-          <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M13.4 6.78c0-.12-.04-.2-.14-.24L7.54.4a.48.48 0 00-.43 0L1.38 6.54c-.1.04-.14.12-.14.24v6.86c0 .28.2.48.48.48h11.2c.28 0 .48-.2.48-.48V6.78z" fill="currentColor"/>
-          </svg>
-          Connect Stripe Account
-        </a>
-      </div>
-      
-    </div>
-
-    <div class="alt-actions">
-      <a href="/" class="btn-secondary">← Back to Homepage</a>
-    </div>
-  </main>
-
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <h3>cadence</h3>
-          <p>movement-aware medication timing for people living with Parkinson's.</p>
+        <div id="step-1-container">
+          <h2 style="font-size:26px; font-weight:800; letter-spacing:-0.5px; margin:0 0 8px;">create your account</h2>
+          <p style="font-size:16px; color:#536084; font-weight:500; margin:0 0 24px; line-height:1.5;">set up a password to manage delivery logs and system updates.</p>
+          
+          <form id="signup-form">
+            <label style="font-size:14px; font-weight:700; color:#16203A;" for="password">choose password</label>
+            <input type="password" id="password" class="onboard-input" required placeholder="••••••••" minlength="8">
+            
+            <button type="submit" style="width:100%; font-size:18px; font-weight:700; color:#fff; background:#2F57E6; border:none; cursor:pointer; font-family:inherit; padding:16px; border-radius:14px; text-align:center;">
+              next: connect stripe payouts
+            </button>
+          </form>
         </div>
-        <div class="footer-nav">
-          <div class="footer-col">
-            <h4>product</h4>
-            <ul>
-              <li><a href="/#how-it-works">How it works</a></li>
-              <li><a href="/#technology">Technology</a></li>
-              <li><a href="/#roadmap">Roadmap</a></li>
-            </ul>
-          </div>
-          <div class="footer-col">
-            <h4>company</h4>
-            <ul>
-              <li><a href="/#story">Our story</a></li>
-              <li><a href="/#team">Team</a></li>
-              <li><a href="mailto:support@cadencehealth.co">Contact</a></li>
-            </ul>
-          </div>
+
+        <div id="step-2-container" class="hidden">
+          <h2 style="font-size:26px; font-weight:800; letter-spacing:-0.5px; margin:0 0 8px;">connect your stripe account</h2>
+          <p style="font-size:16px; color:#536084; font-weight:500; margin:0 0 24px; line-height:1.5;">cadence uses stripe to verify subscription token states securely. sync your account safely below.</p>
+          
+          <a href="https://connect.stripe.com/oauth/authorize?response_type=code&client_id=CLIENT_ID_HERE&scope=read_write" id="stripe-connect-btn" style="width:100%; font-size:18px; font-weight:700; color:#fff; background:#635bff; border:none; cursor:pointer; font-family:inherit; padding:16px; border-radius:14px; text-align:center; display:flex; align-items:center; justify-content:center; gap:8px;">
+            <svg width="14" height="16" viewBox="0 0 14 16" fill="none"><path d="M13.4 6.78c0-.12-.04-.2-.14-.24L7.54.4a.48.48 0 00-.43 0L1.38 6.54c-.1.04-.14.12-.14.24v6.86c0 .28.2.48.48.48h11.2c.28 0 .48-.2.48-.48V6.78z" fill="currentColor"/></svg>
+            connect with stripe
+          </a>
         </div>
+
       </div>
-      
-      <div class="footer-bottom">
-        <div>© 2026 cadence health, inc.</div>
-        <div class="footer-disclaimer">*not a medical device. cadence does not provide medical advice, nor does it change prescriptions beyond what medical experts allow.</div>
-      </div>
+
     </div>
-  </footer>
+  </div>
 
-  <script>
-    // Handles multi-step layout switches without reloading the page context
-    document.getElementById('signup-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      document.getElementById('step-1-container').classList.add('hidden');
-      document.getElementById('step-2-container').classList.remove('hidden');
-    });
+</div>
 
-    document.getElementById('stripe-connect-btn').addEventListener('click', function() {
-      alert('Redirecting to Stripe secure connection gateway...');
-    });
-  </script>
+<script>
+  // Soft, responsive structural switch right inside the component view space
+  document.getElementById('signup-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    document.getElementById('step-1-container').classList.add('hidden');
+    document.getElementById('step-2-container').classList.remove('hidden');
+  });
+</script>
 </body>
 </html>
