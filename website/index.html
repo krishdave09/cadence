@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cadence — stay ahead of every off period</title>
+<meta name="description" content="Cadence learns your rhythm, forecasts when Parkinson's medication is about to wear off, and times each dose to keep you moving. Join the waitlist.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800;900&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500;1,6..72,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#16203A; --ink:#3A4A66; --muted:#536084; --faint:#8A96B0;
+    --bg:#FBFCFE; --card:#ffffff; --line:#DCE3EF;
+    --accent:#2F57E6; --accent-dk:#1E48C8;
+    --green:#1F8A5B; --green-dk:#15724A; --green-soft:#E7F4EC; --mint:#7CF0B7;
+    --amber:#B9700F;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:'Public Sans',system-ui,sans-serif;color:var(--navy);
+    background:var(--bg);text-transform:lowercase;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  .serif{font-family:'Newsreader',serif;font-style:italic;font-weight:600}
+  button,a{font-family:inherit;transition:transform .18s cubic-bezier(.22,.61,.36,1),box-shadow .22s ease,background .22s ease,border-color .22s ease,color .22s ease,opacity .22s}
+  button:hover{transform:translateY(-2px)} button:active{transform:scale(.97)}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+  @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.7);opacity:0}}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+  @keyframes reveal{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+  .reveal{animation:reveal .7s cubic-bezier(.22,.61,.36,1) both}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+
+  /* nav */
+  nav{position:sticky;top:0;z-index:50;padding:18px 0 0}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;
+    background:#fff;border-radius:22px;box-shadow:0 10px 30px rgba(28,46,92,.10);padding:14px 18px 14px 22px}
+  .logo{display:flex;align-items:center;gap:11px}
+  .logo-mark{width:36px;height:36px;border-radius:10px;background:var(--navy);display:flex;align-items:center;justify-content:center}
+  .logo-word{font-size:22px;font-weight:800;letter-spacing:-.5px}
+  .btn{border:none;cursor:pointer;border-radius:14px;font-weight:700}
+  .btn-primary{background:var(--accent);color:#fff;padding:13px 24px;font-size:16px;box-shadow:0 12px 28px rgba(47,87,230,.28)}
+  .btn-primary:hover{background:var(--accent-dk)}
+  .btn-dark{background:var(--navy);color:#fff;padding:13px 24px;font-size:16px}
+  .btn-dark:hover{background:#222F4D}
+  .btn-ghost{background:#fff;color:var(--navy);border:2px solid var(--line);padding:12px 22px;font-size:16px}
+  .btn-ghost:hover{border-color:#B0C0DC;background:#F8FAFF}
+
+  /* hero */
+  .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:center;
+    padding:56px 0 40px;position:relative}
+  .blob{position:absolute;top:-40px;left:-180px;width:520px;height:520px;border-radius:50%;
+    background:radial-gradient(circle,rgba(47,87,230,.10),rgba(47,87,230,0) 68%);pointer-events:none}
+  .badge{display:inline-flex;align-items:center;gap:9px;background:var(--green-soft);
+    padding:8px 15px;border-radius:30px;margin-bottom:22px}
+  .dot{position:relative;width:9px;height:9px;display:inline-block}
+  .dot::before{content:"";position:absolute;inset:0;border-radius:50%;background:var(--green);animation:pulse 2.4s ease-out infinite}
+  .dot::after{content:"";position:relative;display:block;width:9px;height:9px;border-radius:50%;background:var(--green)}
+  .badge span{font-size:15px;font-weight:700;color:var(--green-dk);letter-spacing:.3px}
+  h1{font-size:clamp(34px,7vw,60px);line-height:1.04;font-weight:800;letter-spacing:-1.8px;margin:0 0 20px}
+  h1 .serif{color:var(--accent)}
+  .lede{font-size:20px;line-height:1.55;font-weight:500;color:var(--ink);max-width:480px;margin:0 0 28px}
+
+  /* waitlist form */
+  .wl{display:flex;gap:12px;flex-wrap:wrap;max-width:480px}
+  .wl input{flex:1;min-width:220px;min-height:56px;padding:0 20px;font-family:inherit;font-size:17px;
+    font-weight:500;color:var(--navy);background:#fff;border:2px solid var(--line);border-radius:16px;outline:none}
+  .wl input:focus{border-color:var(--accent)}
+  .wl button{min-height:56px;padding:0 26px;font-size:17px}
+  .note{font-size:13.5px;font-weight:600;color:var(--faint);margin-top:12px}
+  .note.ok{color:var(--green-dk)} .note.err{color:#C2410C}
+  .codelink{margin-top:18px;font-size:14px;font-weight:700;color:var(--accent);background:none;border:none;cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:3px}
+
+  /* product card */
+  .product{position:relative;display:flex;justify-content:center}
+  .product .frame{position:relative;width:100%;max-width:440px;border-radius:32px;overflow:hidden;
+    background:linear-gradient(160deg,#F2F5FB,#E6ECF7);box-shadow:0 40px 80px rgba(28,46,92,.22);
+    aspect-ratio:1/1;animation:float 7s ease-in-out infinite}
+  .product img{width:100%;height:100%;object-fit:contain;display:block;padding:6%}
+  .product .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--muted);text-align:center;padding:24px}
+  .product .ph .mk{width:64px;height:64px;border-radius:18px;background:var(--navy);display:flex;align-items:center;justify-content:center}
+
+  /* trust strip */
+  .trust{border-top:1px solid #ECF0F7;border-bottom:1px solid #ECF0F7;background:#F4F7FC}
+  .trust .wrap{padding:20px 24px;text-align:center}
+  .trust span{font-size:13.5px;font-weight:700;letter-spacing:1.6px;color:var(--faint)}
+
+  /* value row */
+  .vals{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;padding:56px 0}
+  .val{background:var(--card);border:1px solid #EDF1F8;border-radius:22px;padding:26px}
+  .val .ic{width:52px;height:52px;border-radius:14px;background:#E5EBFD;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+  .val h3{font-size:19px;font-weight:800;margin:0 0 8px}
+  .val p{font-size:15px;line-height:1.5;color:var(--muted);margin:0;font-weight:500}
+
+  /* footer */
+  footer{background:var(--navy);color:#C2CFE4;margin-top:24px}
+  footer .wrap{padding:40px 24px 28px}
+  .foot-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+  .foot-bot{border-top:1px solid #243355;margin-top:26px;padding-top:18px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:13px;color:#6E7E9C}
+
+  /* order modal */
+  .ov{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;
+    background:rgba(22,32,58,.45);backdrop-filter:blur(4px);padding:20px}
+  .ov.open{display:flex}
+  .modal{background:#fff;border-radius:26px;max-width:440px;width:100%;padding:32px;
+    box-shadow:0 40px 90px rgba(22,32,58,.35);animation:reveal .4s cubic-bezier(.22,.61,.36,1) both}
+  .modal h2{font-size:26px;font-weight:800;letter-spacing:-.6px;margin:0 0 6px}
+  .modal p.sub{font-size:15px;color:var(--muted);font-weight:500;margin:0 0 22px;line-height:1.5}
+  .modal input{width:100%;min-height:56px;padding:0 18px;font-family:inherit;font-size:18px;font-weight:700;
+    letter-spacing:1px;text-transform:uppercase;color:var(--navy);background:#F7F9FD;border:2px solid var(--line);
+    border-radius:14px;outline:none;text-align:center}
+  .modal input:focus{border-color:var(--accent);background:#fff}
+  .modal .full{width:100%;min-height:56px;font-size:17px;margin-top:14px}
+  .close{position:absolute;top:16px;right:16px;width:38px;height:38px;border:none;background:#F4F7FC;border-radius:11px;cursor:pointer;font-size:18px;color:var(--muted)}
+  .order-card{display:none}
+  .order-card.show{display:block}
+  .code-card.hide{display:none}
+  .price{font-size:40px;font-weight:800;letter-spacing:-1px;margin:4px 0 2px}
+  .price small{font-size:15px;font-weight:600;color:var(--muted);letter-spacing:0}
+  .kit{font-size:14px;color:var(--muted);font-weight:600;margin:0 0 20px}
+
+  /* banner */
+  .banner{display:none;padding:14px 18px;border-radius:16px;font-weight:700;font-size:15px;margin:18px 0 0}
+  .banner.show{display:block}
+  .banner.success{background:var(--green-soft);color:var(--green-dk)}
+  .banner.cancel{background:#FEF2E7;color:#C2410C}
+
+  @media (max-width:860px){
+    .hero{grid-template-columns:1fr;gap:30px}
+    .vals{grid-template-columns:1fr}
+    .product{order:-1}
+  }
+</style>
+</head>
+<body>
+
+<nav><div class="wrap"><div class="nav-inner">
+  <div class="logo">
+    <span class="logo-mark"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M2 12h3.5l2-6 3.2 13 3-9 2.3 4.5H22" stroke="#7CF0B7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    <span class="logo-word">cadence</span>
+  </div>
+  <div style="display:flex;gap:10px;align-items:center">
+    <button class="btn btn-ghost" id="haveCodeNav" style="padding:11px 18px">have a code?</button>
+    <a href="#waitlist" class="btn btn-dark" style="text-decoration:none">join the waitlist</a>
+  </div>
+</div></div></nav>
+
+<main class="wrap">
+  <div id="banner" class="banner"></div>
+
+  <section class="hero reveal" id="waitlist">
+    <div class="blob"></div>
+    <div>
+      <div class="badge"><span class="dot"></span><span>coming soon — for people living with parkinson's</span></div>
+      <h1>stay ahead of<br>every <span class="serif">off</span> period.</h1>
+      <p class="lede">cadence learns your rhythm, forecasts when your medication is about to wear off, and times each dose to keep you moving — instead of chasing the clock.</p>
+
+      <form class="wl" id="wlForm">
+        <input type="email" id="wlEmail" name="email" placeholder="you@email.com" required autocomplete="email">
+        <button type="submit" class="btn btn-primary" id="wlBtn">request access</button>
+      </form>
+      <div class="note" id="wlNote">we respect your privacy. health data stays yours.</div>
+      <button class="codelink" id="haveCode">have an access code? order your kit →</button>
+    </div>
+
+    <div class="product">
+      <div class="frame">
+        <img id="productImg" alt="Cadence band kit" style="display:none">
+        <div class="ph" id="productPh">
+          <span class="mk"><svg width="30" height="30" viewBox="0 0 28 28" fill="none"><rect x="3.5" y="9" width="21" height="10" rx="5" transform="rotate(-45 14 14)" stroke="#7CF0B7" stroke-width="2.4"/><path d="M11 11 17 17" stroke="#7CF0B7" stroke-width="2.4" stroke-linecap="round"/></svg></span>
+          <div style="font-size:16px;font-weight:700;color:var(--navy)">the cadence bands</div>
+          <div style="font-size:13.5px;font-weight:600">product photo coming soon</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="trust"><div class="wrap"><span>grounded in movement-disorder care</span></div></div>
+
+<main class="wrap">
+  <section class="vals">
+    <div class="val reveal">
+      <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3 12h3l2-7 4 14 3-9 2 2h4" stroke="#2F57E6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <h3>learns your rhythm</h3>
+      <p>two lightweight bands read your movement and build a personal model of your on and off windows.</p>
+    </div>
+    <div class="val reveal">
+      <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="#2F57E6" stroke-width="2.2"/><path d="M12 8v4l3 2" stroke="#2F57E6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <h3>forecasts off periods</h3>
+      <p>cadence sees an off window coming and times your next dose to keep you steady and moving.</p>
+    </div>
+    <div class="val reveal">
+      <div class="ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.4-7-9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 7 4.5C19 16.6 12 21 12 21z" stroke="#2F57E6" stroke-width="2.2" stroke-linejoin="round"/></svg></div>
+      <h3>keeps your circle close</h3>
+      <p>share what matters with caregivers and your neurologist — on your terms, never your location.</p>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">
+  <div class="foot-top">
+    <div class="logo">
+      <span class="logo-mark"><svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M2 12h3.5l2-6 3.2 13 3-9 2.3 4.5H22" stroke="#7CF0B7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span class="logo-word" style="color:#fff">cadence</span>
+    </div>
+    <a href="#waitlist" class="btn btn-primary" style="text-decoration:none">join the waitlist</a>
+  </div>
+  <div class="foot-bot">
+    <span>© 2026 cadence health, inc.</span>
+    <span>*not a medical device. cadence does not provide medical advice, nor does it change prescriptions beyond what neurologists allow.</span>
+  </div>
+</div></footer>
+
+<!-- ORDER MODAL -->
+<div class="ov" id="ov">
+  <div class="modal" style="position:relative">
+    <button class="close" id="ovClose" aria-label="close">✕</button>
+
+    <div class="code-card" id="codeCard">
+      <h2>enter your access code</h2>
+      <p class="sub">early access is invite-only. enter the code we sent you to reserve your cadence band kit.</p>
+      <input id="codeInput" placeholder="CAD-XXXX-XXXX" maxlength="13" autocomplete="off" spellcheck="false">
+      <div class="note" id="codeNote" style="text-align:center;min-height:18px;margin-top:12px"></div>
+      <button class="btn btn-primary full" id="codeBtn">unlock my order</button>
+    </div>
+
+    <div class="order-card" id="orderCard">
+      <h2>reserve your kit</h2>
+      <p class="sub">your code is valid. complete your one-time order below — you'll be redirected to secure checkout.</p>
+      <div class="price" id="priceLabel">$299 <small>one-time</small></div>
+      <p class="kit">cadence band kit — wrist + ankle bands, early-access batch.</p>
+      <button class="btn btn-primary full" id="orderBtn">continue to secure checkout →</button>
+      <div class="note" id="orderNote" style="text-align:center;min-height:18px;margin-top:12px"></div>
+    </div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+(function(){
+  var CFG = window.CADENCE_CONFIG || {};
+  // ---- Formspree waitlist ----
+  var FORMSPREE = "https://formspree.io/f/mzdlgbkr";
+  var wlForm = document.getElementById('wlForm');
+  var wlNote = document.getElementById('wlNote');
+  var wlBtn  = document.getElementById('wlBtn');
+  wlForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    var email = document.getElementById('wlEmail').value.trim();
+    if(!email) return;
+    wlBtn.textContent = 'sending...'; wlBtn.disabled = true;
+    fetch(FORMSPREE, {method:'POST', headers:{'Accept':'application/json','Content-Type':'application/json'}, body:JSON.stringify({email:email})})
+      .then(function(r){ if(!r.ok) throw 0; return r; })
+      .then(function(){ wlNote.textContent = "you're on the list — we'll be in touch soon."; wlNote.className='note ok'; wlBtn.textContent="you're on the list"; })
+      .catch(function(){ wlNote.textContent = 'something went wrong. please try again.'; wlNote.className='note err'; wlBtn.textContent='request access'; wlBtn.disabled=false; });
+  });
+
+  // ---- product image (easy swap) ----
+  if (CFG.PRODUCT_IMAGE){
+    var img = document.getElementById('productImg');
+    img.onload = function(){ img.style.display='block'; document.getElementById('productPh').style.display='none'; };
+    img.onerror = function(){ /* keep placeholder */ };
+    img.src = CFG.PRODUCT_IMAGE;
+  }
+  if (CFG.PRICE_DISPLAY){
+    document.getElementById('priceLabel').innerHTML = CFG.PRICE_DISPLAY + ' <small>one-time</small>';
+  }
+
+  // ---- order modal + code gate ----
+  var ov = document.getElementById('ov');
+  var codeCard = document.getElementById('codeCard');
+  var orderCard = document.getElementById('orderCard');
+  var codeNote = document.getElementById('codeNote');
+  var orderNote = document.getElementById('orderNote');
+  var codeInput = document.getElementById('codeInput');
+  var validatedCode = null;
+
+  function openOv(){ ov.classList.add('open'); codeCard.classList.remove('hide'); orderCard.classList.remove('show'); codeNote.textContent=''; setTimeout(function(){codeInput.focus();},80); }
+  function closeOv(){ ov.classList.remove('open'); }
+  document.getElementById('haveCode').addEventListener('click', openOv);
+  document.getElementById('haveCodeNav').addEventListener('click', openOv);
+  document.getElementById('ovClose').addEventListener('click', closeOv);
+  ov.addEventListener('click', function(e){ if(e.target===ov) closeOv(); });
+
+  function fnHeaders(){
+    return {'Content-Type':'application/json','Authorization':'Bearer '+(CFG.SUPABASE_ANON_KEY||''),'apikey':(CFG.SUPABASE_ANON_KEY||'')};
+  }
+  function notConfigured(){
+    return !CFG.FUNCTIONS_URL || CFG.FUNCTIONS_URL.indexOf('YOUR-PROJECT-REF')>-1;
+  }
+
+  var codeBtn = document.getElementById('codeBtn');
+  codeBtn.addEventListener('click', function(){
+    var code = codeInput.value.trim().toUpperCase();
+    if(!code){ codeNote.textContent='please enter your code.'; codeNote.className='note err'; return; }
+    if(notConfigured()){ codeNote.textContent='ordering not configured yet — set FUNCTIONS_URL in config.js.'; codeNote.className='note err'; return; }
+    codeBtn.textContent='checking...'; codeBtn.disabled=true; codeNote.textContent='';
+    fetch(CFG.FUNCTIONS_URL+'/validate-code', {method:'POST', headers:fnHeaders(), body:JSON.stringify({code:code})})
+      .then(function(r){return r.json();})
+      .then(function(d){
+        codeBtn.textContent='unlock my order'; codeBtn.disabled=false;
+        if(d.valid){ validatedCode=code; codeCard.classList.add('hide'); orderCard.classList.add('show'); }
+        else if(d.reason==='already_used'){ codeNote.textContent='this code has already been used.'; codeNote.className='note err'; }
+        else { codeNote.textContent='that code is not valid. check it and try again.'; codeNote.className='note err'; }
+      })
+      .catch(function(){ codeBtn.textContent='unlock my order'; codeBtn.disabled=false; codeNote.textContent='something went wrong. please try again.'; codeNote.className='note err'; });
+  });
+  codeInput.addEventListener('keydown', function(e){ if(e.key==='Enter') codeBtn.click(); });
+
+  var orderBtn = document.getElementById('orderBtn');
+  orderBtn.addEventListener('click', function(){
+    if(!validatedCode) return;
+    orderBtn.textContent='redirecting...'; orderBtn.disabled=true; orderNote.textContent='';
+    fetch(CFG.FUNCTIONS_URL+'/create-checkout', {method:'POST', headers:fnHeaders(), body:JSON.stringify({code:validatedCode})})
+      .then(function(r){return r.json();})
+      .then(function(d){
+        if(d.url){ window.location.href = d.url; }
+        else { orderBtn.textContent='continue to secure checkout →'; orderBtn.disabled=false; orderNote.textContent = d.error==='already_used' ? 'this code has already been used.' : 'could not start checkout. please try again.'; orderNote.className='note err'; }
+      })
+      .catch(function(){ orderBtn.textContent='continue to secure checkout →'; orderBtn.disabled=false; orderNote.textContent='something went wrong. please try again.'; orderNote.className='note err'; });
+  });
+
+  // ---- return-from-checkout banners ----
+  var params = new URLSearchParams(location.search);
+  var banner = document.getElementById('banner');
+  if(params.get('order')==='success'){ banner.textContent='✓ thank you — your order is confirmed. we\'ll email you with next steps.'; banner.className='banner success show'; }
+  else if(params.get('order')==='cancelled'){ banner.textContent='your checkout was cancelled — your code is still valid if you\'d like to try again.'; banner.className='banner cancel show'; }
+})();
+</script>
+</body>
+</html>

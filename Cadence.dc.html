@@ -44,10 +44,10 @@
       <div style="display:flex; align-items:center; justify-content:space-between; margin:10px 0 22px;">
         <div>
           <div style="font-size:17px; font-weight:600; color:#536084; white-space:nowrap;">Good morning,</div>
-          <div style="font-size: 28px; font-weight: 800; color: #16203A; letter-spacing: -0.4px; line-height: 1.1; margin-top: 2px; font-style: italic; font-family:'Newsreader',serif; text-decoration-line: none">Robert.</div>
+          <div style="font-size: 28px; font-weight: 800; color: #16203A; letter-spacing: -0.4px; line-height: 1.1; margin-top: 2px; font-style: italic; font-family:'Newsreader',serif; text-decoration-line: none">{{ greetingName }}</div>
         </div>
         <button onClick="{{ goAccount }}" style="width:56px; height:56px; flex:none; border-radius:50%; background:#2F57E6; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 20px rgba(47,87,230,0.32); font-family:inherit; padding:0;" style-active="transform:scale(0.94)">
-          <span style="font-size:22px; font-weight:700; color:#fff;">R</span>
+          <span style="font-size:22px; font-weight:700; color:#fff;">{{ avatarInitial }}</span>
         </button>
       </div>
 
@@ -507,7 +507,7 @@
         </div>
         <div style="flex:1;">
           <div style="font-size:23px; font-weight:800; color:#fff; letter-spacing:-0.3px;">Dose</div>
-          <div style="font-size:16px; font-weight:500; color:rgba(255,255,255,0.9); margin-top:2px;">Levodopa / Carbidopa 25/100</div>
+          <div style="font-size:16px; font-weight:500; color:rgba(255,255,255,0.9); margin-top:2px;">{{ quickDoseMed }}</div>
         </div>
       </button>
 
@@ -556,8 +556,8 @@
       <div style="background:linear-gradient(160deg, #E6F5EC 0%, #DCF1E6 100%); border-radius:30px; padding:24px 24px 26px; margin-bottom:18px;">
         <div style="font-size:15px; font-weight:700; letter-spacing:1.4px; color:#15724A; margin-bottom:12px;">TIME ON THIS WEEK</div>
         <div style="display:flex; align-items:flex-end; gap:14px;">
-          <div style="font-size:52px; font-weight:800; color:#16203A; line-height:0.9; letter-spacing:-1.5px;">74%</div>
-          <div style="font-size:17px; font-weight:600; color:#15724A; padding-bottom:6px;">up from 68% last week</div>
+          <div style="font-size:52px; font-weight:800; color:#16203A; line-height:0.9; letter-spacing:-1.5px;">{{ timeOnPct }}</div>
+          <div style="font-size:17px; font-weight:600; color:#15724A; padding-bottom:6px;">{{ timeOnDelta }}</div>
         </div>
       </div>
 
@@ -868,10 +868,10 @@
         <div style="position:absolute; top:-50px; right:-40px; width:180px; height:180px; border-radius:50%; background:rgba(255,255,255,0.10);"></div>
         <div style="display:flex; align-items:center; gap:18px; position:relative;">
           <div style="width:74px; height:74px; flex:none; border-radius:50%; background:rgba(255,255,255,0.20); border:2px solid rgba(255,255,255,0.5); display:flex; align-items:center; justify-content:center;">
-            <span style="font-size:30px; font-weight:800; color:#fff;">R</span>
+            <span style="font-size:30px; font-weight:800; color:#fff;">{{ avatarInitial }}</span>
           </div>
           <div style="flex:1;">
-            <div style="font-size:24px; font-weight:800; color:#fff; letter-spacing:-0.4px;">Robert Hale</div>
+            <div style="font-size:24px; font-weight:800; color:#fff; letter-spacing:-0.4px;">{{ patientName }}</div>
             <div style="font-size:16px; font-weight:600; color:rgba(255,255,255,0.85); margin-top:3px;">Member since March 2024</div>
           </div>
         </div>
@@ -1009,6 +1009,12 @@
       </div>
 
       <button onClick="{{ signOut }}" style="width:100%; min-height:64px; background:#fff; border:2px solid #FBD9D9; border-radius:20px; cursor:pointer; font-family:inherit; font-size:19px; font-weight:800; color:#D14343; box-shadow:0 8px 22px rgba(28,46,92,0.05);" style-active="transform:scale(0.99)">Sign out</button>
+
+      <!-- buried build/demo footer: low-key, below sign out -->
+      <div style="text-align:center; margin-top:26px; padding-bottom:6px;">
+        <div style="font-size:12px; font-weight:600; color:#C2CADD;">Cadence v0.9 · preview build</div>
+        <button onClick="{{ toggleDemo }}" style="margin-top:7px; background:none; border:none; cursor:pointer; font-family:inherit; font-size:12px; font-weight:600; color:#C2CADD; text-decoration:underline; text-underline-offset:2px;" style-active="opacity:0.6">{{ demoToggleLabel }}</button>
+      </div>
       </sc-if>
 
       <!-- ================= PASSWORD & SIGN-IN ================= -->
@@ -1466,19 +1472,14 @@ class Component extends DCLogic {
     authMode: 'signin', authStep: 0,
     authName: '', authEmail: '', authPassword: '', authDob: '', authPhone: '', authCode: '',
     termsTos: false, termsData: false,
-    med: { name: 'Levodopa / Carbidopa', strength: '25 / 100 mg', tablets: '1 tablet' },
-    doses: [
-      { id: 1, time: '7:00', label: 'Morning' },
-      { id: 2, time: '11:45', label: 'Midday' },
-      { id: 3, time: '4:00', label: 'Afternoon' },
-      { id: 4, time: '8:00', label: 'Evening' },
-    ],
-    caregivers: [{ id: 1, name: 'Margaret', relation: 'Daughter', phone: '(415) 555-0182', on: true, connected: true }],
+    med: { name: '', strength: '', tablets: '' },
+    doses: [],
+    caregivers: [],
     showAddCaregiver: false, newCgName: '', newCgRelation: '', newCgPhone: '',
     invites: [], invitePhone: '', inviteSentCode: null, _processedSignups: [],
-    patientEmail: 'robert.hale@email.com', patientPhone: '(415) 555-0114', patientDob: 'May 12, 1956',
+    patientEmail: '', patientPhone: '', patientDob: '',
     accountEdit: false, editEmail: '', editPhone: '',
-    careEditOpen: false, doctorName: 'Dr. N. Okafor', doctorId: '', doctorEmail: '', doctorInviteSent: false, doctorAccepted: false,
+    careEditOpen: false, doctorName: '', doctorId: '', doctorEmail: '', doctorInviteSent: false, doctorAccepted: false,
     symptomType: null, symptomSeverity: null,
     consent: { cloud: true, caregiver: false },
     careShare: true,
@@ -1490,14 +1491,14 @@ class Component extends DCLogic {
     messages: [], chatInput: '', chatLoading: false,
     pdfState: 'idle', reportShared: false,
     btSheet: null, btContext: null, btStage: 'list',
-    insight: 'Your mornings have been your steadiest stretch this week. Today\u2019s midday dose was suggested 15 minutes earlier \u2014 you confirmed it \u2014 to stay ahead of the off window expected before noon.',
+    insight: '',
   };
 
   componentDidMount() {
     try {
       if (!localStorage.getItem('cadence_onboarded')) this.setState({ screen: 'auth', authMode: 'signin' });
     } catch (e) {}
-    this.loadInsight();
+    if (this.isDemo()) { this.setState(this.demoPatch()); this.loadInsight(); }
     this.loadInvites();
     this.loadNotifPrefs();
     this.loadCarePlan();
@@ -1507,6 +1508,44 @@ class Component extends DCLogic {
   }
 
   componentWillUnmount() { if (this._signupTimer) clearInterval(this._signupTimer); if (this._cpTimer) clearInterval(this._cpTimer); }
+
+  // ---- demo data: buried "load demo data" toggle in Settings ----
+  // Default first-run is empty (deployment-ready); enabling this seeds the
+  // consistent Hale-family persona used across the patient/caretaker/clinician
+  // apps for walkthroughs. Persisted so it survives reload.
+  demoPatch() {
+    return {
+      med: { name: 'Levodopa / Carbidopa', strength: '25 / 100 mg', tablets: '1 tablet' },
+      doses: [
+        { id: 1, time: '7:00', label: 'Morning' },
+        { id: 2, time: '11:45', label: 'Midday' },
+        { id: 3, time: '4:00', label: 'Afternoon' },
+        { id: 4, time: '8:00', label: 'Evening' },
+      ],
+      caregivers: [{ id: 1, name: 'Margaret', relation: 'Daughter', phone: '(415) 555-0182', on: true, connected: true }],
+      patientEmail: 'robert.hale@email.com', patientPhone: '(415) 555-0114', patientDob: 'May 12, 1956',
+      doctorName: 'Dr. N. Okafor', doctorAccepted: true,
+      insight: 'Your mornings have been your steadiest stretch this week. Today’s midday dose was suggested 15 minutes earlier — you confirmed it — to stay ahead of the off window expected before noon.',
+    };
+  }
+  isDemo() { try { return localStorage.getItem('cadence_demo_mode') === '1'; } catch (e) { return false; } }
+  loadDemo() {
+    try { localStorage.setItem('cadence_demo_mode', '1'); } catch (e) {}
+    this.setState(this.demoPatch());
+    this.loadInsight();
+  }
+  clearDemo() {
+    try { localStorage.removeItem('cadence_demo_mode'); } catch (e) {}
+    this.setState({
+      med: { name: '', strength: '', tablets: '' }, doses: [], caregivers: [],
+      patientEmail: '', patientPhone: '', patientDob: '', doctorName: '', doctorAccepted: false, insight: '',
+    });
+  }
+  toggleDemo() { if (this.isDemo()) this.clearDemo(); else this.loadDemo(); }
+
+  // Patient identity for display: demo persona, else what the user entered at signup.
+  patientFullName() { return this.isDemo() ? 'Robert Hale' : (this.state.authName || '').trim(); }
+  patientFirstName() { return (this.patientFullName().split(/\s+/)[0] || ''); }
 
   carePlanObj() { try { return JSON.parse(localStorage.getItem('cadence_care_plan')) || {}; } catch (e) { return {}; } }
   loadCarePlan() {
@@ -1601,7 +1640,7 @@ class Component extends DCLogic {
     const id = this.state.doctorId.trim().toUpperCase();
     if (!/^CDN-?\d{3,5}$/.test(id.replace(/\s/g, ''))) return;
     const invites = this.readLS('cadence_doctor_invites');
-    invites.push({ providerId: id, patient: 'Robert Hale', ts: Date.now(), status: 'pending' });
+    invites.push({ providerId: id, patient: this.patientFullName() || 'Patient', ts: Date.now(), status: 'pending' });
     this.writeLS('cadence_doctor_invites', invites);
     this.setState({ doctorInviteSent: true, careEditOpen: false });
   }
@@ -2135,14 +2174,16 @@ class Component extends DCLogic {
     const indigo = '#4B5DC4', indigoBg = '#E4E7FA';
     const green = '#1F8A5B';
 
-    const timelineEvents = [
+    const emptyCard = (key, text) => React.createElement('div', { key, style: { background: '#fff', borderRadius: '22px', padding: '22px', textAlign: 'center', fontSize: '17px', fontWeight: 600, color: '#8A96B0', boxShadow: '0 8px 22px rgba(28,46,92,0.06)' } }, text);
+
+    const timelineEvents = this.isDemo() ? [
       this.eventRow({ key: 't1', time: '7:00', icon: 'dose', iconColor: blue, iconBg: blueBg, title: 'Morning dose', sub: 'Levodopa / Carbidopa 25/100', badge: 'Taken', badgeColor: '#15724A', badgeBg: '#D6EEE0' }),
       this.eventRow({ key: 't2', time: '7:40', icon: 'meal', iconColor: amber, iconBg: amberBg, title: 'Breakfast', sub: 'Light, low protein' }),
       this.eventRow({ key: 't3', time: '9:15', icon: 'freeze', iconColor: indigo, iconBg: indigoBg, title: 'Freeze', sub: 'Ankle cue helped you restart' }),
       this.eventRow({ key: 't4', time: 'Now', icon: 'now', iconColor: green, iconBg: '#BFE5CE', title: "You're on", sub: 'Steady for 2h 40m', highlight: true }),
       this.eventRow({ key: 't5', time: '11:45', icon: 'dose', iconColor: blue, iconBg: blueBg, title: 'Midday dose', sub: 'Suggested earlier than 12:00, confirmed', badge: 'Due soon', badgeColor: amber, badgeBg: '#F7E4C4' }),
       this.eventRow({ key: 't6', time: '12:30', icon: 'meal', iconColor: amber, iconBg: amberBg, title: 'Lunch', sub: 'High protein, may slow your dose' }),
-    ];
+    ] : [ emptyCard('tl-empty', 'Your day will fill in here as Cadence learns your rhythm.') ];
 
     const middayBadge = (this.state.takenDoses[2] != null)
       ? { badge: 'Taken', badgeColor: '#15724A', badgeBg: '#D6EEE0' }
@@ -2150,12 +2191,12 @@ class Component extends DCLogic {
         : (this.state.nowMin >= 685 ? { badge: 'Due now', badgeColor: amber, badgeBg: '#F7E4C4' }
           : { badge: 'Scheduled', badgeColor: '#536084', badgeBg: '#EAEFF8' }));
 
-    const doseList = [
+    const doseList = this.isDemo() ? [
       this.eventRow({ key: 'd1', time: '7:00', icon: 'dose', iconColor: blue, iconBg: blueBg, title: 'Morning', sub: 'Levodopa / Carbidopa 25/100', badge: 'Taken', badgeColor: '#15724A', badgeBg: '#D6EEE0' }),
       this.eventRow({ key: 'd2', time: '11:45', icon: 'dose', iconColor: blue, iconBg: blueBg, title: 'Midday', sub: 'Levodopa / Carbidopa 25/100', ...middayBadge }),
       this.eventRow({ key: 'd3', time: '4 pm', icon: 'dose', iconColor: '#8A96B0', iconBg: '#EEF1F7', title: 'Afternoon', sub: 'Levodopa / Carbidopa 25/100', badge: 'Scheduled', badgeColor: '#536084', badgeBg: '#EAEFF8' }),
       this.eventRow({ key: 'd4', time: '8 pm', icon: 'dose', iconColor: '#8A96B0', iconBg: '#EEF1F7', title: 'Evening', sub: 'Levodopa / Carbidopa 25/100', badge: 'Scheduled', badgeColor: '#536084', badgeBg: '#EAEFF8' }),
-    ];
+    ] : [ emptyCard('dl-empty', 'No medication schedule yet — add yours in Medication & schedule.') ];
 
     const logRows = this.state.logEntries.map(en => this.eventRow({
       key: en.key, time: en.time, icon: en.icon, iconColor: en.iconColor, iconBg: en.iconBg, title: en.title, sub: en.sub, badge: en.badge, badgeColor: en.badgeColor, badgeBg: en.badgeBg,
@@ -2165,7 +2206,9 @@ class Component extends DCLogic {
     ];
 
     const histData = [['Wed', 64], ['Thu', 70], ['Fri', 58], ['Sat', 76], ['Sun', 80], ['Mon', 72], ['Tue', 74]];
-    const historyBars = histData.map((d, i) => this.historyBar(d[0], d[1], i === histData.length - 1));
+    const historyBars = this.isDemo()
+      ? histData.map((d, i) => this.historyBar(d[0], d[1], i === histData.length - 1))
+      : [ React.createElement('div', { key: 'hb-empty', style: { width: '100%', alignSelf: 'center', textAlign: 'center', fontSize: '15px', fontWeight: 600, color: '#8A96B0' } }, 'Not enough data yet — your weekly trend appears once Cadence has learned your rhythm.') ];
 
     const e = React.createElement;
     const pairSteps = [
@@ -2176,14 +2219,14 @@ class Component extends DCLogic {
     const ps = pairSteps[this.state.pairStep] || pairSteps[0];
     const stepColor = (i) => this.state.pairStep >= i ? '#2F57E6' : '#D5DEF0';
 
-    const freezeList = [
+    const freezeList = this.isDemo() ? [
       this.eventRow({ key: 'f1', time: '9:15', icon: 'freeze', iconColor: indigo, iconBg: indigoBg, title: 'Freeze', sub: 'Cue restarted you in 4 seconds' }),
       this.eventRow({ key: 'f2', time: '10:50', icon: 'freeze', iconColor: indigo, iconBg: indigoBg, title: 'Freeze', sub: 'Cue restarted you in 6 seconds' }),
-    ];
+    ] : [ emptyCard('fz-empty', 'No freezes logged yet.') ];
 
     const cgOn = this.state.caregivers.filter(c => c.on);
     const moreList = [
-      this.moreRow({ key: 'm1', icon: 'freeze', iconColor: indigo, iconBg: indigoBg, title: 'Freeze', desc: '2 today · ankle cue active', onClick: () => this.setState({ screen: 'freeze' }) }),
+      this.moreRow({ key: 'm1', icon: 'freeze', iconColor: indigo, iconBg: indigoBg, title: 'Freeze', desc: this.isDemo() ? '2 today · ankle cue active' : 'No freezes logged yet', onClick: () => this.setState({ screen: 'freeze' }) }),
       this.moreRow({ key: 'm2', icon: 'plus', iconColor: blue, iconBg: blueBg, title: 'Log', desc: 'Add a dose, meal, or note', onClick: () => this.setState({ screen: 'log' }) }),
       this.moreRow({ key: 'm3', icon: 'chart', iconColor: green, iconBg: '#D6EEE0', title: 'History', desc: 'Trends, dose response & PDF', onClick: () => this.setState({ screen: 'history' }) }),
       this.moreRow({ key: 'm5', icon: 'person', iconColor: amber, iconBg: amberBg, title: 'Caregivers', desc: cgOn.length ? 'Alerts on · ' + cgOn.map(c => c.name).join(', ') : 'No alerts on', onClick: () => this.setState({ screen: 'caregiver' }) }),
@@ -2191,7 +2234,7 @@ class Component extends DCLogic {
 
     const setupList = [
       this.moreRow({ key: 's1', icon: 'devices', iconColor: blue, iconBg: blueBg, title: 'Devices', desc: 'Bands, battery & pairing', onClick: () => this.setState({ screen: 'devices' }) }),
-      this.moreRow({ key: 's2', icon: 'dose', iconColor: blue, iconBg: blueBg, title: 'Medication & schedule', desc: 'Levodopa / Carbidopa 25/100', onClick: () => this.setState({ screen: 'settings' }) }),
+      this.moreRow({ key: 's2', icon: 'dose', iconColor: blue, iconBg: blueBg, title: 'Medication & schedule', desc: (this.state.med.name + ' ' + this.state.med.strength).replace(/\s+/g, ' ').trim() || 'Not set up yet', onClick: () => this.setState({ screen: 'settings' }) }),
       this.moreRow({ key: 's3', icon: 'plus', iconColor: green, iconBg: '#D6EEE0', title: 'Run setup again', desc: 'Re-pair and re-check your plan', onClick: () => this.setState({ screen: 'onboard', onboardStep: 0 }) }),
     ];
 
@@ -2598,7 +2641,7 @@ class Component extends DCLogic {
       logJustAdded: this.state.logJustAdded,
       logList,
       goMore: () => this.setState({ screen: 'more' }),
-      addDose: () => this.addLog({ label: 'Dose', icon: 'dose', iconColor: blue, iconBg: blueBg, title: 'Dose', sub: 'Levodopa / Carbidopa 25/100' }),
+      addDose: () => this.addLog({ label: 'Dose', icon: 'dose', iconColor: blue, iconBg: blueBg, title: 'Dose', sub: medName || 'Dose logged' }),
       addMeal: () => this.addLog({ label: 'Meal', icon: 'meal', iconColor: amber, iconBg: amberBg, title: 'Meal', sub: 'Logged' }),
       addMealProtein: () => this.addLog({ label: 'Meal', icon: 'meal', iconColor: amber, iconBg: amberBg, title: 'High-protein meal', sub: 'May slow your next dose', badge: 'Protein', badgeColor: amber, badgeBg: '#F7E4C4' }),
       addSymptom: () => this.setState({ screen: 'symptom', symptomType: null, symptomSeverity: null }),
@@ -2607,6 +2650,14 @@ class Component extends DCLogic {
       insight: this.state.insight,
       timelineEvents, doseList, moreList, freezeList,
       navItems,
+      toggleDemo: () => this.toggleDemo(),
+      demoToggleLabel: this.isDemo() ? 'Disable demo data' : 'Load demo data',
+      timeOnPct: this.isDemo() ? '74%' : '—',
+      timeOnDelta: this.isDemo() ? 'up from 68% last week' : 'not enough data yet',
+      patientName: this.patientFullName() || 'Your account',
+      greetingName: (this.patientFirstName() || 'there') + '.',
+      avatarInitial: (this.patientFirstName() || '?').charAt(0).toUpperCase(),
+      quickDoseMed: medName || 'Tap to log a dose',
     };
   }
 }
