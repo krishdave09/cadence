@@ -34,6 +34,7 @@ create table if not exists public.orders (
   id                uuid primary key default gen_random_uuid(),
   code              text references public.access_codes(code),
   stripe_session_id text not null unique,
+  stripe_customer_id text,          -- linked Stripe customer (future purchases)
   email             text,
   amount_total      integer,        -- cents
   currency          text,

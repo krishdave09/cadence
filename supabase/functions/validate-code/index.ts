@@ -1,28 +1,17 @@
 // POST /functions/v1/validate-code   { code: string }
 // Returns { valid: true } if the code exists and has not been redeemed.
-// Does NOT redeem the code — redemption only happens on confirmed payment.
-
+// Does NOT redeem the code — redemption only happens on confirmed payment
+// (see stripe-webhook). This endpoint just gates the "unlock order page" step.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-// 1. Hardcode CORS headers so we don't rely on external files breaking
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
-
-// 2. Helper function to ensure EVERY response gets CORS headers
-function jsonResponse(data: any, status = 200) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { ...corsHeaders, "Content-Type": "application/json" },
-  });
-}
+import { corsHeaders, json } from "../_shared/cors.ts";
 
 const supabase = createClient(
   Deno.env.get("SUPABASE_URL")!,
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
 );
 
+// A 'pending' code (checkout started but not paid) is reusable again after this
+// many minutes, so an abandoned checkout doesn't permanently burn a code.
 const PENDING_TTL_MIN = 30;
 
 function normalize(code: string): string {
@@ -39,44 +28,28 @@ export function isUsable(row: { status: string; pending_since: string | null }):
 }
 
 Deno.serve(async (req) => {
-  // Handle CORS Preflight check from the browser
-  if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
-  }
+  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  if (req.method !== "POST") return json({ error: "method not allowed" }, 405);
 
-  // Enforce POST
-  if (req.method !== "POST") {
-    return jsonResponse({ error: "method not allowed" }, 405);
-  }
-
-  // Safely parse the body
   let code: string;
   try {
-    const body = await req.json();
-    code = body.code;
+    ({ code } = await req.json());
   } catch {
-    return jsonResponse({ valid: false, error: "bad request" }, 400);
+    return json({ valid: false, error: "bad request" }, 400);
   }
-
   if (!code || typeof code !== "string") {
-    return jsonResponse({ valid: false, error: "code required" }, 400);
+    return json({ valid: false, error: "code required" }, 400);
   }
 
-  // Query Supabase securely
   const { data, error } = await supabase
     .from("access_codes")
     .select("status, pending_since")
     .eq("code", normalize(code))
     .maybeSingle();
 
-  if (error) {
-    console.error("Supabase Error:", error);
-    return jsonResponse({ valid: false, error: "server error" }, 500);
-  }
+  if (error) return json({ valid: false, error: "server error" }, 500);
+  if (!data) return json({ valid: false, reason: "not_found" });
+  if (!isUsable(data)) return json({ valid: false, reason: "already_used" });
 
-  if (!data) return jsonResponse({ valid: false, reason: "not_found" });
-  if (!isUsable(data)) return jsonResponse({ valid: false, reason: "already_used" });
-
-  // Code is valid!
-  return jsonResponse({ valid: true });
+  return json({ valid: true });
 });

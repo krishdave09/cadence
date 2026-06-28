@@ -653,6 +653,53 @@
   </div>
   </div>
 
+  <!-- ===================== ACCOUNT ===================== -->
+  <div data-page="account">
+  <div class="page-enter">
+  <div style="max-width:520px; margin:0 auto; padding:72px 32px 110px;">
+    <div id="accountView"><!-- rendered by JS: create / login / profile --></div>
+  </div>
+  </div>
+  </div>
+
+  <!-- ===================== POLICIES ===================== -->
+  <div data-page="policies">
+  <div class="page-enter">
+  <div class="scroll-reveal" style="max-width:760px; margin:0 auto; padding:72px 32px 110px;">
+    <div style="font-size:15px; font-weight:800; letter-spacing:1.6px; color:#2F57E6; margin-bottom:14px;">POLICIES</div>
+    <h1 style="font-size: clamp(30px,5.6vw,46px); line-height:1.08; font-weight:800; letter-spacing:-1.2px; margin:0 0 12px; font-family:'Newsreader',serif; font-style:italic;">Policies &amp; returns</h1>
+    <p style="font-size:15px; font-weight:600; color:#B45309; background:#FEF3E2; border:1px solid #F6DEB5; border-radius:12px; padding:12px 16px; margin:0 0 30px;">Draft policies — provided as a starting point and pending legal review before launch.</p>
+
+    <div style="display:flex; flex-direction:column; gap:30px;">
+      <section>
+        <h2 style="font-size:21px; font-weight:800; color:#16203A; margin:0 0 8px;">Returns &amp; refunds</h2>
+        <p style="font-size:17px; line-height:1.6; color:#3A4A66; margin:0;">You may return your Cadence band kit within <b>30 days</b> of delivery for a full refund, provided the hardware is in good condition. Reach out to start a return and we'll send a prepaid label. Refunds are issued to your original payment method within 5–10 business days of us receiving the kit.</p>
+      </section>
+      <section>
+        <h2 style="font-size:21px; font-weight:800; color:#16203A; margin:0 0 8px;">Shipping</h2>
+        <p style="font-size:17px; line-height:1.6; color:#3A4A66; margin:0;">Early-access kits ship in batches. After your order you'll receive an estimated ship window by email and a tracking number once your kit is on its way. Shipping is currently US-only during early access.</p>
+      </section>
+      <section>
+        <h2 style="font-size:21px; font-weight:800; color:#16203A; margin:0 0 8px;">Warranty</h2>
+        <p style="font-size:17px; line-height:1.6; color:#3A4A66; margin:0;">Bands are covered by a 1-year limited warranty against manufacturing defects. It does not cover accidental damage, water damage beyond the rated level, or normal wear.</p>
+      </section>
+      <section>
+        <h2 style="font-size:21px; font-weight:800; color:#16203A; margin:0 0 8px;">Privacy &amp; your health data</h2>
+        <p style="font-size:17px; line-height:1.6; color:#3A4A66; margin:0;">Your movement and medication data is yours. We store it securely, never sell it, and share it only with the care team you choose. Freeze events never record your location. You can export or delete your data at any time. A full privacy policy will accompany launch.</p>
+      </section>
+      <section>
+        <h2 style="font-size:21px; font-weight:800; color:#16203A; margin:0 0 8px;">Terms of sale</h2>
+        <p style="font-size:17px; line-height:1.6; color:#3A4A66; margin:0;">Cadence is a wellness aid, <b>not a medical device</b>, and does not provide medical advice or change prescriptions beyond what your neurologist allows. Early-access purchases reserve hardware from an early batch; timelines may shift and we'll keep you informed.</p>
+      </section>
+      <section>
+        <h2 style="font-size:21px; font-weight:800; color:#16203A; margin:0 0 8px;">Questions?</h2>
+        <p style="font-size:17px; line-height:1.6; color:#3A4A66; margin:0;">Email <a href="mailto:hello@cadence.health" style="color:#2F57E6; font-weight:700;">hello@cadence.health</a> and a real person will help.</p>
+      </section>
+    </div>
+  </div>
+  </div>
+  </div>
+
   <!-- ===================== FOOTER ===================== -->
   <div style="background:#16203A;">
     <div style="max-width:1200px; margin:0 auto; padding:48px 32px; display:flex; align-items:flex-start; justify-content:space-between; gap:30px; flex-wrap:wrap;">
@@ -677,8 +724,13 @@
           <button data-go="contact" style="background:none; border:none; cursor:pointer; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">Contact</button>
         </div>
         <div style="display:flex; flex-direction:column; gap:12px; align-items:flex-start;">
-          <span style="font-size:13px; font-weight:700; letter-spacing:1px; color:#5E6E8C;">ORDER</span>
+          <span style="font-size:13px; font-weight:700; letter-spacing:1px; color:#5E6E8C;">ACCOUNT</span>
           <button data-go="order" style="background:none; border:none; cursor:pointer; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">Have an access code?</button>
+          <button data-go="account" style="background:none; border:none; cursor:pointer; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">My account</button>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:12px; align-items:flex-start;">
+          <span style="font-size:13px; font-weight:700; letter-spacing:1px; color:#5E6E8C;">LEGAL</span>
+          <button data-go="policies" style="background:none; border:none; cursor:pointer; font-size:15px; font-weight:500; color:#C2CFE4; padding:0;">Policies &amp; returns</button>
         </div>
       </div>
     </div>
@@ -693,7 +745,7 @@
   var FORMSPREE = 'https://formspree.io/f/mzdlgbkr';
 
   // ---------------- page routing ----------------
-  var PAGES = ['home','how','tech','roadmap','story','team','contact','order'];
+  var PAGES = ['home','how','tech','roadmap','story','team','contact','order','account','policies'];
   var NAV_PAGES = ['story','how','tech','roadmap','team'];
 
   function setActiveNav(page) {
@@ -710,6 +762,7 @@
       el.classList.toggle('active', el.getAttribute('data-page') === page);
     });
     setActiveNav(page);
+    if (page === 'account') { renderAccount(nextAccountMode); nextAccountMode = null; }
     closeMenu();
     try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e) { window.scrollTo(0,0); }
     setTimeout(revealAll, 50); setTimeout(revealAll, 200); setTimeout(revealAll, 500);
@@ -810,11 +863,128 @@
     });
   }
 
-  // ---------------- success / cancel banner ----------------
+  // ---------------- account / auth (one identity across the apps) ----------------
+  var API = (CFG.API_URL || '').replace(/\/$/, '');
+  var accountView = document.getElementById('accountView');
+  var pendingOrder = null;       // {session_id, email, stripe_customer_id} after payment
+  var nextAccountMode = null;    // 'create' to force the post-payment signup view
+
+  function apiReady(){ return !!API; }
+  function saveSession(d){
+    if (d.access_token) localStorage.setItem('cadence_token', d.access_token);
+    if (d.refresh_token) localStorage.setItem('cadence_refresh', d.refresh_token);
+    if (d.user_type) localStorage.setItem('cadence_role', d.user_type);
+  }
+  function clearSession(){ ['cadence_token','cadence_refresh','cadence_role'].forEach(function(k){ localStorage.removeItem(k); }); }
+  function esc(s){ return (s==null?'':String(s)).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function setNote(t){ var n=document.getElementById('acctNote'); if(n) n.textContent=t||''; }
+
+  var BTN='width:100%; min-height:58px; margin-top:16px; background:#2F57E6; border:none; border-radius:16px; font-size:17px; font-weight:700; color:#fff; cursor:pointer; box-shadow:0 14px 30px rgba(47,87,230,0.28);';
+  var CARD='background:#fff; border:1px solid #ECF0F7; border-radius:26px; padding:30px 28px; box-shadow:0 18px 40px rgba(28,46,92,0.07); text-align:left;';
+  var H="font-size: clamp(28px,5vw,40px); line-height:1.1; font-weight:800; letter-spacing:-1px; margin:0 0 8px; font-family:'Newsreader',serif; font-style:italic;";
+  var LABEL='display:block; font-size:13px; font-weight:700; letter-spacing:0.4px; color:#536084; margin:14px 0 6px;';
+  var INPUT='width:100%; min-height:52px; border:2px solid #DCE3EF; border-radius:14px; padding:0 16px; font-family:inherit; font-size:16px; font-weight:500; color:#16203A; background:#fff; box-sizing:border-box;';
+  var SELECT='width:100%; min-height:52px; border:2px solid #DCE3EF; border-radius:14px; padding:0 14px; font-family:inherit; font-size:16px; font-weight:600; color:#16203A; background:#fff;';
+  function noteEl(){ return '<div id="acctNote" style="font-size:14px; font-weight:600; color:#C2410C; min-height:18px; margin-top:12px;"></div>'; }
+  function roleOpts(withClin){ var o='<option value="patient">Patient (person with Parkinson\'s)</option><option value="caregiver">Caregiver / family</option>'; if(withClin) o+='<option value="clinician">Clinician</option>'; return o; }
+  function row(k,v){ return '<div style="display:flex; justify-content:space-between; gap:16px; padding:12px 0; border-bottom:1px solid #F0F3F8;"><span style="font-size:14px; font-weight:700; color:#536084;">'+k+'</span><span style="font-size:15px; font-weight:600; color:#16203A; text-align:right;">'+v+'</span></div>'; }
+
+  function renderAccount(mode){
+    if (!accountView) return;
+    if (!apiReady()){
+      accountView.innerHTML = '<div style="'+CARD+'"><h1 style="'+H+'">Accounts coming soon</h1><p style="font-size:16px; color:#3A4A66; line-height:1.55; margin:0;">The account system isn\'t connected yet. Please check back shortly.</p></div>';
+      return;
+    }
+    if (mode === 'create') return renderCreate();
+    if (localStorage.getItem('cadence_token')) return renderProfile();
+    return renderLogin();
+  }
+
+  function renderCreate(){
+    var email = pendingOrder && pendingOrder.email ? pendingOrder.email : '';
+    accountView.innerHTML =
+      '<div style="text-align:center; margin-bottom:8px; font-size:15px; font-weight:800; letter-spacing:1.6px; color:#1F8A5B;">✓ PAYMENT CONFIRMED</div>'+
+      '<h1 style="'+H+' text-align:center;">Create your account</h1>'+
+      '<p style="text-align:center; font-size:16px; color:#3A4A66; line-height:1.55; margin:0 0 22px;">One account works across all your Cadence apps. Set it up to get started.</p>'+
+      '<div style="'+CARD+'">'+
+        '<label style="'+LABEL+'">I am a…</label><select id="acRole" style="'+SELECT+'">'+roleOpts(false)+'</select>'+
+        '<label style="'+LABEL+'">Full name</label><input id="acName" style="'+INPUT+'" placeholder="Your name" autocomplete="name">'+
+        '<label style="'+LABEL+'">Email</label><input id="acEmail" type="email" style="'+INPUT+'" value="'+esc(email)+'" placeholder="you@email.com" autocomplete="email">'+
+        '<label style="'+LABEL+'">Password</label><input id="acPass" type="password" style="'+INPUT+'" placeholder="At least 8 characters" autocomplete="new-password">'+
+        '<button id="acSubmit" style="'+BTN+'">Create account</button>'+ noteEl() +
+      '</div>';
+    document.getElementById('acSubmit').addEventListener('click', doCreate);
+  }
+  function doCreate(){
+    var role=document.getElementById('acRole').value, name=document.getElementById('acName').value.trim(),
+        email=document.getElementById('acEmail').value.trim(), pass=document.getElementById('acPass').value;
+    if(!name||!email){ setNote('Please enter your name and email.'); return; }
+    if(pass.length<8){ setNote('Password must be at least 8 characters.'); return; }
+    var btn=document.getElementById('acSubmit'); btn.textContent='Creating...'; btn.disabled=true; setNote('');
+    var body={ email:email, password:pass, name:name };
+    if(pendingOrder){ body.stripe_customer_id=pendingOrder.stripe_customer_id; body.order_session_id=pendingOrder.session_id; }
+    fetch(API+'/v1/auth/'+role+'/signup',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) })
+      .then(function(r){ return r.json().then(function(d){ return {ok:r.ok,status:r.status,d:d}; }); })
+      .then(function(res){
+        if(res.ok){ saveSession(res.d); renderDone(); }
+        else { btn.textContent='Create account'; btn.disabled=false; setNote(res.status===409?'An account with this email already exists — try signing in.':'Could not create your account. Check your details and try again.'); }
+      })
+      .catch(function(){ btn.textContent='Create account'; btn.disabled=false; setNote('Something went wrong. Please try again.'); });
+  }
+  function renderDone(){
+    accountView.innerHTML='<div style="'+CARD+' text-align:center;"><div style="font-size:46px; margin-bottom:6px;">🎉</div><h1 style="'+H+'">You\'re all set</h1><p style="font-size:16px; color:#3A4A66; line-height:1.6; margin:0 0 8px;">Your Cadence account is ready. Use the same email and password to sign in to the Cadence app when your kit arrives.</p><button data-go="home" style="'+BTN+'">Back to home</button></div>';
+  }
+  function renderLogin(){
+    accountView.innerHTML=
+      '<h1 style="'+H+' text-align:center;">Sign in</h1>'+
+      '<p style="text-align:center; font-size:16px; color:#3A4A66; line-height:1.55; margin:0 0 22px;">Access your Cadence account.</p>'+
+      '<div style="'+CARD+'">'+
+        '<label style="'+LABEL+'">I am a…</label><select id="acRole" style="'+SELECT+'">'+roleOpts(true)+'</select>'+
+        '<label style="'+LABEL+'">Email</label><input id="acEmail" type="email" style="'+INPUT+'" placeholder="you@email.com" autocomplete="email">'+
+        '<label style="'+LABEL+'">Password</label><input id="acPass" type="password" style="'+INPUT+'" placeholder="Your password" autocomplete="current-password">'+
+        '<button id="acSubmit" style="'+BTN+'">Sign in</button>'+ noteEl() +
+      '</div>';
+    document.getElementById('acSubmit').addEventListener('click', doLogin);
+  }
+  function doLogin(){
+    var role=document.getElementById('acRole').value, email=document.getElementById('acEmail').value.trim(), pass=document.getElementById('acPass').value;
+    if(!email||!pass){ setNote('Please enter your email and password.'); return; }
+    var btn=document.getElementById('acSubmit'); btn.textContent='Signing in...'; btn.disabled=true; setNote('');
+    fetch(API+'/v1/auth/'+role+'/login',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ email:email, password:pass }) })
+      .then(function(r){ return r.json().then(function(d){ return {ok:r.ok,d:d}; }); })
+      .then(function(res){ if(res.ok){ saveSession(res.d); renderProfile(); } else { btn.textContent='Sign in'; btn.disabled=false; setNote('Invalid email or password.'); } })
+      .catch(function(){ btn.textContent='Sign in'; btn.disabled=false; setNote('Something went wrong. Please try again.'); });
+  }
+  function renderProfile(){
+    accountView.innerHTML='<div style="'+CARD+'"><p style="font-size:16px; color:#536084; margin:0;">Loading your account…</p></div>';
+    fetch(API+'/v1/auth/me',{ headers:{'Authorization':'Bearer '+localStorage.getItem('cadence_token')} })
+      .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+      .then(function(u){
+        var rl={patient:'Patient',caregiver:'Caregiver',clinician:'Clinician'}[u.user_type]||u.user_type;
+        accountView.innerHTML='<h1 style="'+H+'">Your account</h1><div style="'+CARD+'">'+row('Name',esc(u.name))+row('Email',esc(u.email))+row('Role',esc(rl))+(u.stripe_customer_id?row('Billing','Linked — ready for future purchases'):'')+'<button id="acLogout" style="'+BTN+' background:#16203A; box-shadow:none;">Sign out</button></div>';
+        document.getElementById('acLogout').addEventListener('click', function(){ clearSession(); renderLogin(); });
+      })
+      .catch(function(){ clearSession(); renderLogin(); });
+  }
+
+  // ---------------- success / cancel banner + post-payment account ----------------
   var params = new URLSearchParams(location.search);
   var banner = document.getElementById('banner');
-  if (params.get('order') === 'success') { banner.textContent = '✓ Thank you — your order is confirmed. We\'ll email you with next steps.'; banner.className = 'banner success show'; }
-  else if (params.get('order') === 'cancelled') { banner.textContent = 'Your checkout was cancelled — your code is still valid if you\'d like to try again.'; banner.className = 'banner cancel show'; }
+  var startPage = 'home';
+  if (params.get('order') === 'success') {
+    banner.textContent = '✓ Payment confirmed — finish setting up your account below.'; banner.className = 'banner success show';
+    startPage = 'account'; nextAccountMode = 'create';
+    var sid = params.get('session_id');
+    pendingOrder = { session_id: sid, email: '', stripe_customer_id: null };
+    if (apiReady() && sid && !notConfigured()) {
+      fetch(CFG.FUNCTIONS_URL+'/order-status', { method:'POST', headers:fnHeaders(), body: JSON.stringify({ session_id: sid }) })
+        .then(function(r){ return r.json(); })
+        .then(function(d){ if(d){ pendingOrder.email=d.email||''; pendingOrder.stripe_customer_id=d.stripe_customer_id||null; var ef=document.getElementById('acEmail'); if(ef && !ef.value && pendingOrder.email) ef.value=pendingOrder.email; } })
+        .catch(function(){});
+    }
+  } else if (params.get('order') === 'cancelled') {
+    banner.textContent = 'Your checkout was cancelled — your code is still valid if you\'d like to try again.'; banner.className = 'banner cancel show';
+  }
 
   // ---------------- scroll reveal ----------------
   var obs = new IntersectionObserver(function(entries){
@@ -836,7 +1006,7 @@
   setInterval(revealAll, 1500);
 
   // ---------------- init ----------------
-  go('home');
+  go(startPage);
 })();
 </script>
 </body>

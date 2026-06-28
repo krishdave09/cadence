@@ -70,6 +70,9 @@ Deno.serve(async (req) => {
     session = await stripe.checkout.sessions.create({
       mode: "payment",
       line_items,
+      // Always create a Stripe Customer for this purchase so the buyer's
+      // Cadence account can be linked to it for future accessory purchases.
+      customer_creation: "always",
       // Carry the code through to the webhook so we can redeem on payment.
       metadata: { access_code: norm },
       success_url: `${SITE_URL}/?order=success&session_id={CHECKOUT_SESSION_ID}`,

@@ -37,6 +37,7 @@ Deno.serve(async (req) => {
     const s = event.data.object as Stripe.Checkout.Session;
     const code = s.metadata?.access_code ?? null;
     const email = s.customer_details?.email ?? s.customer_email ?? null;
+    const customerId = typeof s.customer === "string" ? s.customer : s.customer?.id ?? null;
 
     if (code) {
       await supabase
@@ -55,6 +56,7 @@ Deno.serve(async (req) => {
       {
         code,
         stripe_session_id: s.id,
+        stripe_customer_id: customerId,
         email,
         amount_total: s.amount_total,
         currency: s.currency,
