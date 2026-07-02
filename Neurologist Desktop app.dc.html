@@ -412,6 +412,34 @@
           </div>
         </div>
 
+        <!-- Section A2: models & calibration -->
+        <div style="background:#fff; border:1px solid #E4EAF3; border-radius:16px; padding:24px 26px; box-shadow:0 1px 3px rgba(28,46,92,0.06); margin-bottom:22px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:18px;">
+            <div>
+              <div style="font-size:18px; font-weight:800;">Models &amp; calibration</div>
+              <div style="font-size:14px; font-weight:600; color:#6B7794; margin-top:3px;">What's running for {{ d_firstName }}, and when it was last tuned to him. Updates are gated: promoted only if they beat the current model on his own history, with one-click rollback.</div>
+            </div>
+            <button style="flex:none; height:42px; padding:0 18px; border:1px solid #DCE4F0; border-radius:11px; background:#fff; cursor:pointer; font-family:inherit; font-size:13.5px; font-weight:800; color:#2F57E6;" style-hover="background:#F5F8FD">Schedule recalibration</button>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:14px;">
+            <div style="border:1px solid #EEF1F7; border-radius:13px; padding:16px 18px;">
+              <div style="font-size:12.5px; font-weight:800; letter-spacing:0.8px; color:#9AA6BE;">FREEZE DETECTION + PREDICTION</div>
+              <div style="font-size:15px; font-weight:800; color:#16203A; margin-top:7px;">v2 ensemble · on his phone</div>
+              <div style="font-size:13px; font-weight:600; color:#6B7794; margin-top:4px; line-height:1.45;">Warns ~1.25s pre-onset · 2-window confirm, 5s lockout · calibrated to his gait Jun 3.</div>
+            </div>
+            <div style="border:1px solid #EEF1F7; border-radius:13px; padding:16px 18px;">
+              <div style="font-size:12.5px; font-weight:800; letter-spacing:0.8px; color:#9AA6BE;">OFF-WINDOW FORECAST</div>
+              <div style="font-size:15px; font-weight:800; color:#16203A; margin-top:7px;">Personal response-curve fit</div>
+              <div style="font-size:13px; font-weight:600; color:#6B7794; margin-top:4px; line-height:1.45;">Fit to his dose response incl. protein-meal delay · nudges bounded by your limits above.</div>
+            </div>
+            <div style="border:1px solid #EEF1F7; border-radius:13px; padding:16px 18px;">
+              <div style="font-size:12.5px; font-weight:800; letter-spacing:0.8px; color:#9AA6BE;">LAST CALIBRATION</div>
+              <div style="font-size:15px; font-weight:800; color:#16203A; margin-top:7px;">Jun 3, 2026 · supervised session</div>
+              <div style="font-size:13px; font-weight:600; color:#6B7794; margin-top:4px; line-height:1.45;">Improved both freeze models for him · drift monitored, you'll be flagged if accuracy slips.</div>
+            </div>
+          </div>
+        </div>
+
         <!-- Section B: motor state timeline (hero) -->
         <div style="background:#fff; border:1px solid #E4EAF3; border-radius:16px; padding:24px 26px 26px; box-shadow:0 1px 3px rgba(28,46,92,0.06); margin-bottom:22px;">
           <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">

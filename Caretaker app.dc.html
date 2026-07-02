@@ -412,7 +412,7 @@
       <sc-if value="{{ alertsHasItems }}" hint-placeholder-val="{{ false }}">
       <div style="display:flex; flex-direction:column; gap:14px;">
         <sc-for list="{{ alertItems }}" as="al" hint-placeholder-count="3">
-        <div style="background:#fff; border-radius:22px; padding:18px 20px; box-shadow:0 8px 22px rgba(28,46,92,0.06); display:flex; gap:14px;" data-comment-anchor="c0d10a636f-div">
+        <div style="background:#fff; border-radius:22px; padding:18px 20px; box-shadow:0 8px 22px rgba(28,46,92,0.06); display:flex; gap:14px;">
           <div style="width:44px; height:44px; flex:none; border-radius:14px; background:{{ al.iconBg }}; display:flex; align-items:center; justify-content:center;">{{ al.icon }}</div>
           <div style="flex:1;">
             <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
@@ -460,7 +460,7 @@
           </button>
         </div>
         </sc-for>
-        <div style="padding:16px 0;" data-comment-anchor="205875f806-div">
+        <div style="padding:16px 0;">
           <div style="display:flex; align-items:center; gap:14px;">
             <div style="flex:1;">
               <div style="font-size:18px; font-weight:700; color:#16203A;">Quiet hours</div>
@@ -718,7 +718,7 @@ class Component extends DCLogic {
     } else if (isFreeze) {
       alertItems = [{
         key: 'a-frz', icon: this.alertIcon('freeze'), iconBg: '#FBF1E1',
-        title: 'Brief freeze, resolved', time: '10:50', body: 'Robert\u2019s steps paused briefly. The ankle cue helped him restart on his own.',
+        title: 'Brief freeze, resolved', time: '10:50', body: 'Robert\u2019s ankle band caught his walk breaking down and cued a rhythm a second early. He restarted on his own, no fall.',
         tag: 'Resolved', tagBg: '#E6F5EC', tagDot: '#1F8A5B', tagColor: '#15724A',
       }];
     }

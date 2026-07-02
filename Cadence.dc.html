@@ -44,10 +44,10 @@
       <div style="display:flex; align-items:center; justify-content:space-between; margin:10px 0 22px;">
         <div>
           <div style="font-size:17px; font-weight:600; color:#536084; white-space:nowrap;">Good morning,</div>
-          <div style="font-size: 28px; font-weight: 800; color: #16203A; letter-spacing: -0.4px; line-height: 1.1; margin-top: 2px; font-style: italic; font-family:'Newsreader',serif; text-decoration-line: none">{{ greetingName }}</div>
+          <div style="font-size: 28px; font-weight: 800; color: #16203A; letter-spacing: -0.4px; line-height: 1.1; margin-top: 2px; font-style: italic; font-family:'Newsreader',serif; text-decoration-line: none">Robert.</div>
         </div>
         <button onClick="{{ goAccount }}" style="width:56px; height:56px; flex:none; border-radius:50%; background:#2F57E6; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 20px rgba(47,87,230,0.32); font-family:inherit; padding:0;" style-active="transform:scale(0.94)">
-          <span style="font-size:22px; font-weight:700; color:#fff;">{{ avatarInitial }}</span>
+          <span style="font-size:22px; font-weight:700; color:#fff;">R</span>
         </button>
       </div>
 
@@ -447,7 +447,7 @@
           <span style="font-size:15px; font-weight:700; letter-spacing:1.4px; color:#3A47A0;">ANKLE CUE</span>
         </div>
         <div style="font-size:32px; font-weight:800; color:#16203A; line-height:1.05; letter-spacing:-0.6px;">Active and working</div>
-        <div style="font-size:18px; font-weight:500; color:#3A4A66; margin-top:12px; line-height:1.45;">If your feet stop, the ankle band gives a steady rhythm to step to. It restarted you twice today.</div>
+        <div style="font-size:18px; font-weight:500; color:#3A4A66; margin-top:12px; line-height:1.45;">When your walk starts to break down, the ankle band cues a steady rhythm about a second before your feet would stop. It got ahead of both freezes today.</div>
       </div>
 
       <!-- counts -->
@@ -473,9 +473,141 @@
         </div>
       </div>
 
+      <!-- tuned to you -->
+      <div style="background:#fff; border-radius:24px; padding:20px 22px; box-shadow:0 8px 22px rgba(28,46,92,0.06); margin-bottom:18px; display:flex; gap:14px; align-items:flex-start;">
+        <div style="width:44px; height:44px; flex:none; border-radius:14px; background:#E4E7FA; display:flex; align-items:center; justify-content:center;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 14c2-1 3-4 4-4s2 5 4 5 2-8 4-8 2 6 4 6" stroke="#4B5DC4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </div>
+        <div>
+          <div style="font-size:18px; font-weight:700; color:#16203A;">Tuned to your walk</div>
+          <div style="font-size:16px; font-weight:500; color:#3A4A66; margin-top:4px; line-height:1.45;">Your freeze warning was calibrated to your own gait at your session with Dr. Patel on June 3. You can retune it at any visit.</div>
+          <button onClick="{{ goCalibration }}" style="margin-top:12px; background:none; border:none; cursor:pointer; font-family:inherit; font-size:16px; font-weight:700; color:#2F57E6; padding:0; display:flex; align-items:center; gap:6px; min-height:44px;">Open the guided session <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="#2F57E6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+        </div>
+      </div>
+
       <div style="font-size:18px; font-weight:700; color:#16203A; margin:4px 4px 14px;">Today's freezes</div>
       <div style="display:flex; flex-direction:column; gap:12px;">
         {{ freezeList }}
+      </div>
+      </sc-if>
+
+      <!-- ================= CALIBRATION ================= -->
+      <sc-if value="{{ isCalibration }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; align-items:center; gap:14px; margin:10px 0 20px;">
+        <button onClick="{{ goFreeze }}" style="width:48px; height:48px; flex:none; border-radius:14px; background:#fff; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 16px rgba(28,46,92,0.08);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M15 5 8 12l7 7" stroke="#16203A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </button>
+        <div>
+          <div style="font-size:30px; font-weight:800; color:#16203A; letter-spacing:-0.5px;">Calibration walk</div>
+          <div style="font-size:17px; font-weight:500; color:#536084; margin-top:2px;">{{ calibStepLabel }}</div>
+        </div>
+      </div>
+
+      <!-- video player -->
+      <div style="background:#16203A; border-radius:28px; overflow:hidden; margin-bottom:18px;">
+        <div style="position:relative; aspect-ratio:16/10;">
+          <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:20px; text-align:center;">
+            <button onClick="{{ toggleCalibPlay }}" style="width:76px; height:76px; border-radius:50%; background:rgba(255,255,255,0.14); border:2px solid rgba(255,255,255,0.55); cursor:pointer; display:flex; align-items:center; justify-content:center;" style-active="transform:scale(0.95)">
+              <sc-if value="{{ calibPaused }}" hint-placeholder-val="{{ true }}"><svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7L8 5z" fill="#fff"></path></svg></sc-if>
+              <sc-if value="{{ calibPlaying }}" hint-placeholder-val="{{ false }}"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M8 5v14M16 5v14" stroke="#fff" stroke-width="3.4" stroke-linecap="round"></path></svg></sc-if>
+            </button>
+            <div style="font-size:20px; font-weight:800; color:#fff;">{{ calibVideoTitle }}</div>
+            <div style="font-size:15px; font-weight:500; color:#A9B7D0; line-height:1.4;">Your medical staff shows each move before you do it.</div>
+          </div>
+        </div>
+        <div style="height:8px; background:#243355;"><div style="width:{{ calibProgW }}; height:100%; background:#7CF0B7; transition:width 0.4s;"></div></div>
+      </div>
+
+      <!-- steps -->
+      <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:18px;">
+        <sc-for list="{{ calibRows }}" as="r" hint-placeholder-count="4">
+        <div style="background:{{ r.bg }}; border-radius:22px; padding:18px 20px; box-shadow:0 8px 22px rgba(28,46,92,0.06); display:flex; align-items:center; gap:14px;">
+          <div style="width:40px; height:40px; flex:none; border-radius:50%; background:{{ r.numBg }}; color:{{ r.numColor }}; display:flex; align-items:center; justify-content:center; font-size:17px; font-weight:800;">{{ r.num }}</div>
+          <div style="flex:1; font-size:17.5px; font-weight:700; color:#16203A;">{{ r.name }}</div>
+          <div style="font-size:15px; font-weight:600; color:#8A96B0; flex:none;">{{ r.time }}</div>
+        </div>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ calibNotDone }}" hint-placeholder-val="{{ true }}">
+      <button onClick="{{ calibPrimary }}" style="width:100%; min-height:64px; background:#2F57E6; border:none; border-radius:20px; font-family:inherit; font-size:19px; font-weight:700; color:#fff; cursor:pointer; box-shadow:0 14px 30px rgba(47,87,230,0.30);" style-active="transform:scale(0.985)">{{ calibPrimaryLabel }}</button>
+      <div style="text-align:center; font-size:15px; font-weight:500; color:#8A96B0; margin-top:14px; line-height:1.5;">Wear both bands. The session records your own gait so your freeze warning fits you.</div>
+      </sc-if>
+
+      <sc-if value="{{ calibDone }}" hint-placeholder-val="{{ false }}">
+      <div style="background:#E6F5EC; border:2px solid #BFE5CE; border-radius:24px; padding:20px 22px; margin-bottom:14px; display:flex; gap:14px;">
+        <div style="width:44px; height:44px; flex:none; border-radius:50%; background:#1F8A5B; display:flex; align-items:center; justify-content:center;">
+          <svg width="24" height="24" viewBox="0 0 26 26" fill="none"><path d="M6 13.5 11 18.5 20 7.5" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </div>
+        <div>
+          <div style="font-size:18px; font-weight:700; color:#15724A;">Session recorded</div>
+          <div style="font-size:16px; font-weight:500; color:#3A4A66; margin-top:4px; line-height:1.45;">Sent to Dr. Patel. Your freeze warning retunes overnight, and you'll see the change tomorrow.</div>
+        </div>
+      </div>
+      <button onClick="{{ calibReset }}" style="width:100%; min-height:58px; background:#EEF3FB; border:2px solid #D5DEF0; border-radius:20px; font-family:inherit; font-size:18px; font-weight:700; color:#2F57E6; cursor:pointer;" style-active="transform:scale(0.985)">Redo session</button>
+      </sc-if>
+      </sc-if>
+
+      <!-- ================= PERSONALIZATION ================= -->
+      <sc-if value="{{ isPersonal }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; align-items:center; gap:14px; margin:10px 0 20px;">
+        <button onClick="{{ goMore }}" style="width:48px; height:48px; flex:none; border-radius:14px; background:#fff; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 16px rgba(28,46,92,0.08);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M15 5 8 12l7 7" stroke="#16203A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </button>
+        <div>
+          <div style="font-size:30px; font-weight:800; color:#16203A; letter-spacing:-0.5px;">Personalization</div>
+          <div style="font-size:17px; font-weight:500; color:#536084; margin-top:2px;">How Cadence is tuned to you</div>
+        </div>
+      </div>
+
+      <!-- freeze personalization -->
+      <div style="background:#fff; border-radius:26px; padding:22px; box-shadow:0 10px 30px rgba(28,46,92,0.07); margin-bottom:16px;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+          <div style="width:48px; height:48px; flex:none; border-radius:14px; background:#E4E7FA; display:flex; align-items:center; justify-content:center;">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M2 12h3.5l2-6 3.2 13 3-9 2.3 4.5H22" stroke="#4B5DC4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:20px; font-weight:800; color:#16203A;">Freeze warning</div>
+            <div style="font-size:15px; font-weight:600; color:#15724A; margin-top:2px;">Tuned to your gait</div>
+          </div>
+        </div>
+        <div style="font-size:16px; font-weight:500; color:#3A4A66; line-height:1.5; margin-bottom:16px;">Calibrated at your guided walk with Dr. Patel on June 3. Since then it has kept learning from every walk you take.</div>
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-top:1px solid #EEF1F7;">
+          <span style="font-size:15px; font-weight:600; color:#8A96B0;">Warned in advance this week</span>
+          <span style="font-size:15px; font-weight:700; color:#16203A;">8 of 9 freezes</span>
+        </div>
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 0 4px; border-top:1px solid #EEF1F7;">
+          <span style="font-size:15px; font-weight:600; color:#8A96B0;">Last tuned</span>
+          <span style="font-size:15px; font-weight:700; color:#16203A;">June 3 · guided session</span>
+        </div>
+        <button onClick="{{ goCalibration }}" style="margin-top:10px; width:100%; min-height:54px; background:#EEF3FB; border:2px solid #D5DEF0; border-radius:16px; font-family:inherit; font-size:17px; font-weight:700; color:#2F57E6; cursor:pointer;" style-active="transform:scale(0.985)">Redo the guided session</button>
+      </div>
+
+      <!-- off-window personalization -->
+      <div style="background:#fff; border-radius:26px; padding:22px; box-shadow:0 10px 30px rgba(28,46,92,0.07); margin-bottom:16px;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+          <div style="width:48px; height:48px; flex:none; border-radius:14px; background:#E5EBFD; display:flex; align-items:center; justify-content:center;">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="#2F57E6" stroke-width="2.2"></circle><path d="M12 8v4l3 2" stroke="#2F57E6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:20px; font-weight:800; color:#16203A;">Off-window forecast</div>
+            <div style="font-size:15px; font-weight:600; color:#15724A; margin-top:2px;">Learning your response curve</div>
+          </div>
+        </div>
+        <div style="font-size:16px; font-weight:500; color:#3A4A66; line-height:1.5; margin-bottom:16px;">Cadence has learned how your body answers each dose, including how a protein-heavy meal slows it down, from 26 days of wear.</div>
+        <div style="margin-bottom:14px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="font-size:14px; font-weight:600; color:#8A96B0;">Nudge timing at setup</span><span style="font-size:14px; font-weight:700; color:#536084;">within ~19 min</span></div>
+          <div style="height:14px; border-radius:7px; background:#EAEFF8;"><div style="width:100%; height:100%; border-radius:7px; background:#C4CCDC;"></div></div>
+        </div>
+        <div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="font-size:14px; font-weight:600; color:#15724A;">Nudge timing now</span><span style="font-size:14px; font-weight:700; color:#15724A;">within ~5 min</span></div>
+          <div style="height:14px; border-radius:7px; background:#EAEFF8;"><div style="width:26%; height:100%; border-radius:7px; background:#1F8A5B;"></div></div>
+        </div>
+      </div>
+
+      <div style="background:#F4F7FC; border-radius:22px; padding:18px 20px; display:flex; gap:12px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style="flex:none; margin-top:2px;"><path d="M12 2 20 5v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3Z" stroke="#8A96B0" stroke-width="2" stroke-linejoin="round"></path></svg>
+        <div style="font-size:14.5px; font-weight:500; color:#536084; line-height:1.5;">Tuning updates install only after they've been checked against your own history, and every change can be undone. Your doctor sees the same numbers.</div>
       </div>
       </sc-if>
 
@@ -507,7 +639,7 @@
         </div>
         <div style="flex:1;">
           <div style="font-size:23px; font-weight:800; color:#fff; letter-spacing:-0.3px;">Dose</div>
-          <div style="font-size:16px; font-weight:500; color:rgba(255,255,255,0.9); margin-top:2px;">{{ quickDoseMed }}</div>
+          <div style="font-size:16px; font-weight:500; color:rgba(255,255,255,0.9); margin-top:2px;">Levodopa / Carbidopa 25/100</div>
         </div>
       </button>
 
@@ -556,8 +688,8 @@
       <div style="background:linear-gradient(160deg, #E6F5EC 0%, #DCF1E6 100%); border-radius:30px; padding:24px 24px 26px; margin-bottom:18px;">
         <div style="font-size:15px; font-weight:700; letter-spacing:1.4px; color:#15724A; margin-bottom:12px;">TIME ON THIS WEEK</div>
         <div style="display:flex; align-items:flex-end; gap:14px;">
-          <div style="font-size:52px; font-weight:800; color:#16203A; line-height:0.9; letter-spacing:-1.5px;">{{ timeOnPct }}</div>
-          <div style="font-size:17px; font-weight:600; color:#15724A; padding-bottom:6px;">{{ timeOnDelta }}</div>
+          <div style="font-size:52px; font-weight:800; color:#16203A; line-height:0.9; letter-spacing:-1.5px;">74%</div>
+          <div style="font-size:17px; font-weight:600; color:#15724A; padding-bottom:6px;">up from 68% last week</div>
         </div>
       </div>
 
@@ -673,6 +805,24 @@
         <div style="flex:1;">
           <div style="font-size:18px; font-weight:700; color:#16203A;">Charging dock</div>
           <div style="font-size:16px; font-weight:500; color:#3A4A66; margin-top:2px;">Plugged in · ready overnight</div>
+        </div>
+      </div>
+
+      <!-- on this phone -->
+      <div style="background:#fff; border-radius:26px; padding:22px; box-shadow:0 10px 30px rgba(28,46,92,0.07); margin-bottom:20px;">
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:14px;">
+          <div style="width:54px; height:54px; flex:none; border-radius:16px; background:#E6F5EC; display:flex; align-items:center; justify-content:center;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="7" y="2.5" width="10" height="19" rx="3" stroke="#1F8A5B" stroke-width="2.2"></rect><path d="M11 18.5h2" stroke="#1F8A5B" stroke-width="2.2" stroke-linecap="round"></path></svg>
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:21px; font-weight:800; color:#16203A;">On this phone</div>
+            <div style="font-size:16px; font-weight:600; color:#15724A; margin-top:3px;">Freeze warning · up to date</div>
+          </div>
+        </div>
+        <div style="font-size:16px; font-weight:500; color:#3A4A66; line-height:1.5;">Your freeze warning runs right here on the phone, so it works with no signal and no delay. Updates install only after they've been checked against your own history, and Cadence can always go back to the previous version.</div>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-top:14px; padding-top:14px; border-top:1px solid #EEF1F7;">
+          <span style="font-size:15px; font-weight:600; color:#8A96B0;">Model version</span>
+          <span style="font-size:15px; font-weight:700; color:#16203A;">v2 · tuned to you June 3</span>
         </div>
       </div>
 
@@ -868,10 +1018,10 @@
         <div style="position:absolute; top:-50px; right:-40px; width:180px; height:180px; border-radius:50%; background:rgba(255,255,255,0.10);"></div>
         <div style="display:flex; align-items:center; gap:18px; position:relative;">
           <div style="width:74px; height:74px; flex:none; border-radius:50%; background:rgba(255,255,255,0.20); border:2px solid rgba(255,255,255,0.5); display:flex; align-items:center; justify-content:center;">
-            <span style="font-size:30px; font-weight:800; color:#fff;">{{ avatarInitial }}</span>
+            <span style="font-size:30px; font-weight:800; color:#fff;">R</span>
           </div>
           <div style="flex:1;">
-            <div style="font-size:24px; font-weight:800; color:#fff; letter-spacing:-0.4px;">{{ patientName }}</div>
+            <div style="font-size:24px; font-weight:800; color:#fff; letter-spacing:-0.4px;">Robert Hale</div>
             <div style="font-size:16px; font-weight:600; color:rgba(255,255,255,0.85); margin-top:3px;">Member since March 2024</div>
           </div>
         </div>
@@ -1009,12 +1159,6 @@
       </div>
 
       <button onClick="{{ signOut }}" style="width:100%; min-height:64px; background:#fff; border:2px solid #FBD9D9; border-radius:20px; cursor:pointer; font-family:inherit; font-size:19px; font-weight:800; color:#D14343; box-shadow:0 8px 22px rgba(28,46,92,0.05);" style-active="transform:scale(0.99)">Sign out</button>
-
-      <!-- buried build/demo footer: low-key, below sign out -->
-      <div style="text-align:center; margin-top:26px; padding-bottom:6px;">
-        <div style="font-size:12px; font-weight:600; color:#C2CADD;">Cadence v0.9 · preview build</div>
-        <button onClick="{{ toggleDemo }}" style="margin-top:7px; background:none; border:none; cursor:pointer; font-family:inherit; font-size:12px; font-weight:600; color:#C2CADD; text-decoration:underline; text-underline-offset:2px;" style-active="opacity:0.6">{{ demoToggleLabel }}</button>
-      </div>
       </sc-if>
 
       <!-- ================= PASSWORD & SIGN-IN ================= -->
@@ -1389,6 +1533,33 @@
           </div>
         </sc-if>
 
+        <sc-if value="{{ obStepIsCalib }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:24px;">
+            <div style="background:#16203A; border-radius:24px; overflow:hidden; margin-bottom:14px;">
+              <div style="display:flex; align-items:center; gap:16px; padding:18px 20px;">
+                <button onClick="{{ toggleCalibPlay }}" style="width:56px; height:56px; flex:none; border-radius:50%; background:rgba(255,255,255,0.14); border:2px solid rgba(255,255,255,0.55); cursor:pointer; display:flex; align-items:center; justify-content:center;" style-active="transform:scale(0.95)">
+                  <sc-if value="{{ calibPaused }}" hint-placeholder-val="{{ true }}"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7L8 5z" fill="#fff"></path></svg></sc-if>
+                  <sc-if value="{{ calibPlaying }}" hint-placeholder-val="{{ false }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M8 5v14M16 5v14" stroke="#fff" stroke-width="3.4" stroke-linecap="round"></path></svg></sc-if>
+                </button>
+                <div style="flex:1;">
+                  <div style="font-size:18px; font-weight:800; color:#fff;">{{ calibVideoTitle }}</div>
+                  <div style="font-size:14px; font-weight:600; color:#A9B7D0; margin-top:2px;">{{ calibStepLabel }}</div>
+                </div>
+              </div>
+              <div style="height:7px; background:#243355;"><div style="width:{{ calibProgW }}; height:100%; background:#7CF0B7; transition:width 0.4s;"></div></div>
+            </div>
+            <sc-if value="{{ calibNotDone }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ calibPrimary }}" style="width:100%; min-height:58px; background:#fff; border:2px solid #D5DEF0; border-radius:18px; font-family:inherit; font-size:18px; font-weight:700; color:#2F57E6; cursor:pointer;" style-active="transform:scale(0.985)">{{ calibPrimaryLabel }}</button>
+            </sc-if>
+            <sc-if value="{{ calibDone }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#E6F5EC; border:2px solid #BFE5CE; border-radius:18px; padding:16px 18px; display:flex; align-items:center; gap:12px;">
+                <svg width="24" height="24" viewBox="0 0 26 26" fill="none"><path d="M6 13.5 11 18.5 20 7.5" stroke="#15724A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></svg>
+                <span style="font-size:16px; font-weight:700; color:#15724A;">Session recorded, sent to your care team.</span>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
         <sc-if value="{{ obStepIsConsent }}" hint-placeholder-val="{{ false }}">
           <div style="margin-top:24px;">
             {{ consentEditor }}
@@ -1472,14 +1643,19 @@ class Component extends DCLogic {
     authMode: 'signin', authStep: 0,
     authName: '', authEmail: '', authPassword: '', authDob: '', authPhone: '', authCode: '',
     termsTos: false, termsData: false,
-    med: { name: '', strength: '', tablets: '' },
-    doses: [],
-    caregivers: [],
+    med: { name: 'Levodopa / Carbidopa', strength: '25 / 100 mg', tablets: '1 tablet' },
+    doses: [
+      { id: 1, time: '7:00', label: 'Morning' },
+      { id: 2, time: '11:45', label: 'Midday' },
+      { id: 3, time: '4:00', label: 'Afternoon' },
+      { id: 4, time: '8:00', label: 'Evening' },
+    ],
+    caregivers: [{ id: 1, name: 'Margaret', relation: 'Daughter', phone: '(415) 555-0182', on: true, connected: true }],
     showAddCaregiver: false, newCgName: '', newCgRelation: '', newCgPhone: '',
     invites: [], invitePhone: '', inviteSentCode: null, _processedSignups: [],
-    patientEmail: '', patientPhone: '', patientDob: '',
+    patientEmail: 'robert.hale@email.com', patientPhone: '(415) 555-0114', patientDob: 'May 12, 1956',
     accountEdit: false, editEmail: '', editPhone: '',
-    careEditOpen: false, doctorName: '', doctorId: '', doctorEmail: '', doctorInviteSent: false, doctorAccepted: false,
+    careEditOpen: false, doctorName: 'Dr. N. Okafor', doctorId: '', doctorEmail: '', doctorInviteSent: false, doctorAccepted: false,
     symptomType: null, symptomSeverity: null,
     consent: { cloud: true, caregiver: false },
     careShare: true,
@@ -1491,14 +1667,14 @@ class Component extends DCLogic {
     messages: [], chatInput: '', chatLoading: false,
     pdfState: 'idle', reportShared: false,
     btSheet: null, btContext: null, btStage: 'list',
-    insight: '',
+    insight: 'Your mornings have been your steadiest stretch this week. Today\u2019s midday dose was suggested 15 minutes earlier, you confirmed it, to stay ahead of the off window expected before noon.',
   };
 
   componentDidMount() {
     try {
       if (!localStorage.getItem('cadence_onboarded')) this.setState({ screen: 'auth', authMode: 'signin' });
     } catch (e) {}
-    if (this.isDemo()) { this.setState(this.demoPatch()); this.loadInsight(); }
+    this.loadInsight();
     this.loadInvites();
     this.loadNotifPrefs();
     this.loadCarePlan();
@@ -1508,44 +1684,6 @@ class Component extends DCLogic {
   }
 
   componentWillUnmount() { if (this._signupTimer) clearInterval(this._signupTimer); if (this._cpTimer) clearInterval(this._cpTimer); }
-
-  // ---- demo data: buried "load demo data" toggle in Settings ----
-  // Default first-run is empty (deployment-ready); enabling this seeds the
-  // consistent Hale-family persona used across the patient/caretaker/clinician
-  // apps for walkthroughs. Persisted so it survives reload.
-  demoPatch() {
-    return {
-      med: { name: 'Levodopa / Carbidopa', strength: '25 / 100 mg', tablets: '1 tablet' },
-      doses: [
-        { id: 1, time: '7:00', label: 'Morning' },
-        { id: 2, time: '11:45', label: 'Midday' },
-        { id: 3, time: '4:00', label: 'Afternoon' },
-        { id: 4, time: '8:00', label: 'Evening' },
-      ],
-      caregivers: [{ id: 1, name: 'Margaret', relation: 'Daughter', phone: '(415) 555-0182', on: true, connected: true }],
-      patientEmail: 'robert.hale@email.com', patientPhone: '(415) 555-0114', patientDob: 'May 12, 1956',
-      doctorName: 'Dr. N. Okafor', doctorAccepted: true,
-      insight: 'Your mornings have been your steadiest stretch this week. Today’s midday dose was suggested 15 minutes earlier — you confirmed it — to stay ahead of the off window expected before noon.',
-    };
-  }
-  isDemo() { try { return localStorage.getItem('cadence_demo_mode') === '1'; } catch (e) { return false; } }
-  loadDemo() {
-    try { localStorage.setItem('cadence_demo_mode', '1'); } catch (e) {}
-    this.setState(this.demoPatch());
-    this.loadInsight();
-  }
-  clearDemo() {
-    try { localStorage.removeItem('cadence_demo_mode'); } catch (e) {}
-    this.setState({
-      med: { name: '', strength: '', tablets: '' }, doses: [], caregivers: [],
-      patientEmail: '', patientPhone: '', patientDob: '', doctorName: '', doctorAccepted: false, insight: '',
-    });
-  }
-  toggleDemo() { if (this.isDemo()) this.clearDemo(); else this.loadDemo(); }
-
-  // Patient identity for display: demo persona, else what the user entered at signup.
-  patientFullName() { return this.isDemo() ? 'Robert Hale' : (this.state.authName || '').trim(); }
-  patientFirstName() { return (this.patientFullName().split(/\s+/)[0] || ''); }
 
   carePlanObj() { try { return JSON.parse(localStorage.getItem('cadence_care_plan')) || {}; } catch (e) { return {}; } }
   loadCarePlan() {
@@ -1640,7 +1778,7 @@ class Component extends DCLogic {
     const id = this.state.doctorId.trim().toUpperCase();
     if (!/^CDN-?\d{3,5}$/.test(id.replace(/\s/g, ''))) return;
     const invites = this.readLS('cadence_doctor_invites');
-    invites.push({ providerId: id, patient: this.patientFullName() || 'Patient', ts: Date.now(), status: 'pending' });
+    invites.push({ providerId: id, patient: 'Robert Hale', ts: Date.now(), status: 'pending' });
     this.writeLS('cadence_doctor_invites', invites);
     this.setState({ doctorInviteSent: true, careEditOpen: false });
   }
@@ -1856,7 +1994,7 @@ class Component extends DCLogic {
       e('div', { onClick: () => this.toggleCaregiver(c.id), style: { display: 'flex', alignItems: 'center', gap: '16px', marginTop: '14px', padding: '16px 18px', borderRadius: '18px', cursor: 'pointer', background: on ? '#E6F5EC' : '#F4F7FC', border: '2px solid ' + (on ? '#BFE5CE' : '#E2E9F5') } },
         e('div', { style: { flex: 1 } },
           e('div', { style: { fontSize: '18px', fontWeight: 700, color: '#16203A' } }, 'Send alerts'),
-          e('div', { style: { fontSize: '15px', fontWeight: 500, color: '#536084', marginTop: '2px' } }, on ? 'On \u2014 off windows & freezes' : 'Off')),
+          e('div', { style: { fontSize: '15px', fontWeight: 500, color: '#536084', marginTop: '2px' } }, on ? 'On, off windows & freezes' : 'Off')),
         e('div', { style: { width: '60px', height: '36px', flex: 'none', borderRadius: '18px', background: on ? '#1F8A5B' : '#CDD6E8', position: 'relative', transition: 'background 0.2s' } },
           e('div', { style: { position: 'absolute', top: '4px', left: on ? '28px' : '4px', width: '28px', height: '28px', borderRadius: '50%', background: '#fff', boxShadow: '0 2px 6px rgba(0,0,0,0.2)', transition: 'left 0.2s' } }))));
   }
@@ -2148,6 +2286,39 @@ class Component extends DCLogic {
     };
   }
 
+  calibVals() {
+    const step = this.state.calibStep || 0;
+    const playing = !!this.state.calibPlaying;
+    const done = step >= 4;
+    const defs = [
+      { name: 'Sit and stand', time: '2 min' },
+      { name: 'Steady walk down a hallway', time: '4 min' },
+      { name: 'Turns, both directions', time: '2 min' },
+      { name: 'Start-stop drills', time: '2 min' },
+    ];
+    const calibRows = defs.map((d, i) => ({
+      key: 'cal' + i,
+      name: d.name, time: d.time, num: String(i + 1),
+      bg: i === step && !done ? '#EEF3FB' : '#fff',
+      numBg: i < step || done ? '#1F8A5B' : (i === step ? '#2F57E6' : '#EAEFF8'),
+      numColor: i < step || done || i === step ? '#fff' : '#8A96B0',
+    }));
+    return {
+      calibRows,
+      calibDone: done,
+      calibNotDone: !done,
+      calibPlaying: playing && !done,
+      calibPaused: !playing || done,
+      toggleCalibPlay: () => this.setState(s => ({ calibPlaying: !s.calibPlaying })),
+      calibPrimary: () => this.setState(s => ({ calibStep: Math.min((s.calibStep || 0) + 1, 4), calibPlaying: (s.calibStep || 0) + 1 < 4 })),
+      calibPrimaryLabel: step === 0 ? 'Start guided session' : (step >= 3 ? 'Finish session' : 'Next step'),
+      calibStepLabel: done ? 'Session complete' : 'Step ' + (step + 1) + ' of 4 \u00b7 about 10 minutes',
+      calibVideoTitle: done ? 'All done' : defs[Math.min(step, 3)].name,
+      calibReset: () => this.setState({ calibStep: 0, calibPlaying: false }),
+      calibProgW: Math.round((Math.min(step, 4) / 4) * 100) + '%',
+    };
+  }
+
   renderVals() {
     const active = '#2F57E6';
     const idle = '#8A96B0';
@@ -2174,16 +2345,14 @@ class Component extends DCLogic {
     const indigo = '#4B5DC4', indigoBg = '#E4E7FA';
     const green = '#1F8A5B';
 
-    const emptyCard = (key, text) => React.createElement('div', { key, style: { background: '#fff', borderRadius: '22px', padding: '22px', textAlign: 'center', fontSize: '17px', fontWeight: 600, color: '#8A96B0', boxShadow: '0 8px 22px rgba(28,46,92,0.06)' } }, text);
-
-    const timelineEvents = this.isDemo() ? [
+    const timelineEvents = [
       this.eventRow({ key: 't1', time: '7:00', icon: 'dose', iconColor: blue, iconBg: blueBg, title: 'Morning dose', sub: 'Levodopa / Carbidopa 25/100', badge: 'Taken', badgeColor: '#15724A', badgeBg: '#D6EEE0' }),
       this.eventRow({ key: 't2', time: '7:40', icon: 'meal', iconColor: amber, iconBg: amberBg, title: 'Breakfast', sub: 'Light, low protein' }),
       this.eventRow({ key: 't3', time: '9:15', icon: 'freeze', iconColor: indigo, iconBg: indigoBg, title: 'Freeze', sub: 'Ankle cue helped you restart' }),
       this.eventRow({ key: 't4', time: 'Now', icon: 'now', iconColor: green, iconBg: '#BFE5CE', title: "You're on", sub: 'Steady for 2h 40m', highlight: true }),
       this.eventRow({ key: 't5', time: '11:45', icon: 'dose', iconColor: blue, iconBg: blueBg, title: 'Midday dose', sub: 'Suggested earlier than 12:00, confirmed', badge: 'Due soon', badgeColor: amber, badgeBg: '#F7E4C4' }),
       this.eventRow({ key: 't6', time: '12:30', icon: 'meal', iconColor: amber, iconBg: amberBg, title: 'Lunch', sub: 'High protein, may slow your dose' }),
-    ] : [ emptyCard('tl-empty', 'Your day will fill in here as Cadence learns your rhythm.') ];
+    ];
 
     const middayBadge = (this.state.takenDoses[2] != null)
       ? { badge: 'Taken', badgeColor: '#15724A', badgeBg: '#D6EEE0' }
@@ -2191,12 +2360,12 @@ class Component extends DCLogic {
         : (this.state.nowMin >= 685 ? { badge: 'Due now', badgeColor: amber, badgeBg: '#F7E4C4' }
           : { badge: 'Scheduled', badgeColor: '#536084', badgeBg: '#EAEFF8' }));
 
-    const doseList = this.isDemo() ? [
+    const doseList = [
       this.eventRow({ key: 'd1', time: '7:00', icon: 'dose', iconColor: blue, iconBg: blueBg, title: 'Morning', sub: 'Levodopa / Carbidopa 25/100', badge: 'Taken', badgeColor: '#15724A', badgeBg: '#D6EEE0' }),
       this.eventRow({ key: 'd2', time: '11:45', icon: 'dose', iconColor: blue, iconBg: blueBg, title: 'Midday', sub: 'Levodopa / Carbidopa 25/100', ...middayBadge }),
       this.eventRow({ key: 'd3', time: '4 pm', icon: 'dose', iconColor: '#8A96B0', iconBg: '#EEF1F7', title: 'Afternoon', sub: 'Levodopa / Carbidopa 25/100', badge: 'Scheduled', badgeColor: '#536084', badgeBg: '#EAEFF8' }),
       this.eventRow({ key: 'd4', time: '8 pm', icon: 'dose', iconColor: '#8A96B0', iconBg: '#EEF1F7', title: 'Evening', sub: 'Levodopa / Carbidopa 25/100', badge: 'Scheduled', badgeColor: '#536084', badgeBg: '#EAEFF8' }),
-    ] : [ emptyCard('dl-empty', 'No medication schedule yet — add yours in Medication & schedule.') ];
+    ];
 
     const logRows = this.state.logEntries.map(en => this.eventRow({
       key: en.key, time: en.time, icon: en.icon, iconColor: en.iconColor, iconBg: en.iconBg, title: en.title, sub: en.sub, badge: en.badge, badgeColor: en.badgeColor, badgeBg: en.badgeBg,
@@ -2206,9 +2375,7 @@ class Component extends DCLogic {
     ];
 
     const histData = [['Wed', 64], ['Thu', 70], ['Fri', 58], ['Sat', 76], ['Sun', 80], ['Mon', 72], ['Tue', 74]];
-    const historyBars = this.isDemo()
-      ? histData.map((d, i) => this.historyBar(d[0], d[1], i === histData.length - 1))
-      : [ React.createElement('div', { key: 'hb-empty', style: { width: '100%', alignSelf: 'center', textAlign: 'center', fontSize: '15px', fontWeight: 600, color: '#8A96B0' } }, 'Not enough data yet — your weekly trend appears once Cadence has learned your rhythm.') ];
+    const historyBars = histData.map((d, i) => this.historyBar(d[0], d[1], i === histData.length - 1));
 
     const e = React.createElement;
     const pairSteps = [
@@ -2219,14 +2386,14 @@ class Component extends DCLogic {
     const ps = pairSteps[this.state.pairStep] || pairSteps[0];
     const stepColor = (i) => this.state.pairStep >= i ? '#2F57E6' : '#D5DEF0';
 
-    const freezeList = this.isDemo() ? [
+    const freezeList = [
       this.eventRow({ key: 'f1', time: '9:15', icon: 'freeze', iconColor: indigo, iconBg: indigoBg, title: 'Freeze', sub: 'Cue restarted you in 4 seconds' }),
       this.eventRow({ key: 'f2', time: '10:50', icon: 'freeze', iconColor: indigo, iconBg: indigoBg, title: 'Freeze', sub: 'Cue restarted you in 6 seconds' }),
-    ] : [ emptyCard('fz-empty', 'No freezes logged yet.') ];
+    ];
 
     const cgOn = this.state.caregivers.filter(c => c.on);
     const moreList = [
-      this.moreRow({ key: 'm1', icon: 'freeze', iconColor: indigo, iconBg: indigoBg, title: 'Freeze', desc: this.isDemo() ? '2 today · ankle cue active' : 'No freezes logged yet', onClick: () => this.setState({ screen: 'freeze' }) }),
+      this.moreRow({ key: 'm1', icon: 'freeze', iconColor: indigo, iconBg: indigoBg, title: 'Freeze', desc: '2 today · ankle cue active', onClick: () => this.setState({ screen: 'freeze' }) }),
       this.moreRow({ key: 'm2', icon: 'plus', iconColor: blue, iconBg: blueBg, title: 'Log', desc: 'Add a dose, meal, or note', onClick: () => this.setState({ screen: 'log' }) }),
       this.moreRow({ key: 'm3', icon: 'chart', iconColor: green, iconBg: '#D6EEE0', title: 'History', desc: 'Trends, dose response & PDF', onClick: () => this.setState({ screen: 'history' }) }),
       this.moreRow({ key: 'm5', icon: 'person', iconColor: amber, iconBg: amberBg, title: 'Caregivers', desc: cgOn.length ? 'Alerts on · ' + cgOn.map(c => c.name).join(', ') : 'No alerts on', onClick: () => this.setState({ screen: 'caregiver' }) }),
@@ -2234,7 +2401,8 @@ class Component extends DCLogic {
 
     const setupList = [
       this.moreRow({ key: 's1', icon: 'devices', iconColor: blue, iconBg: blueBg, title: 'Devices', desc: 'Bands, battery & pairing', onClick: () => this.setState({ screen: 'devices' }) }),
-      this.moreRow({ key: 's2', icon: 'dose', iconColor: blue, iconBg: blueBg, title: 'Medication & schedule', desc: (this.state.med.name + ' ' + this.state.med.strength).replace(/\s+/g, ' ').trim() || 'Not set up yet', onClick: () => this.setState({ screen: 'settings' }) }),
+      this.moreRow({ key: 's2', icon: 'dose', iconColor: blue, iconBg: blueBg, title: 'Medication & schedule', desc: 'Levodopa / Carbidopa 25/100', onClick: () => this.setState({ screen: 'settings' }) }),
+      this.moreRow({ key: 's4', icon: 'chart', iconColor: green, iconBg: '#D6EEE0', title: 'Personalization', desc: 'How Cadence is tuned to you', onClick: () => this.setState({ screen: 'personal' }) }),
       this.moreRow({ key: 's3', icon: 'plus', iconColor: green, iconBg: '#D6EEE0', title: 'Run setup again', desc: 'Re-pair and re-check your plan', onClick: () => this.setState({ screen: 'onboard', onboardStep: 0 }) }),
     ];
 
@@ -2274,13 +2442,14 @@ class Component extends DCLogic {
     const scheduleEditor = this.scheduleEditor();
 
     const onboardSteps = [
-      { iconBg: '#E5EBFD', icon: React.createElement('svg', { width: 52, height: 52, viewBox: '0 0 24 24', fill: 'none' }, React.createElement('path', { d: 'M12 3 13.6 8.4 19 10l-5.4 1.6L12 17l-1.6-5.4L5 10l5.4-1.6L12 3Z', fill: '#2F57E6' })), title: 'Welcome to Cadence', body: 'Two small bands learn your rhythm and warn you before an off period or a freeze. Let\u2019s get them set up \u2014 it takes about two minutes.', button: 'Get started', welcome: true },
-      { iconBg: '#E5EBFD', icon: React.createElement('svg', { width: 52, height: 52, viewBox: '0 0 24 24', fill: 'none' }, React.createElement('path', { d: 'M7 7l10 10-5 5V2l5 5L7 17', stroke: '#2F57E6', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' })), title: 'Connect your wrist band', body: 'Put on the wrist band and press its button 3 times quickly \u2014 a blue light blinks when it\u2019s ready. Then open your phone\u2019s Bluetooth settings and tap the band to connect.', button: 'Open Bluetooth settings', bt: 'Cadence Wrist Band' },
+      { iconBg: '#E5EBFD', icon: React.createElement('svg', { width: 52, height: 52, viewBox: '0 0 24 24', fill: 'none' }, React.createElement('path', { d: 'M12 3 13.6 8.4 19 10l-5.4 1.6L12 17l-1.6-5.4L5 10l5.4-1.6L12 3Z', fill: '#2F57E6' })), title: 'Welcome to Cadence', body: 'Two small bands learn your rhythm and warn you before an off period or a freeze. Let\u2019s get them set up, it takes about two minutes.', button: 'Get started', welcome: true },
+      { iconBg: '#E5EBFD', icon: React.createElement('svg', { width: 52, height: 52, viewBox: '0 0 24 24', fill: 'none' }, React.createElement('path', { d: 'M7 7l10 10-5 5V2l5 5L7 17', stroke: '#2F57E6', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' })), title: 'Connect your wrist band', body: 'Put on the wrist band and press its button 3 times quickly, a blue light blinks when it\u2019s ready. Then open your phone\u2019s Bluetooth settings and tap the band to connect.', button: 'Open Bluetooth settings', bt: 'Cadence Wrist Band' },
       { iconBg: '#E4E7FA', icon: React.createElement('svg', { width: 52, height: 52, viewBox: '0 0 24 24', fill: 'none' }, React.createElement('path', { d: 'M7 7l10 10-5 5V2l5 5L7 17', stroke: '#4B5DC4', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' })), title: 'Connect your ankle band', body: 'Now the ankle band. Press its button 3 times quickly until it blinks, then tap it in your Bluetooth settings to connect.', button: 'Open Bluetooth settings', bt: 'Cadence Ankle Band' },
-      { iconBg: '#E5EBFD', icon: React.createElement('svg', { width: 52, height: 52, viewBox: '0 0 28 28', fill: 'none' }, React.createElement('rect', { x: 3.5, y: 9, width: 21, height: 10, rx: 5, transform: 'rotate(-45 14 14)', stroke: '#2F57E6', strokeWidth: 2.2 }), React.createElement('path', { d: 'M11 11 17 17', stroke: '#2F57E6', strokeWidth: 2.2, strokeLinecap: 'round' })), title: 'Your medication', body: 'Everyone\u2019s plan is different. Type in exactly what you take \u2014 you can change it anytime in the menu.', button: 'Continue', med: true },
+      { iconBg: '#E5EBFD', icon: React.createElement('svg', { width: 52, height: 52, viewBox: '0 0 28 28', fill: 'none' }, React.createElement('rect', { x: 3.5, y: 9, width: 21, height: 10, rx: 5, transform: 'rotate(-45 14 14)', stroke: '#2F57E6', strokeWidth: 2.2 }), React.createElement('path', { d: 'M11 11 17 17', stroke: '#2F57E6', strokeWidth: 2.2, strokeLinecap: 'round' })), title: 'Your medication', body: 'Everyone\u2019s plan is different. Type in exactly what you take, you can change it anytime in the menu.', button: 'Continue', med: true },
       { iconBg: '#E6F5EC', icon: React.createElement('svg', { width: 52, height: 52, viewBox: '0 0 24 24', fill: 'none' }, React.createElement('circle', { cx: 12, cy: 13, r: 8, stroke: '#1F8A5B', strokeWidth: 2 }), React.createElement('path', { d: 'M12 9v4l3 2M12 3h0', stroke: '#1F8A5B', strokeWidth: 2, strokeLinecap: 'round' })), title: 'Your dose times', body: 'Enter the times you take a dose now. Cadence fine-tunes each one as the bands learn how your body responds.', button: 'Looks good', schedule: true },
       { iconBg: '#E5EBFD', icon: React.createElement('svg', { width: 52, height: 52, viewBox: '0 0 24 24', fill: 'none' }, React.createElement('rect', { x: 6, y: 3, width: 12, height: 18, rx: 6, stroke: '#2F57E6', strokeWidth: 2 }), React.createElement('path', { d: 'M9 3.5 9.5 1h5L15 3.5M9 20.5 9.5 23h5l.5-2.5', stroke: '#2F57E6', strokeWidth: 2, strokeLinecap: 'round' })), title: 'Wearing your bands', body: 'A good fit is what lets the bands read your movement accurately. Here\u2019s how to wear each one.', button: 'Got it', wear: true },
-      { iconBg: '#E6F5EC', icon: React.createElement('svg', { width: 52, height: 52, viewBox: '0 0 24 24', fill: 'none' }, React.createElement('path', { d: 'M12 2 20 5v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3Z', stroke: '#1F8A5B', strokeWidth: 2, strokeLinejoin: 'round' }), React.createElement('path', { d: 'M8.5 12 11 14.5 16 9', stroke: '#1F8A5B', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' })), title: 'Your data \u0026 privacy', body: 'Cadence reads movement from your bands to learn your rhythm. You choose what it can do with that data \u2014 and you can change this anytime.', button: 'Agree \u0026 continue', consent: true },
+      { iconBg: '#E6F5EC', icon: React.createElement('svg', { width: 52, height: 52, viewBox: '0 0 24 24', fill: 'none' }, React.createElement('path', { d: 'M12 2 20 5v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3Z', stroke: '#1F8A5B', strokeWidth: 2, strokeLinejoin: 'round' }), React.createElement('path', { d: 'M8.5 12 11 14.5 16 9', stroke: '#1F8A5B', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' })), title: 'Your data \u0026 privacy', body: 'Cadence reads movement from your bands to learn your rhythm. You choose what it can do with that data, and you can change this anytime.', button: 'Agree \u0026 continue', consent: true },
+      { iconBg: '#E4E7FA', icon: React.createElement('svg', { width: 52, height: 52, viewBox: '0 0 24 24', fill: 'none' }, React.createElement('path', { d: 'M2 12h3.5l2-6 3.2 13 3-9 2.3 4.5H22', stroke: '#4B5DC4', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' })), title: 'Your calibration walk', body: 'A short guided walk teaches Cadence your own gait, so warnings fit you instead of an average. Do it now with someone nearby, or skip and do it at your clinic visit. You can redo it anytime from the menu.', button: 'Continue', calib: true },
       { iconBg: '#E6F5EC', icon: React.createElement('svg', { width: 52, height: 52, viewBox: '0 0 26 26', fill: 'none' }, React.createElement('path', { d: 'M6 13.5 11 18.5 20 7.5', stroke: '#1F8A5B', strokeWidth: 3, strokeLinecap: 'round', strokeLinejoin: 'round' })), title: 'You\u2019re all set', body: 'Both bands are on and learning. Your home screen shows your state and the next forecast. We\u2019ll take it from here.', button: 'Go to my day' },
     ];
     const ob = onboardSteps[this.state.onboardStep] || onboardSteps[0];
@@ -2344,7 +2513,7 @@ class Component extends DCLogic {
     } else {
       riskLevel = 'Low'; riskColor = '#1F8A5B'; riskBg = '#E6F5EC';
       riskReason = pick(
-        'Everything looks calm. Your last dose was on time \u2014 nothing to do right now.',
+        'Everything looks calm. Your last dose was on time, nothing to do right now.',
         'Bands show steady movement and your last dose was on time. Nothing to do right now.',
         'Stable motor signal; last dose on schedule. No action indicated.');
       riskMeter = 0.18; confPct = 88;
@@ -2354,7 +2523,7 @@ class Component extends DCLogic {
       ? ('Cadence expects an off window ' + (offWin ? 'around ' + offWin : 'before your next dose') + '. Your dose is timed to get ahead of it.')
       : ('You\u2019re in a predicted off window. Movement is expected back around ' + this.fmt(C.seg.e) + '.');
     const featureRows = [
-      this.featureRow('Time since last dose', 'About 3 hours since your morning dose \u2014 your strongest signal right now.', 0.9, '#2F57E6'),
+      this.featureRow('Time since last dose', 'About 3 hours since your morning dose, your strongest signal right now.', 0.9, '#2F57E6'),
       this.featureRow('Your 14-day pattern', 'Off periods usually begin ~3h 40m after a dose for you.', 0.8, '#2F57E6'),
       this.featureRow('Wrist tremor trend', 'Climbing slightly over the last hour.', 0.7, '#B9700F'),
       this.featureRow('Gait &amp; cadence (ankle)', 'Steps a little slower than your morning baseline.', 0.58, '#B9700F'),
@@ -2396,7 +2565,7 @@ class Component extends DCLogic {
       undoDose: () => this.undoDueDose(),
       takenAtText: C.recentTaken ? ('Dose taken at ' + this.fmtShort(C.recentTaken.at)) : '',
       nextDoseText: C.nextDose ? (C.nextDose.label + ' dose at ' + this.fmtShort(C.nextDose.min)) : 'No more doses today',
-      doseScreenTime: focusDose ? this.fmtShort(focusDose.min) : '\u2014',
+      doseScreenTime: focusDose ? this.fmtShort(focusDose.min) : ', ',
       doseScreenNote: focusDose ? (focusDose.label + ' dose') : 'All doses done for today',
       dayBar: this.dayBar(C),
       medNameText: medName,
@@ -2417,6 +2586,11 @@ class Component extends DCLogic {
       isDose: this.state.screen === 'dose',
       isMore: this.state.screen === 'more',
       isFreeze: this.state.screen === 'freeze',
+      isCalibration: this.state.screen === 'calibration',
+      isPersonal: this.state.screen === 'personal',
+      goCalibration: () => this.setState({ screen: 'calibration', calibStep: 0, calibPlaying: false }),
+      goFreeze: () => this.setState({ screen: 'freeze' }),
+      ...this.calibVals(),
       isLog: this.state.screen === 'log',
       isHistory: this.state.screen === 'history',
       historyBars,
@@ -2623,7 +2797,7 @@ class Component extends DCLogic {
       isOnboard: this.state.screen === 'onboard',
       onboardProgress,
       obIcon: ob.icon, obIconBg: ob.iconBg, obTitle: ob.title, obBody: ob.body, obButton: ob.button,
-      obStepIsMed: !!ob.med, obStepIsSchedule: !!ob.schedule, obStepIsWelcome: !!ob.welcome, obStepIsWear: !!ob.wear, obStepIsConsent: !!ob.consent,
+      obStepIsMed: !!ob.med, obStepIsSchedule: !!ob.schedule, obStepIsWelcome: !!ob.welcome, obStepIsWear: !!ob.wear, obStepIsConsent: !!ob.consent, obStepIsCalib: !!ob.calib,
       consentEditor,
       onboardNext: () => {
         if (ob.bt) { this.openBtSheet(ob.bt, 'onboard'); return; }
@@ -2641,7 +2815,7 @@ class Component extends DCLogic {
       logJustAdded: this.state.logJustAdded,
       logList,
       goMore: () => this.setState({ screen: 'more' }),
-      addDose: () => this.addLog({ label: 'Dose', icon: 'dose', iconColor: blue, iconBg: blueBg, title: 'Dose', sub: medName || 'Dose logged' }),
+      addDose: () => this.addLog({ label: 'Dose', icon: 'dose', iconColor: blue, iconBg: blueBg, title: 'Dose', sub: 'Levodopa / Carbidopa 25/100' }),
       addMeal: () => this.addLog({ label: 'Meal', icon: 'meal', iconColor: amber, iconBg: amberBg, title: 'Meal', sub: 'Logged' }),
       addMealProtein: () => this.addLog({ label: 'Meal', icon: 'meal', iconColor: amber, iconBg: amberBg, title: 'High-protein meal', sub: 'May slow your next dose', badge: 'Protein', badgeColor: amber, badgeBg: '#F7E4C4' }),
       addSymptom: () => this.setState({ screen: 'symptom', symptomType: null, symptomSeverity: null }),
@@ -2650,14 +2824,6 @@ class Component extends DCLogic {
       insight: this.state.insight,
       timelineEvents, doseList, moreList, freezeList,
       navItems,
-      toggleDemo: () => this.toggleDemo(),
-      demoToggleLabel: this.isDemo() ? 'Disable demo data' : 'Load demo data',
-      timeOnPct: this.isDemo() ? '74%' : '—',
-      timeOnDelta: this.isDemo() ? 'up from 68% last week' : 'not enough data yet',
-      patientName: this.patientFullName() || 'Your account',
-      greetingName: (this.patientFirstName() || 'there') + '.',
-      avatarInitial: (this.patientFirstName() || '?').charAt(0).toUpperCase(),
-      quickDoseMed: medName || 'Tap to log a dose',
     };
   }
 }
